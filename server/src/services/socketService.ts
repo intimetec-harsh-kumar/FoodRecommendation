@@ -8,6 +8,10 @@ import DateService from "./dateService";
 import UserDetail from "../User/userDetail";
 import UserService from "./userService";
 import logHandler from "../handlers/logHandler";
+import { FoodItemRepository } from "../repository/foodItemRepository";
+import FoodRecommendationEngine from "./foodRecommendationService";
+import pool from "../config/dbConnection";
+import { log } from "console";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -119,6 +123,26 @@ class SocketService {
 			console.log(`User ${socket.id} logged out`);
 			UserDetail.clearUserDetail();
 			socket.disconnect(true);
+		});
+
+		socket.on("viewRecommendations", async () => {
+			console.log("Recommendation called");
+			try {
+				const foodItemRepo = new FoodItemRepository(pool, "items");
+				const rows: any = await foodItemRepo.getItemsForRecommendation();
+				const foodItems: any[] = rows;
+				const recommendationEngine = new FoodRecommendationEngine(foodItems);
+
+				recommendationEngine.calculateRecommendationScores();
+				const recommendations = recommendationEngine.getRecommendations(5);
+				console.log("Recommended Food Items:", recommendations);
+			} catch (error) {
+				console.error("Error fetching recommendations:", error);
+				socket.emit(
+					"recommendationsError",
+					"An error occurred while fetching recommendations."
+				);
+			}
 		});
 
 		socket.on("disconnect", () => {

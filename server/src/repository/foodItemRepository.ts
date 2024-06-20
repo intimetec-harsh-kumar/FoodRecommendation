@@ -100,4 +100,26 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			throw err;
 		}
 	}
+
+	async getItemsForRecommendation(): Promise<any[]> {
+		try {
+			const connection = await this.pool.getConnection();
+			const [rows]: any = await connection.query(
+				` SELECT 
+            f.id AS foodItemId,
+            f.rating,
+            f.vote,
+            f.sentiment,
+            f.noOfTimesPrepared,
+            (f.noOfTimesPrepared / f.rating) AS preparationToRatingRatio
+        FROM 
+            FoodItemAudit f;`
+			);
+			connection.release();
+			return rows;
+		} catch (err) {
+			console.error("Database error:", err);
+			throw err;
+		}
+	}
 }
