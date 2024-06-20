@@ -18,8 +18,13 @@ class NotificationService {
 	async getNotification(): Promise<void> {
 		try {
 			const connection = await pool.getConnection();
-			const genericRepository = new GenericRepository(pool, "Notifications");
-			const rows: any = await genericRepository.getAll();
+			const notificationRepository = new NotificationRepository(
+				pool,
+				"Notifications"
+			);
+			const rows: any = await notificationRepository.getCurrentNotification();
+			console.log("in ns", rows);
+
 			connection.release();
 			return rows;
 		} catch (error) {

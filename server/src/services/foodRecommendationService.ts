@@ -1,7 +1,7 @@
 import pool from "../config/dbConnection";
 import { FoodItemRepository } from "../repository/foodItemRepository";
 
-class FoodRecommendationEngine {
+class FoodRecommendationEngineService {
 	private foodItems: any[];
 
 	constructor(foodItems: any[]) {
@@ -33,4 +33,4 @@ class FoodRecommendationEngine {
 		return topRecommendations;
 	}
 }
-export default FoodRecommendationEngine;
+export default FoodRecommendationEngineService;

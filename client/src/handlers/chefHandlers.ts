@@ -64,7 +64,16 @@ class ChefHandlers {
 	}
 
 	async viewRecommendations(): Promise<void> {
-		this.socket.emit("viewRecommendations");
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewRecommendations", (response: any) => {
+				if (response) {
+					console.log(response);
+				} else {
+					console.log("Error occured while logging out");
+				}
+				resolve(response);
+			});
+		});
 	}
 
 	async logout() {
