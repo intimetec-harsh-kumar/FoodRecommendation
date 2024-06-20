@@ -8,7 +8,6 @@ class AdminConsole {
 	constructor(private socketService: SocketService) {
 		this.adminHandlers = new AdminHandlers(this.socketService.getSocket());
 	}
-	private resolveAction!: (value?: unknown) => void;
 
 	async start() {
 		let isConsoleRunning = true;

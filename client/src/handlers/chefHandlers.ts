@@ -5,11 +5,29 @@ class ChefHandlers {
 	constructor(private socket: Socket) {}
 
 	async viewMenuItems(): Promise<void> {
-		this.socket.emit("viewMenuItems");
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewItems", (response: any) => {
+				if (response.items.length > 0) {
+					console.log(response.items);
+				} else {
+					console.log("No records found.");
+				}
+				resolve(response.items);
+			});
+		});
 	}
 
 	async viewMealTypes(): Promise<void> {
-		this.socket.emit("viewMealTypes");
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewMealTypes", (response: any) => {
+				if (response.mealType.length > 0) {
+					console.log(response.mealType);
+				} else {
+					console.log("no data found");
+				}
+				resolve(response.mealType);
+			});
+		});
 	}
 
 	async viewNotifications(): Promise<void> {
@@ -26,10 +44,19 @@ class ChefHandlers {
 	}
 
 	async viewAvailableFoodItems(): Promise<void> {
-		this.socket.emit("viewAvailableFoodItems");
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewAvailableFoodItems", (response: any) => {
+				if (response.items.length > 0) {
+					console.log(response.items);
+				} else {
+					console.log("No records found.");
+				}
+				resolve(response);
+			});
+		});
 	}
 
-	async sendNotification(): Promise<void> {
+	async sendFoodNotification(): Promise<void> {
 		const message = await InputHandlerService.askQuestion(
 			"Enter the notification message: "
 		);

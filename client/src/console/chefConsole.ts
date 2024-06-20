@@ -15,8 +15,7 @@ class ChefConsole {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
 					"Chef: Choose an action (1: View Menu Items, 2: View Meal Types, 3: View Notifications, 4: View Available Food Items, 5: Send Notification, 6: View Recommendations, 7: Exit): "
-				),
-				10
+				)
 			);
 
 			switch (action) {
@@ -33,7 +32,7 @@ class ChefConsole {
 					await this.chefHandlers.viewAvailableFoodItems();
 					break;
 				case 5:
-					await this.chefHandlers.sendNotification();
+					await this.chefHandlers.sendFoodNotification();
 					break;
 				case 6:
 					await this.chefHandlers.viewRecommendations();

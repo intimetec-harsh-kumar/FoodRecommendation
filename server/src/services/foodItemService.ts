@@ -37,6 +37,12 @@ class FoodItemService {
 		return rows;
 	}
 
+	async getAvailableItems(): Promise<any[]> {
+		const foodItemRepository = new FoodItemRepository(pool, "Items");
+		const rows = await foodItemRepository.getAvailableItems();
+		return rows;
+	}
+
 	async getMealTypes(): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();

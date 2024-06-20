@@ -78,6 +78,23 @@ class SocketService {
 			}
 		);
 
+		socket.on(
+			"viewAvailableFoodItems",
+			(
+				callback: (response: {
+					items: {
+						id: number;
+						item_name: string;
+						price: number;
+						availability_status: number;
+						meal_type_id: number;
+					}[];
+				}) => void
+			) => {
+				FoodItemhandler.handleViewAvailableFoodItems(socket, callback);
+			}
+		);
+
 		socket.on("disconnect", () => {
 			SocketHandler.handleDisconnect(socket);
 		});

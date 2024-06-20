@@ -152,5 +152,25 @@ class FoodItemHandler {
 			console.error("Error retrieving meal types:", err);
 		}
 	}
+
+	public async handleViewAvailableFoodItems(
+		socket: Socket,
+		callback: (response: {
+			items: {
+				id: number;
+				item_name: string;
+				price: number;
+				availability_status: number;
+				meal_type_id: number;
+			}[];
+		}) => void
+	): Promise<any> {
+		try {
+			const items = await FoodItemService.getAvailableItems();
+			callback({ items: items });
+		} catch (err) {
+			console.error("Error retrieving items:", err);
+		}
+	}
 }
 export default new FoodItemHandler();
