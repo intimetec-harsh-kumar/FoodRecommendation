@@ -119,6 +119,19 @@ class AdminHandlers extends ActionHandlers {
 		});
 	}
 
+	async viewLog() {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewLog", (response: any) => {
+				if (response.log.length > 0) {
+					console.log(response.log);
+				} else {
+					console.log("no data found");
+				}
+				resolve(response.log);
+			});
+		});
+	}
+
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {

@@ -1,4 +1,5 @@
 import pool from "../config/dbConnection";
+import UserDetail from "../User/userDetail";
 import { Users } from "../models/Users";
 import { GenericRepository } from "../repository/genericRepository";
 import { UserRepository } from "../repository/userRepository";
@@ -36,5 +37,9 @@ class UserService {
 	// 		throw err;
 	// 	}
 	// }
+	async getUserEmail(): Promise<string | null> {
+		let email: string | null = await UserDetail.getUserDetail();
+		return email;
+	}
 }
 export default new UserService();

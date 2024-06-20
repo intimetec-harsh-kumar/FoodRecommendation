@@ -2,6 +2,8 @@ import { Socket } from "socket.io";
 import FoodItemService from "../services/foodItemService";
 import NotificationService from "../services/notificationService";
 import DateService from "../services/dateService";
+import UserDetail from "../User/userDetail";
+import LogService from "../services/logService";
 
 class FoodItemHandler {
 	public async handleAddItem(
@@ -20,6 +22,8 @@ class FoodItemHandler {
 
 			if (addedItem) {
 				console.log(`Item ${item.item_name} added successfully`);
+				let userEmail = UserDetail.getUserDetail();
+				this.addLog(userEmail, "AddItems");
 				NotificationService.pushNotification({
 					NotificationTypeId: 1,
 					Message: `${item.item_name} have been added to the Items`,
@@ -60,6 +64,8 @@ class FoodItemHandler {
 			const updatedItem = await FoodItemService.updateItem(item);
 			if (updatedItem) {
 				console.log(`Item with id ${item.id} updated successfully`);
+				let userEmail = UserDetail.getUserDetail();
+				this.addLog(userEmail, "UpdateItem");
 				NotificationService.pushNotification({
 					NotificationTypeId: 2,
 					Message: `${item.item_name} have been updated to the Items`,
@@ -92,6 +98,8 @@ class FoodItemHandler {
 			const deletedItem = await FoodItemService.deleteItem(itemId);
 			if (deletedItem) {
 				console.log(`Item with ID ${itemId} deleted successfully`);
+				let userEmail = UserDetail.getUserDetail();
+				this.addLog(userEmail, "DeleteItem");
 				NotificationService.pushNotification({
 					NotificationTypeId: 3,
 					Message: `${itemId} have been deleted from the Items`,
@@ -130,6 +138,8 @@ class FoodItemHandler {
 	): Promise<any> {
 		try {
 			const items = await FoodItemService.getItems();
+			let userEmail = UserDetail.getUserDetail();
+			this.addLog(userEmail, "ViewItems");
 			callback({ items: items });
 		} catch (err) {
 			console.error("Error retrieving items:", err);
@@ -171,6 +181,15 @@ class FoodItemHandler {
 		} catch (err) {
 			console.error("Error retrieving items:", err);
 		}
+	}
+
+	addLog(email: string | null, action: string) {
+		let logObject = {
+			userEmail: email,
+			action: action,
+			timestamp: DateService.getCurrentTimestamp(),
+		};
+		LogService.addLogs(logObject);
 	}
 }
 export default new FoodItemHandler();

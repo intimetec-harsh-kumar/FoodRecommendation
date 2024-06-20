@@ -3,6 +3,11 @@ import FoodItemhandler from "../handlers/foodItemhandler";
 import NotificationHandler from "../handlers/notificationHandler";
 import AuthenticationHandler from "../handlers/authenticationHandler";
 import SocketHandler from "../handlers/socketHandler";
+import LogService from "./logService";
+import DateService from "./dateService";
+import UserDetail from "../User/userDetail";
+import UserService from "./userService";
+import logHandler from "../handlers/logHandler";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -95,8 +100,24 @@ class SocketService {
 			}
 		);
 
+		socket.on(
+			"viewLog",
+			(
+				callback: (response: {
+					log: {
+						id: number;
+						userEmail: string;
+						action: string;
+					}[];
+				}) => void
+			) => {
+				logHandler.handleViewLogs(socket, callback);
+			}
+		);
+
 		socket.on("logout", () => {
 			console.log(`User ${socket.id} logged out`);
+			UserDetail.clearUserDetail();
 			socket.disconnect(true);
 		});
 
