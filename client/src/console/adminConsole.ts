@@ -13,7 +13,7 @@ class AdminConsole {
 		let isConsoleRunning = true;
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
-				"Admin: Choose an action (\n 1: addItem, 2: update ,\n 3: delete , 4: view ,\n 5: meal types , 6: exit \n): "
+				"Admin: Choose an action (\n 1: addItem, 2: update ,\n 3: delete , 4: view ,\n 5: meal types , 6: Logout \n): "
 			);
 			switch (action) {
 				case "1":
@@ -32,7 +32,7 @@ class AdminConsole {
 					await this.adminHandlers.viewMealTypes();
 					break;
 				case "6":
-					console.log("Exiting admin console...");
+					await this.adminHandlers.logout();
 					isConsoleRunning = false;
 					return;
 				default:

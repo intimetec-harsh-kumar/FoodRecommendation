@@ -95,6 +95,11 @@ class SocketService {
 			}
 		);
 
+		socket.on("logout", () => {
+			console.log(`User ${socket.id} logged out`);
+			socket.disconnect(true);
+		});
+
 		socket.on("disconnect", () => {
 			SocketHandler.handleDisconnect(socket);
 		});

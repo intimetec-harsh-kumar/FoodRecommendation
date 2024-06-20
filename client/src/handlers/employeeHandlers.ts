@@ -68,18 +68,14 @@ class EmployeeHandlers extends ActionHandlers {
 
 	async logout() {
 		return new Promise(async (resolve, reject) => {
-			// const id = parseInt(
-			// 	await InputHandlerService.askQuestion("Enter item ID to delete: ")
-			// );
-			// this.socket.emit("deleteItem", id, (response: any) => {
-			// 	console.log(response);
-			// 	if (response.success) {
-			// 		console.log(response.message);
-			// 		resolve(response.message);
+			this.socket.emit("logout");
+			// , (response: any) => {
+			// 	if (response) {
+			// 		console.log("response", response);
 			// 	} else {
-			// 		console.error(response.message);
-			// 		reject(new Error(response.message));
+			// 		console.log("Error occured while logging out");
 			// 	}
+			// 	resolve(response);
 			// });
 		});
 	}

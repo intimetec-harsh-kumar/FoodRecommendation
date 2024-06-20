@@ -14,7 +14,7 @@ class ChefConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Chef: Choose an action (1: View Menu Items, 2: View Meal Types, 3: View Notifications, 4: View Available Food Items, 5: Send Notification, 6: View Recommendations, 7: Exit): "
+					"Chef: Choose an action (1: View Menu Items, 2: View Meal Types, 3: View Notifications, 4: View Available Food Items, 5: Send Notification, 6: View Recommendations, 7: Logout): "
 				)
 			);
 
@@ -38,7 +38,7 @@ class ChefConsole {
 					await this.chefHandlers.viewRecommendations();
 					break;
 				case 7:
-					console.log("Exiting admin console...");
+					await this.chefHandlers.logout();
 					isConsoleRunning = false;
 					return;
 				default:

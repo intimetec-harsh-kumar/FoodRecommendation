@@ -118,6 +118,19 @@ class AdminHandlers extends ActionHandlers {
 			});
 		});
 	}
+
+	async logout() {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("logout", (response: any) => {
+				if (response) {
+					console.log("response", response);
+				} else {
+					console.log("Error occured while logging out");
+				}
+				resolve(response);
+			});
+		});
+	}
 }
 
 export default AdminHandlers;

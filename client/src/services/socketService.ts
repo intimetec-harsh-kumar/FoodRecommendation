@@ -59,13 +59,6 @@ class SocketService {
 		}
 	}
 
-	private handleViewItems(items: any[]): void {
-		console.log("Items:", items);
-		if (this.viewItemsCallback) {
-			this.viewItemsCallback(items);
-		}
-	}
-
 	private handleDisconnect(): void {
 		console.log("Disconnected from server");
 		InputHandlerService.close();

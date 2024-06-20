@@ -16,7 +16,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Chef: Choose an action (1: View Menu Items, 2: View Notification,\n 3: Send Feedback, 4: Logout,\n 7: Exit): "
+					"Employee: Choose an action (1: View Menu Items, 2: View Notification,\n 3: Send Feedback, 4: Logout,\n): "
 				)
 			);
 
@@ -32,11 +32,8 @@ class EmployeeConsole {
 					break;
 				case 4:
 					await this.employeeHandlers.logout();
-					break;
-				case 5:
-					console.log("Exiting admin console...");
 					isConsoleRunning = false;
-					return;
+					break;
 				default:
 					console.log("Invalid action. Please try again.");
 			}
