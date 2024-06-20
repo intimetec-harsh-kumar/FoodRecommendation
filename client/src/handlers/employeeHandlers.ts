@@ -33,32 +33,29 @@ class EmployeeHandlers extends ActionHandlers {
 		});
 	}
 
-	async sendFeedback(): Promise<void> {
+	async provideFeedback(): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			const item_name = await InputHandlerService.askQuestion(
-				"Enter item Id: "
+			const itemId = await InputHandlerService.askQuestion("Enter item Id: ");
+			const rating = await InputHandlerService.askQuestion(
+				"Enter your rating (0-5): "
 			);
-			const price = parseFloat(
-				await InputHandlerService.askQuestion("Enter item price: ")
+			const comment = await InputHandlerService.askQuestion(
+				"Enter you feedback: "
 			);
-			const availability_status =
-				(await InputHandlerService.askQuestion(
-					"Is the item available? (yes/no): "
-				)) === "yes";
-			const meal_type_id = parseInt(
-				await InputHandlerService.askQuestion(
-					"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
-				)
-			);
+			// const meal_type_id = parseInt(
+			// 	await InputHandlerService.askQuestion(
+			// 		"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
+			// 	)
+			// );
 			this.socket.emit(
-				"addItem",
-				{ item_name, price, availability_status, meal_type_id },
+				"provideFeedback",
+				{ itemId, rating, comment },
 				(response: any) => {
-					if (response.success) {
+					if (response) {
 						console.log(response.message);
 						resolve(response.message);
 					} else {
-						console.log("Failed to add item:", response.message);
+						console.log("Failed to provide feedback:", response.message);
 						reject(new Error(response.message));
 					}
 				}

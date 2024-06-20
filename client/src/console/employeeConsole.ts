@@ -28,7 +28,7 @@ class EmployeeConsole {
 					await this.employeeHandlers.viewNotifications();
 					break;
 				case 3:
-					await this.employeeHandlers.sendFeedback();
+					await this.employeeHandlers.provideFeedback();
 					break;
 				case 4:
 					await this.employeeHandlers.logout();

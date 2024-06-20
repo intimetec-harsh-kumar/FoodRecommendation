@@ -13,6 +13,7 @@ import FoodRecommendationEngine from "./foodRecommendationService";
 import pool from "../config/dbConnection";
 import { log } from "console";
 import FoodRecommendationHandler from "../handlers/foodRecommendationHandler";
+import FeedbackHandler from "../handlers/feedbackHandler";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -136,6 +137,10 @@ class SocketService {
 		socket.on("disconnect", () => {
 			SocketHandler.handleDisconnect(socket);
 		});
+
+		socket.on("provideFeedback", (item, callback) =>
+			FeedbackHandler.handleProvideFeedback(socket, item, callback)
+		);
 	}
 }
 
