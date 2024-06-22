@@ -35,21 +35,18 @@ class EmployeeHandlers extends ActionHandlers {
 
 	async provideFeedback(): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			const itemId = await InputHandlerService.askQuestion("Enter item Id: ");
+			const foodItemId = await InputHandlerService.askQuestion(
+				"Enter item Id: "
+			);
 			const rating = await InputHandlerService.askQuestion(
 				"Enter your rating (0-5): "
 			);
 			const comment = await InputHandlerService.askQuestion(
 				"Enter you feedback: "
 			);
-			// const meal_type_id = parseInt(
-			// 	await InputHandlerService.askQuestion(
-			// 		"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
-			// 	)
-			// );
 			this.socket.emit(
 				"provideFeedback",
-				{ itemId, rating, comment },
+				{ foodItemId, rating, comment },
 				(response: any) => {
 					if (response) {
 						console.log(response.message);

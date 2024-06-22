@@ -138,8 +138,8 @@ class SocketService {
 			SocketHandler.handleDisconnect(socket);
 		});
 
-		socket.on("provideFeedback", (item, callback) =>
-			FeedbackHandler.handleProvideFeedback(socket, item, callback)
+		socket.on("provideFeedback", (feedback, callback) =>
+			FeedbackHandler.handleProvideFeedback(socket, feedback, callback)
 		);
 	}
 }
