@@ -85,7 +85,7 @@ class SocketService {
 					}[];
 				}) => void
 			) => {
-				NotificationHandler.handleViewNotifications(socket, callback);
+				NotificationHandler.handleViewNotifications(callback);
 			}
 		);
 
@@ -140,6 +140,12 @@ class SocketService {
 
 		socket.on("provideFeedback", (feedback, callback) =>
 			FeedbackHandler.handleProvideFeedback(socket, feedback, callback)
+		);
+		socket.on(
+			"sendFoodItemNotificationForNextDay",
+			(callback: (response: { message: string }) => void) => {
+				NotificationHandler.handleSendNotifications();
+			}
 		);
 	}
 }

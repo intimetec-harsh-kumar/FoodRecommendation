@@ -57,10 +57,10 @@ class ChefHandlers {
 	}
 
 	async sendFoodNotification(): Promise<void> {
-		const message = await InputHandlerService.askQuestion(
-			"Enter the notification message: "
-		);
-		this.socket.emit("sendNotification", { message });
+		// const message = await InputHandlerService.askQuestion(
+		// 	"Enter the notification message: "
+		// );
+		this.socket.emit("sendFoodItemNotificationForNextDay");
 	}
 
 	async viewRecommendations(): Promise<void> {

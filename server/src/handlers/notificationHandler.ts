@@ -1,9 +1,9 @@
 import { Socket } from "socket.io";
 import NotificationService from "../services/notificationService";
+import FoodRecommendationEngineService from "../services/foodRecommendationService";
 
 class NotificationHandler {
 	public async handleViewNotifications(
-		socket: Socket,
 		callback: (response: {
 			notification: {
 				Id: number;
@@ -16,6 +16,14 @@ class NotificationHandler {
 		try {
 			const notification: any = await NotificationService.getNotification();
 			callback({ notification: notification });
+		} catch (error) {
+			console.error("Error retrieving items:", error);
+		}
+	}
+
+	public async handleSendNotifications() {
+		try {
+			await NotificationService.sendFoodItemNotificationForNextDay();
 		} catch (error) {
 			console.error("Error retrieving items:", error);
 		}

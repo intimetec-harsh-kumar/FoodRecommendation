@@ -1,6 +1,9 @@
 import pool from "../config/dbConnection";
+import { FoodItemRepository } from "../repository/foodItemRepository";
 import { GenericRepository } from "../repository/genericRepository";
 import { NotificationRepository } from "../repository/notificationRepository";
+import dateService from "./dateService";
+import FoodRecommendationEngineService from "./foodRecommendationService";
 
 class NotificationService {
 	async pushNotification(notification: any): Promise<void> {
@@ -27,6 +30,28 @@ class NotificationService {
 
 			connection.release();
 			return rows;
+		} catch (error) {
+			console.error("Database error:", error);
+			throw error;
+		}
+	}
+	async sendFoodItemNotificationForNextDay() {
+		try {
+			const foodItemRepo = new FoodItemRepository(pool, "items");
+			const foodItems: any = await foodItemRepo.getItemsForRecommendation();
+			const recommendationEngine = new FoodRecommendationEngineService(
+				foodItems
+			);
+			recommendationEngine.calculateRecommendationScores();
+			const recommendations = recommendationEngine.getRecommendations(5);
+			recommendations.forEach((recommendation) => {
+				let notification = {
+					NotificationTypeId: 1,
+					Message: recommendation.foodItemId,
+					Date: dateService.getCurrentDate(),
+				};
+				this.pushNotification(notification);
+			});
 		} catch (error) {
 			console.error("Database error:", error);
 			throw error;
