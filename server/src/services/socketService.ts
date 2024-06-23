@@ -69,6 +69,7 @@ class SocketService {
 		socket.on(
 			"viewNotifications",
 			(
+				notificationTypeId: number | undefined,
 				callback: (response: {
 					notification: {
 						Id: number;
@@ -78,7 +79,12 @@ class SocketService {
 					}[];
 				}) => void
 			) => {
-				NotificationHandler.handleViewNotifications(callback);
+				console.log("in ss", notificationTypeId);
+
+				NotificationHandler.handleViewNotifications(
+					callback,
+					notificationTypeId
+				);
 			}
 		);
 

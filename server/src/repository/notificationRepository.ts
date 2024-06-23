@@ -3,16 +3,21 @@ import DateService from "../services/dateService";
 import { GenericRepository } from "./genericRepository";
 
 export class NotificationRepository extends GenericRepository<any> {
-	async getCurrentNotification(): Promise<any[]> {
+	async getCurrentNotification(notificationTypeId?: number): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();
 			let currentDate = DateService.getCurrentDate();
-			console.log(currentDate);
+			console.log("in nr", notificationTypeId);
 
+			if (notificationTypeId) {
+				const [rows]: any = await this.pool.query(
+					`select * from Notifications where Date = '${currentDate}' and NotificationTypeId = ${notificationTypeId}`
+				);
+				return rows;
+			}
 			const [rows]: any = await this.pool.query(
 				`select * from Notifications where Date = '${currentDate}'`
 			);
-			console.log("in nr", rows);
 
 			connection.release();
 			return rows as any[];

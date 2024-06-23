@@ -29,16 +29,20 @@ class ChefHandlers {
 		});
 	}
 
-	async viewNotifications(): Promise<void> {
+	async viewNotifications(notificationTypeId?: number): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			this.socket.emit("viewNotifications", (response: any) => {
-				if (response.notification.length > 0) {
-					console.log(response.notification);
-				} else {
-					console.log("No records found.");
+			this.socket.emit(
+				"viewNotifications",
+				notificationTypeId,
+				(response: any) => {
+					if (response.notification.length > 0) {
+						console.log(response.notification);
+					} else {
+						console.log("No records found.");
+					}
+					resolve(response);
 				}
-				resolve(response);
-			});
+			);
 		});
 	}
 

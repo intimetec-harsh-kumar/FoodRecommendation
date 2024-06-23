@@ -18,16 +18,16 @@ class NotificationService {
 			throw error;
 		}
 	}
-	async getNotification(): Promise<void> {
+	async getNotification(notificationTypeId?: number): Promise<void> {
 		try {
 			const connection = await pool.getConnection();
 			const notificationRepository = new NotificationRepository(
 				pool,
 				"Notifications"
 			);
-			const rows: any = await notificationRepository.getCurrentNotification();
-			console.log("in ns", rows);
-
+			const rows: any = await notificationRepository.getCurrentNotification(
+				notificationTypeId
+			);
 			connection.release();
 			return rows;
 		} catch (error) {
@@ -41,7 +41,7 @@ class NotificationService {
 				await FoodRecommendationEngineService.getRecommendations(5);
 			foodItemRecommendationsForNextDay.forEach((recommendation: any) => {
 				let notification = {
-					NotificationTypeId: 1,
+					NotificationTypeId: 4,
 					Message: recommendation.itemName,
 					Date: dateService.getCurrentDate(),
 				};

@@ -7,16 +7,20 @@ class EmployeeHandlers extends ActionHandlers {
 		super(socket);
 	}
 
-	async viewNotifications() {
+	async viewNotifications(notificationTypeId?: number) {
 		return new Promise(async (resolve, reject) => {
-			this.socket.emit("viewNotifications", (response: any) => {
-				if (response.notification.length > 0) {
-					console.log(response.notification);
-				} else {
-					console.log("no data found");
+			this.socket.emit(
+				"viewNotifications",
+				notificationTypeId,
+				(response: any) => {
+					if (response.notification.length > 0) {
+						console.log(response.notification);
+					} else {
+						console.log("no data found");
+					}
+					resolve(response.items);
 				}
-				resolve(response.items);
-			});
+			);
 		});
 	}
 

@@ -25,7 +25,7 @@ class EmployeeConsole {
 					await this.employeeHandlers.viewMenuItems();
 					break;
 				case 2:
-					await this.employeeHandlers.viewNotifications();
+					await this.employeeHandlers.viewNotifications(4);
 					break;
 				case 3:
 					await this.employeeHandlers.provideFeedback();

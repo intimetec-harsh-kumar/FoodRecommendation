@@ -1,3 +1,4 @@
+import { log } from "console";
 import NotificationService from "../services/notificationService";
 
 class NotificationHandler {
@@ -9,10 +10,14 @@ class NotificationHandler {
 				Message: string;
 				Date: any;
 			}[];
-		}) => void
+		}) => void,
+		notificationTypeId?: number
 	): Promise<void> {
 		try {
-			const notification: any = await NotificationService.getNotification();
+			console.log("in nh", notificationTypeId);
+			const notification: any = await NotificationService.getNotification(
+				notificationTypeId
+			);
 			callback({ notification: notification });
 		} catch (error) {
 			console.error("Error retrieving items:", error);
