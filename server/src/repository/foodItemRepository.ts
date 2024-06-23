@@ -36,13 +36,14 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			const [rows]: any = await connection.query(
 				` SELECT 
 						f.id AS foodItemId,
+						i.item_name as itemName,
 						f.rating,
 						f.vote,
 						f.sentiment,
 						f.noOfTimesPrepared,
 						(f.noOfTimesPrepared / f.rating) AS preparationToRatingRatio
 					FROM 
-						FoodItemAudit f;`
+						FoodItemAudit f inner join items i on i.id=f.foodItemId;`
 			);
 			connection.release();
 			return rows;

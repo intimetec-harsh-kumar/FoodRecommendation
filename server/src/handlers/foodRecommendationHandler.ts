@@ -6,20 +6,13 @@ import pool from "../config/dbConnection";
 class FoodRecommendationHandler {
 	public async handleViewRecommendation(
 		socket: Socket,
-		callback: (response: { recommendations: any[] }) => void
+		callback: (response: { recommendations: any }) => void
 	): Promise<any> {
 		try {
-			const foodItemRepo = new FoodItemRepository(pool, "items");
-			const rows: any = await foodItemRepo.getItemsForRecommendation();
-			const foodItems: any[] = rows;
-			const recommendationEngine = new FoodRecommendationEngineService(
-				foodItems
-			);
-
-			recommendationEngine.calculateRecommendationScores();
-			const recommendations = recommendationEngine.getRecommendations(5);
-			callback({ recommendations: recommendations });
-			console.log("Recommended Food Items:", recommendations);
+			let foodItemRecommendationForNextDay =
+				await FoodRecommendationEngineService.getRecommendations(5);
+			callback({ recommendations: foodItemRecommendationForNextDay });
+			console.log("Recommended Food Items:", foodItemRecommendationForNextDay);
 		} catch (error) {
 			console.error("Error fetching recommendations:", error);
 		}

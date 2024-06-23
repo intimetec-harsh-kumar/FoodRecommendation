@@ -37,17 +37,12 @@ class NotificationService {
 	}
 	async sendFoodItemNotificationForNextDay() {
 		try {
-			const foodItemRepo = new FoodItemRepository(pool, "items");
-			const foodItems: any = await foodItemRepo.getItemsForRecommendation();
-			const recommendationEngine = new FoodRecommendationEngineService(
-				foodItems
-			);
-			recommendationEngine.calculateRecommendationScores();
-			const recommendations = recommendationEngine.getRecommendations(5);
-			recommendations.forEach((recommendation) => {
+			const foodItemRecommendationsForNextDay =
+				await FoodRecommendationEngineService.getRecommendations(5);
+			foodItemRecommendationsForNextDay.forEach((recommendation: any) => {
 				let notification = {
 					NotificationTypeId: 1,
-					Message: recommendation.foodItemId,
+					Message: recommendation.itemName,
 					Date: dateService.getCurrentDate(),
 				};
 				this.pushNotification(notification);
