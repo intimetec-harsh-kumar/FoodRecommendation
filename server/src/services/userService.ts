@@ -24,19 +24,7 @@ class UserService {
 			throw err;
 		}
 	}
-	// async getRoleUser(email: string): Promise<any[]> {
-	// 	try {
-	// 		const connection = await pool.getConnection();
-	// 		const genericRepository = new GenericRepository<Users>(pool, "Users");
-	// 		const rows: any = await genericRepository.getByEmail(email);
-	// 		console.log("inside userService", rows);
-	// 		connection.release();
-	// 		return rows as any[];
-	// 	} catch (err) {
-	// 		console.error("Database error:", err);
-	// 		throw err;
-	// 	}
-	// }
+
 	async getUserEmail(): Promise<string | null> {
 		let email: string | null = await UserDetail.getUserDetail();
 		return email;

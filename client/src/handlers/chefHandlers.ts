@@ -1,5 +1,4 @@
 import { Socket } from "socket.io-client";
-import InputHandlerService from "../services/inputHandlerService";
 
 class ChefHandlers {
 	constructor(private socket: Socket) {}
@@ -57,9 +56,6 @@ class ChefHandlers {
 	}
 
 	async sendFoodNotification(): Promise<void> {
-		// const message = await InputHandlerService.askQuestion(
-		// 	"Enter the notification message: "
-		// );
 		this.socket.emit("sendFoodItemNotificationForNextDay");
 	}
 

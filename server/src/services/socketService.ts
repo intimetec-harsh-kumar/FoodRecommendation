@@ -3,15 +3,8 @@ import FoodItemhandler from "../handlers/foodItemhandler";
 import NotificationHandler from "../handlers/notificationHandler";
 import AuthenticationHandler from "../handlers/authenticationHandler";
 import SocketHandler from "../handlers/socketHandler";
-import LogService from "./logService";
-import DateService from "./dateService";
 import UserDetail from "../User/userDetail";
-import UserService from "./userService";
 import logHandler from "../handlers/logHandler";
-import { FoodItemRepository } from "../repository/foodItemRepository";
-import FoodRecommendationEngine from "./foodRecommendationService";
-import pool from "../config/dbConnection";
-import { log } from "console";
 import FoodRecommendationHandler from "../handlers/foodRecommendationHandler";
 import FeedbackHandler from "../handlers/feedbackHandler";
 

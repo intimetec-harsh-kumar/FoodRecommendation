@@ -14,7 +14,7 @@ class ChefConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Chef: Choose an action (1: View Menu Items, 2: View Meal Types, 3: View Notifications, 4: View Available Food Items, 5: Send Notification, 6: View Recommendations, 7: Logout): "
+					"Chef: Choose an action (\n 1: View Menu Items \n 2: View Meal Types \n 3: View Notifications \n 4: View Available Food Items \n 5: Send Notification \n 6: View Recommendations \n 7: Logout \n): "
 				)
 			);
 

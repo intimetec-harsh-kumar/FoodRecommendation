@@ -1,6 +1,5 @@
 import { Socket } from "socket.io";
 import logService from "../services/logService";
-import UserDetail from "../User/userDetail";
 
 class LogHandler {
 	public async handleViewLogs(

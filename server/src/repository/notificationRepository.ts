@@ -1,6 +1,5 @@
 import pool from "../config/dbConnection";
 import DateService from "../services/dateService";
-import notificationService from "../services/notificationService";
 import { GenericRepository } from "./genericRepository";
 
 export class NotificationRepository extends GenericRepository<any> {

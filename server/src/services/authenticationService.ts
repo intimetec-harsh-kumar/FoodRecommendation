@@ -1,5 +1,4 @@
 import RoleService from "./roleService";
-import UserService from "./userService";
 
 class AuthenticationService {
 	async authenticateUser(email: string): Promise<any[]> {

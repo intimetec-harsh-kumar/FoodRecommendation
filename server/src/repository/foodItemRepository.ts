@@ -1,4 +1,3 @@
-import { Pool } from "mysql2";
 import { GenericRepository } from "./genericRepository";
 import { FoodItems } from "../models/FoodItems";
 

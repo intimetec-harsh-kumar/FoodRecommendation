@@ -13,7 +13,7 @@ class AdminConsole {
 		let isConsoleRunning = true;
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
-				"Admin: Choose an action (\n 1: addItem, 2: update ,\n 3: delete , 4: view ,\n 5: meal types , 6: Logout ,\n 7: viewLog): "
+				"Admin: Choose an action (\n 1: addItem\n 2: update \n 3: delete \n 4: view \n 5: meal types \n 6: Logout \n 7: viewLog \n): "
 			);
 			switch (action) {
 				case "1":

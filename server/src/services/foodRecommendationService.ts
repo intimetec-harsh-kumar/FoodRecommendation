@@ -1,6 +1,3 @@
-import pool from "../config/dbConnection";
-import { FoodItemRepository } from "../repository/foodItemRepository";
-
 class FoodRecommendationEngineService {
 	private foodItems: any[];
 

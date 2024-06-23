@@ -1,6 +1,4 @@
-import { Socket } from "socket.io";
 import NotificationService from "../services/notificationService";
-import FoodRecommendationEngineService from "../services/foodRecommendationService";
 
 class NotificationHandler {
 	public async handleViewNotifications(

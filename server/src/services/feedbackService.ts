@@ -1,4 +1,3 @@
-import { log } from "console";
 import UserDetail from "../User/userDetail";
 import pool from "../config/dbConnection";
 import { GenericRepository } from "../repository/genericRepository";
