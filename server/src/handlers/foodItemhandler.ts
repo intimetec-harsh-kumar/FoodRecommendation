@@ -4,6 +4,7 @@ import NotificationService from "../services/notificationService";
 import DateService from "../services/dateService";
 import UserDetail from "../User/userDetail";
 import LogService from "../services/logService";
+import foodItemService from "../services/foodItemService";
 
 class FoodItemHandler {
 	public async handleAddItem(
@@ -180,6 +181,29 @@ class FoodItemHandler {
 			callback({ items: items });
 		} catch (err) {
 			console.error("Error retrieving items:", err);
+		}
+	}
+
+	public async selectFoodItemForNextDay(
+		foodItemId: number,
+		callback: (response: { message: string }) => void
+	): Promise<any> {
+		try {
+			let votedItem = {
+				foodItemId: foodItemId,
+				userEmail: UserDetail.getUserDetail(),
+				date: DateService.getCurrentDate(),
+			};
+			const selectedItem = await FoodItemService.addVotedItem(votedItem);
+			if (selectedItem) {
+				callback({
+					message: `Item with id ${foodItemId} choosen successfully`,
+				});
+			} else {
+				callback({ message: `Failed to choose an Item with id ${foodItemId}` });
+			}
+		} catch (error) {
+			console.error("Error retrieving items:", error);
 		}
 	}
 

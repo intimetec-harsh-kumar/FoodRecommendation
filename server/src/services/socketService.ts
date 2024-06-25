@@ -79,8 +79,6 @@ class SocketService {
 					}[];
 				}) => void
 			) => {
-				console.log("in ss", notificationTypeId);
-
 				NotificationHandler.handleViewNotifications(
 					callback,
 					notificationTypeId
@@ -117,6 +115,18 @@ class SocketService {
 				}) => void
 			) => {
 				logHandler.handleViewLogs(socket, callback);
+			}
+		);
+
+		socket.on(
+			"selectFoodItemForNextDay",
+			(
+				foodItemId: number,
+				callback: (response: { message: string }) => void
+			) => {
+				console.log("in ss", foodItemId);
+
+				FoodItemhandler.selectFoodItemForNextDay(foodItemId, callback);
 			}
 		);
 

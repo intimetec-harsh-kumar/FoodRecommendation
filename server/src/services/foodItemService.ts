@@ -13,6 +13,12 @@ class FoodItemService {
 		return rows;
 	}
 
+	async addVotedItem(votedItem: any): Promise<unknown> {
+		const foodItemRepository = new FoodItemRepository(pool, "VotedItem");
+		const rows = await foodItemRepository.add(votedItem);
+		return rows;
+	}
+
 	async updateItem(item: {
 		id: number;
 		item_name: string;

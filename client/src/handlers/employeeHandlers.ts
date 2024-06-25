@@ -64,6 +64,33 @@ class EmployeeHandlers extends ActionHandlers {
 		});
 	}
 
+	async selectFoodItemForNextDay(): Promise<void> {
+		return new Promise(async (resolve, reject) => {
+			const foodItemId = await InputHandlerService.askQuestion(
+				"Enter item Id: "
+			);
+			// const rating = await InputHandlerService.askQuestion(
+			// 	"Enter your rating (0-5): "
+			// );
+			// const comment = await InputHandlerService.askQuestion(
+			// 	"Enter you feedback: "
+			// );
+			this.socket.emit(
+				"selectFoodItemForNextDay",
+				foodItemId,
+				(response: any) => {
+					if (response) {
+						console.log(response.message);
+						resolve(response.message);
+					} else {
+						console.log("Failed to select food item:", response.message);
+						reject(new Error(response.message));
+					}
+				}
+			);
+		});
+	}
+
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout");
