@@ -7,6 +7,7 @@ import UserDetail from "../User/userDetail";
 import logHandler from "../handlers/logHandler";
 import FoodRecommendationHandler from "../handlers/foodRecommendationHandler";
 import FeedbackHandler from "../handlers/feedbackHandler";
+import foodItemhandler from "../handlers/foodItemhandler";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -154,6 +155,12 @@ class SocketService {
 			"sendFoodItemNotificationForNextDay",
 			(callback: (response: { message: string }) => void) => {
 				NotificationHandler.handleSendNotifications();
+			}
+		);
+		socket.on(
+			"viewVotedItems",
+			(callback: (response: { votedItems: any[] }) => void) => {
+				foodItemhandler.handleViewVotedItems(socket, callback);
 			}
 		);
 	}

@@ -76,6 +76,19 @@ class ChefHandlers {
 		});
 	}
 
+	async viewVotedItems(): Promise<void> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewVotedItems", (response: any) => {
+				if (response) {
+					console.log(response.votedItems);
+				} else {
+					console.log("Error occured while fetching voted items data");
+				}
+				resolve(response);
+			});
+		});
+	}
+
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {

@@ -164,6 +164,26 @@ class FoodItemHandler {
 		}
 	}
 
+	public async handleViewVotedItems(
+		socket: Socket,
+		callback: (response: {
+			votedItems: {
+				id: number;
+				foodItemId: number;
+				userEmail: string;
+				Date: Date;
+			}[];
+		}) => void
+	): Promise<any> {
+		try {
+			let currentDate = DateService.getCurrentDate();
+			const votedItem = await FoodItemService.getVotedItem(currentDate);
+			callback({ votedItems: votedItem });
+		} catch (err) {
+			console.error("Error retrieving voted items:", err);
+		}
+	}
+
 	public async handleViewAvailableFoodItems(
 		socket: Socket,
 		callback: (response: {

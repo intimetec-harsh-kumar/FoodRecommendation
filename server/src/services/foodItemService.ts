@@ -61,5 +61,18 @@ class FoodItemService {
 			throw err;
 		}
 	}
+
+	async getVotedItem(currentDate: string): Promise<any[]> {
+		try {
+			const connection = await pool.getConnection();
+			const foodItemRepository = new FoodItemRepository(pool, "VotedItem");
+			const rows = await foodItemRepository.getVotedItem(currentDate);
+			connection.release();
+			return rows;
+		} catch (err) {
+			console.error("Database error:", err);
+			throw err;
+		}
+	}
 }
 export default new FoodItemService();

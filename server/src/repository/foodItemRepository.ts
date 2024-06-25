@@ -30,6 +30,20 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 		}
 	}
 
+	async getVotedItem(currentDate: string): Promise<any[]> {
+		try {
+			const connection = await this.pool.getConnection();
+			const [rows]: any = await connection.query(
+				`SELECT * FROM VotedItem where Date = DATE_SUB('${currentDate}', INTERVAL 1 DAY)`
+			);
+			connection.release();
+			return rows;
+		} catch (err) {
+			console.error("Database error:", err);
+			throw err;
+		}
+	}
+
 	async getItemsForRecommendation(): Promise<any[]> {
 		try {
 			const connection = await this.pool.getConnection();
