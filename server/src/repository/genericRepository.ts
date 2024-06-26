@@ -45,7 +45,6 @@ export class GenericRepository<T> implements IRepository<T> {
 				`UPDATE ${this.tableName} SET ? WHERE id = ?`,
 				[entity, (entity as any).id]
 			);
-			console.log(row);
 			return row.length > 0 ? row : null;
 		} catch (err) {
 			throw new Error("Internal serveer error");

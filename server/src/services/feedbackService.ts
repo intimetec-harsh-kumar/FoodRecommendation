@@ -9,8 +9,6 @@ class FeedbackService {
 			feedback.userEmail = UserDetail.getUserDetail();
 			const genericRepository = new GenericRepository(pool, "Feedback");
 			const [rows]: any = await genericRepository.add(feedback);
-			console.log(rows);
-
 			connection.release();
 			return rows.affectedRows ? rows : [];
 		} catch (error) {

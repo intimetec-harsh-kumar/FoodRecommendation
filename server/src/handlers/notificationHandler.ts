@@ -1,4 +1,3 @@
-import { log } from "console";
 import NotificationService from "../services/notificationService";
 
 class NotificationHandler {
@@ -14,7 +13,6 @@ class NotificationHandler {
 		notificationTypeId?: number
 	): Promise<void> {
 		try {
-			console.log("in nh", notificationTypeId);
 			const notification: any = await NotificationService.getNotification(
 				notificationTypeId
 			);

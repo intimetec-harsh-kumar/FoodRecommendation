@@ -19,8 +19,6 @@ class FoodItemHandler {
 	): Promise<void> {
 		try {
 			const addedItem = await FoodItemService.addItem(item);
-			console.log("addeditem inisde socketSevice", addedItem);
-
 			if (addedItem) {
 				console.log(`Item ${item.item_name} added successfully`);
 				let userEmail = UserDetail.getUserDetail();

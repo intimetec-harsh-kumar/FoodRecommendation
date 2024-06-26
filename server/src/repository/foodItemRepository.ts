@@ -20,8 +20,6 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			const [rows]: any = await connection.query(
 				"SELECT * FROM Items where availability_status = 1"
 			);
-			console.log("in dbService", rows);
-
 			connection.release();
 			return rows;
 		} catch (err) {

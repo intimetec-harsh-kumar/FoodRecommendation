@@ -16,7 +16,6 @@ class UserService {
 			const connection = await pool.getConnection();
 			const genericRepository = new GenericRepository<Users>(pool, "Users");
 			const rows: any = await genericRepository.getByEmail(email);
-			console.log("inside userService", rows);
 			connection.release();
 			return rows as any[];
 		} catch (err) {

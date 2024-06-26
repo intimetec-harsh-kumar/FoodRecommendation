@@ -12,7 +12,6 @@ class FoodRecommendationHandler {
 			let foodItemRecommendationForNextDay =
 				await FoodRecommendationEngineService.getRecommendations(5);
 			callback({ recommendations: foodItemRecommendationForNextDay });
-			console.log("Recommended Food Items:", foodItemRecommendationForNextDay);
 		} catch (error) {
 			console.error("Error fetching recommendations:", error);
 		}

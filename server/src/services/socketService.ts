@@ -125,8 +125,6 @@ class SocketService {
 				foodItemId: number,
 				callback: (response: { message: string }) => void
 			) => {
-				console.log("in ss", foodItemId);
-
 				FoodItemhandler.selectFoodItemForNextDay(foodItemId, callback);
 			}
 		);

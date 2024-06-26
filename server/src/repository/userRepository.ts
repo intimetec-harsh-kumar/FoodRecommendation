@@ -6,7 +6,6 @@ export class UserRepository extends GenericRepository<any> {
 		try {
 			const connection = await pool.getConnection();
 			const rows: any = await this.getByEmail(email);
-			console.log("in userrepo", rows);
 			connection.release();
 			return rows as any[];
 		} catch (err) {

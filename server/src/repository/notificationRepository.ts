@@ -7,8 +7,6 @@ export class NotificationRepository extends GenericRepository<any> {
 		try {
 			const connection = await pool.getConnection();
 			let currentDate = DateService.getCurrentDate();
-			console.log("in nr", notificationTypeId);
-
 			if (notificationTypeId) {
 				const [rows]: any = await this.pool.query(
 					`select * from Notifications where Date = '${currentDate}' and NotificationTypeId = ${notificationTypeId}`
