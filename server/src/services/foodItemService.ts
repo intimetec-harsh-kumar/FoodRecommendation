@@ -8,13 +8,13 @@ class FoodItemService {
 		availability_status: boolean;
 		meal_type_id: number;
 	}): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Items");
+		const foodItemRepository = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepository.add(item);
 		return rows;
 	}
 
 	async addVotedItem(votedItem: any): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "VotedItem");
+		const foodItemRepository = new FoodItemRepository(pool, "Voted_Item");
 		const rows = await foodItemRepository.add(votedItem);
 		return rows;
 	}
@@ -26,25 +26,25 @@ class FoodItemService {
 		availability_status: boolean;
 		meal_type_id: number;
 	}): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Items");
+		const foodItemRepository = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepository.update(item);
 		return rows;
 	}
 
 	async deleteItem(itemId: number): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Items");
+		const foodItemRepository = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepository.delete(itemId);
 		return rows;
 	}
 
 	async getItems(): Promise<any[]> {
-		const foodItemRepository = new FoodItemRepository(pool, "Items");
+		const foodItemRepository = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepository.getAll();
 		return rows;
 	}
 
 	async getAvailableItems(): Promise<any[]> {
-		const foodItemRepository = new FoodItemRepository(pool, "Items");
+		const foodItemRepository = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepository.getAvailableItems();
 		return rows;
 	}
@@ -52,7 +52,7 @@ class FoodItemService {
 	async getMealTypes(): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();
-			const foodItemRepository = new FoodItemRepository(pool, "Items");
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
 			const rows = await foodItemRepository.getMealTypes();
 			connection.release();
 			return rows;
@@ -65,7 +65,7 @@ class FoodItemService {
 	async getVotedItem(currentDate: string): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();
-			const foodItemRepository = new FoodItemRepository(pool, "VotedItem");
+			const foodItemRepository = new FoodItemRepository(pool, "Voted_Item");
 			const rows = await foodItemRepository.getVotedItem(currentDate);
 			connection.release();
 			return rows;

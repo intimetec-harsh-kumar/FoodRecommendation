@@ -18,7 +18,7 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 		try {
 			const connection = await this.pool.getConnection();
 			const [rows]: any = await connection.query(
-				"SELECT * FROM Items where availability_status = 1"
+				"SELECT * FROM Item where availability_status = 1"
 			);
 			connection.release();
 			return rows;
@@ -32,7 +32,7 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 		try {
 			const connection = await this.pool.getConnection();
 			const [rows]: any = await connection.query(
-				`SELECT * FROM VotedItem where Date = DATE_SUB('${currentDate}', INTERVAL 1 DAY)`
+				`SELECT * FROM Voted_Item where Date = DATE_SUB('${currentDate}', INTERVAL 1 DAY)`
 			);
 			connection.release();
 			return rows;
@@ -47,15 +47,15 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			const connection = await this.pool.getConnection();
 			const [rows]: any = await connection.query(
 				` SELECT 
-						f.foodItemId,
+						f.food_item_id,
 						i.item_name as itemName,
 						f.rating,
 						f.vote,
 						f.sentiment,
-						f.noOfTimesPrepared,
-						(f.noOfTimesPrepared / f.rating) AS preparationToRatingRatio
+						f.no_of_times_prepared,
+						(f.no_of_times_prepared / f.rating) AS preparationToRatingRatio
 					FROM 
-						FoodItemAudit f inner join items i on i.id=f.foodItemId;`
+						Food_Item_Audit f inner join Item i on i.id=f.food_item_id;`
 			);
 			connection.release();
 			return rows;

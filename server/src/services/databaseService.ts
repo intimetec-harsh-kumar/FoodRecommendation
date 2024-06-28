@@ -7,7 +7,7 @@ class DatabaseService {
 	async getUserByEmail(email: string): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();
-			const genericRepository = new GenericRepository<Users>(pool, "Users");
+			const genericRepository = new GenericRepository<Users>(pool, "User");
 			const rows: any = await genericRepository.getByEmail(email);
 			connection.release();
 			return rows as any[];
@@ -23,7 +23,7 @@ class DatabaseService {
 		availability_status: boolean;
 		meal_type_id: number;
 	}): Promise<unknown> {
-		const foodItemRepo = new FoodItemRepository(pool, "Items");
+		const foodItemRepo = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepo.add(item);
 		return rows;
 	}
@@ -35,19 +35,19 @@ class DatabaseService {
 		availability_status: boolean;
 		meal_type_id: number;
 	}): Promise<unknown> {
-		const foodItemRepo = new FoodItemRepository(pool, "Items");
+		const foodItemRepo = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepo.update(item);
 		return rows;
 	}
 
 	async deleteItem(itemId: number): Promise<unknown> {
-		const foodItemRepo = new FoodItemRepository(pool, "Items");
+		const foodItemRepo = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepo.delete(itemId);
 		return rows;
 	}
 
 	async getItems(): Promise<any[]> {
-		const foodItemRepo = new FoodItemRepository(pool, "Items");
+		const foodItemRepo = new FoodItemRepository(pool, "Item");
 		const rows = await foodItemRepo.getAll();
 		return rows;
 	}

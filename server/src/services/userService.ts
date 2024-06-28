@@ -6,7 +6,7 @@ import { UserRepository } from "../repository/userRepository";
 
 class UserService {
 	async getUsers() {
-		const users = new UserRepository(pool, "Users");
+		const users = new UserRepository(pool, "User");
 		const rows = await users.getAll();
 		return rows;
 	}
@@ -14,7 +14,7 @@ class UserService {
 	async getUserByEmail(email: string): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();
-			const genericRepository = new GenericRepository<Users>(pool, "Users");
+			const genericRepository = new GenericRepository<Users>(pool, "User");
 			const rows: any = await genericRepository.getByEmail(email);
 			connection.release();
 			return rows as any[];

@@ -73,9 +73,9 @@ class SocketService {
 				notificationTypeId: number | undefined,
 				callback: (response: {
 					notification: {
-						Id: number;
-						NotificationTypeId: number;
-						Message: string;
+						id: number;
+						notification_type_id: number;
+						message: string;
 						Date: any;
 					}[];
 				}) => void
@@ -110,7 +110,7 @@ class SocketService {
 				callback: (response: {
 					log: {
 						id: number;
-						userEmail: string;
+						user_email: string;
 						action: string;
 					}[];
 				}) => void

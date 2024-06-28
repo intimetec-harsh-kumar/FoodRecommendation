@@ -9,12 +9,12 @@ export class NotificationRepository extends GenericRepository<any> {
 			let currentDate = DateService.getCurrentDate();
 			if (notificationTypeId) {
 				const [rows]: any = await this.pool.query(
-					`select * from Notifications where Date = '${currentDate}' and NotificationTypeId = ${notificationTypeId}`
+					`select * from Notification where Date = '${currentDate}' and notification_type_id = ${notificationTypeId}`
 				);
 				return rows;
 			}
 			const [rows]: any = await this.pool.query(
-				`select * from Notifications where Date = '${currentDate}'`
+				`select * from Notification where Date = '${currentDate}'`
 			);
 
 			connection.release();

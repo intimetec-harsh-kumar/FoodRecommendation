@@ -6,7 +6,7 @@ class RoleService {
 	async getRoleUser(email: string): Promise<any[]> {
 		try {
 			const connection = await pool.getConnection();
-			const genericRepository = new GenericRepository<Users>(pool, "Users");
+			const genericRepository = new GenericRepository<Users>(pool, "User");
 			const rows: any = await genericRepository.getByEmail(email);
 			connection.release();
 			return rows as any[];

@@ -35,15 +35,17 @@ class EmployeeConsole {
 				case 4:
 					let rolledOutFoodItems: any =
 						await this.employeeHandlers.viewNotifications(4);
+					console.log(rolledOutFoodItems);
+
 					console.log(
 						"Rolled Out Food Item Ids : " +
-							rolledOutFoodItems.map((item: any) => item.Id).join(",")
+							rolledOutFoodItems.map((item: any) => item.id).join(",")
 					);
 					const selectedFoodItemIds = await InputHandlerService.askQuestion(
 						"Enter item Id to select for next day seperated by comma : "
 					);
 					const rolledOutFoodItemIds = new Set(
-						rolledOutFoodItems.map((item: any) => item.Id)
+						rolledOutFoodItems.map((item: any) => item.id)
 					);
 					const invalidFoodItemIds: string[] = [];
 

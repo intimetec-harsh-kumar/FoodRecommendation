@@ -5,7 +5,7 @@ class LogHandler {
 	public async handleViewLogs(
 		socket: Socket,
 		callback: (response: {
-			log: { id: number; userEmail: string; action: string }[];
+			log: { id: number; user_email: string; action: string }[];
 		}) => void
 	): Promise<any> {
 		try {

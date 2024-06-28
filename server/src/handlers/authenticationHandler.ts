@@ -17,7 +17,7 @@ class authenticationHandler {
 			console.log(`Email ${email} authenticated successfully.`);
 			let userEmail = UserDetail.getUserDetail();
 			let logObject = {
-				userEmail: userEmail,
+				user_email: userEmail,
 				action: "authentication",
 				timestamp: DateService.getCurrentTimestamp(),
 			};

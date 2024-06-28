@@ -12,8 +12,8 @@ export class GenericRepository<T> implements IRepository<T> {
 	async getByEmail(email: string): Promise<T> {
 		const [rows]: any = await this.pool.query(
 			`SELECT r.role_name 
-        FROM users u 
-        JOIN roles r ON u.role_id = r.id 
+        FROM User u 
+        JOIN role r ON u.role_id = r.id 
         WHERE u.email = ?`,
 			[email]
 		);

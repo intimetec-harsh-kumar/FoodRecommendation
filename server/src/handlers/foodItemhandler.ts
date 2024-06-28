@@ -24,8 +24,8 @@ class FoodItemHandler {
 				let userEmail = UserDetail.getUserDetail();
 				this.addLog(userEmail, "AddItems");
 				NotificationService.pushNotification({
-					NotificationTypeId: 1,
-					Message: `${item.item_name} have been added to the Items`,
+					notification_type_id: 1,
+					message: `${item.item_name} have been added to the Items`,
 					Date: DateService.getCurrentDate(),
 				});
 				callback({
@@ -66,8 +66,8 @@ class FoodItemHandler {
 				let userEmail = UserDetail.getUserDetail();
 				this.addLog(userEmail, "UpdateItem");
 				NotificationService.pushNotification({
-					NotificationTypeId: 2,
-					Message: `${item.item_name} have been updated to the Items`,
+					notification_type_id: 2,
+					message: `${item.item_name} have been updated to the Items`,
 					Date: DateService.getCurrentDate(),
 				});
 				callback({
@@ -100,8 +100,8 @@ class FoodItemHandler {
 				let userEmail = UserDetail.getUserDetail();
 				this.addLog(userEmail, "DeleteItem");
 				NotificationService.pushNotification({
-					NotificationTypeId: 3,
-					Message: `${itemId} have been deleted from the Items`,
+					notification_type_id: 3,
+					message: `${itemId} have been deleted from the Items`,
 					Date: DateService.getCurrentDate(),
 				});
 				callback({
@@ -167,8 +167,8 @@ class FoodItemHandler {
 		callback: (response: {
 			votedItems: {
 				id: number;
-				foodItemId: number;
-				userEmail: string;
+				food_item_id: number;
+				user_email: string;
 				Date: Date;
 			}[];
 		}) => void
@@ -213,8 +213,8 @@ class FoodItemHandler {
 
 			const promises = foodItemIdArray.map(async (foodItemId) => {
 				let votedItem = {
-					foodItemId: foodItemId,
-					userEmail: userEmail,
+					food_item_id: foodItemId,
+					user_email: userEmail,
 					date: currentDate,
 				};
 				console.log("itemmm", foodItemId);
@@ -240,7 +240,7 @@ class FoodItemHandler {
 
 	addLog(email: string | null, action: string) {
 		let logObject = {
-			userEmail: email,
+			user_email: email,
 			action: action,
 			timestamp: DateService.getCurrentTimestamp(),
 		};

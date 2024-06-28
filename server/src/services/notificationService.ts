@@ -9,7 +9,7 @@ class NotificationService {
 	async pushNotification(notification: any): Promise<void> {
 		try {
 			const connection = await pool.getConnection();
-			const genericRepository = new GenericRepository(pool, "Notifications");
+			const genericRepository = new GenericRepository(pool, "Notification");
 			const rows: any = await genericRepository.add(notification);
 			connection.release();
 			return rows;
@@ -23,7 +23,7 @@ class NotificationService {
 			const connection = await pool.getConnection();
 			const notificationRepository = new NotificationRepository(
 				pool,
-				"Notifications"
+				"Notification"
 			);
 			const rows: any = await notificationRepository.getCurrentNotification(
 				notificationTypeId
@@ -39,12 +39,12 @@ class NotificationService {
 		foodItemIdsToRollOutForNextDay: string
 	) {
 		try {
-			let genericRepository = new GenericRepository(pool, "items");
+			let genericRepository = new GenericRepository(pool, "Item");
 			foodItemIdsToRollOutForNextDay.split(",").forEach(async (itemId) => {
 				let item: any = await genericRepository.getById(itemId);
 				let notification = {
-					NotificationTypeId: 4,
-					Message: item[0].item_name,
+					notification_type_id: 4,
+					message: item[0].item_name,
 					Date: dateService.getCurrentDate(),
 				};
 				this.pushNotification(notification);

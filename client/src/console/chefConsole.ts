@@ -35,12 +35,14 @@ class ChefConsole {
 					let recommendedFoodItems =
 						await this.chefHandlers.viewRecommendations();
 					const recommendedFoodItemIds = new Set(
-						recommendedFoodItems.map((item: any) => item.foodItemId)
+						recommendedFoodItems.map((item: any) => item.food_item_id)
 					);
 
 					console.log(
 						"Choose from recommeded food item IDs : " +
-							recommendedFoodItems.map((item: any) => item.foodItemId).join(",")
+							recommendedFoodItems
+								.map((item: any) => item.food_item_id)
+								.join(",")
 					);
 					const foodItemIdsToRollOutForNextDay =
 						await InputHandlerService.askQuestion(

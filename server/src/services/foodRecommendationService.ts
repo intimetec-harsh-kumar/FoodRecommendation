@@ -7,7 +7,7 @@ class FoodRecommendationEngineService {
 			const sentimentScore = item.sentiment;
 			const ratingScore = item.rating;
 			const voteScore = item.vote;
-			const preparationScore = item.noOfTimesPrepared;
+			const preparationScore = item.no_of_times_prepared;
 			const preparationToRatingRatioScore = item.preparationToRatingRatio;
 
 			item.recommendationScore =
@@ -21,7 +21,7 @@ class FoodRecommendationEngineService {
 	}
 
 	public async getRecommendations(limit: number): Promise<any> {
-		const foodItemRepo = new FoodItemRepository(pool, "items");
+		const foodItemRepo = new FoodItemRepository(pool, "Item");
 		const foodItems: any = await foodItemRepo.getItemsForRecommendation();
 		let foodItemsForRecommendation =
 			this.calculateRecommendationScores(foodItems);

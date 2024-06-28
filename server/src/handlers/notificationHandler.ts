@@ -4,9 +4,9 @@ class NotificationHandler {
 	public async handleViewNotifications(
 		callback: (response: {
 			notification: {
-				Id: number;
-				NotificationTypeId: number;
-				Message: string;
+				id: number;
+				notification_type_id: number;
+				message: string;
 				Date: any;
 			}[];
 		}) => void,

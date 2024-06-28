@@ -7,7 +7,7 @@ class FeedbackService {
 	async provideFeedback(feedback: any): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
-			feedback.userEmail = UserDetail.getUserDetail();
+			feedback.user_email = UserDetail.getUserDetail();
 			const genericRepository = new GenericRepository(pool, "Feedback");
 			const sentimentScore = await SentimentService.analyzeFeedbackSentiments(
 				feedback.comment
