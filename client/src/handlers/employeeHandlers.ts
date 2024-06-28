@@ -14,11 +14,10 @@ class EmployeeHandlers extends ActionHandlers {
 				notificationTypeId,
 				(response: any) => {
 					if (response.notification.length > 0) {
-						console.log(response.notification);
+						resolve(response.notification);
 					} else {
-						console.log("no data found");
+						reject("error occured while fetching the records");
 					}
-					resolve(response.items);
 				}
 			);
 		});
@@ -64,11 +63,11 @@ class EmployeeHandlers extends ActionHandlers {
 		});
 	}
 
-	async selectFoodItemForNextDay(): Promise<void> {
+	async selectFoodItemForNextDay(foodItemId: any): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			const foodItemId = await InputHandlerService.askQuestion(
-				"Enter item Id: "
-			);
+			// const foodItemId = await InputHandlerService.askQuestion(
+			// 	"Enter item Id: "
+			// );
 			// const rating = await InputHandlerService.askQuestion(
 			// 	"Enter your rating (0-5): "
 			// );

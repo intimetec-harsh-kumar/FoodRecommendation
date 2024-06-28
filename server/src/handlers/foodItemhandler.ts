@@ -203,22 +203,35 @@ class FoodItemHandler {
 	}
 
 	public async selectFoodItemForNextDay(
-		foodItemId: number,
+		foodItemIds: string,
 		callback: (response: { message: string }) => void
 	): Promise<any> {
 		try {
-			let votedItem = {
-				foodItemId: foodItemId,
-				userEmail: UserDetail.getUserDetail(),
-				date: DateService.getCurrentDate(),
-			};
-			const selectedItem = await FoodItemService.addVotedItem(votedItem);
-			if (selectedItem) {
+			const userEmail = UserDetail.getUserDetail();
+			const currentDate = DateService.getCurrentDate();
+			const foodItemIdArray = foodItemIds.split(",").map((id) => id.trim());
+
+			const promises = foodItemIdArray.map(async (foodItemId) => {
+				let votedItem = {
+					foodItemId: foodItemId,
+					userEmail: userEmail,
+					date: currentDate,
+				};
+				console.log("itemmm", foodItemId);
+
+				return await FoodItemService.addVotedItem(votedItem);
+			});
+			const results = await Promise.all(promises);
+			const allAdded = results.every((result) => result);
+
+			if (allAdded) {
 				callback({
-					message: `Item with id ${foodItemId} choosen successfully`,
+					message: `Items with ids ${foodItemIds} chosen successfully`,
 				});
 			} else {
-				callback({ message: `Failed to choose an Item with id ${foodItemId}` });
+				callback({
+					message: `Failed to choose some items with ids ${foodItemIds}`,
+				});
 			}
 		} catch (error) {
 			console.error("Error retrieving items:", error);

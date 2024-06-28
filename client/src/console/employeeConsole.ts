@@ -16,7 +16,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Notification\n 3: Send Feedback \n 4:Choose Item for next day \n 5:Logout\n): "
+					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Notification\n 3: Send Feedback \n 4: Choose Item for next day \n 5:Logout\n): "
 				)
 			);
 
@@ -25,13 +25,47 @@ class EmployeeConsole {
 					await this.employeeHandlers.viewMenuItems();
 					break;
 				case 2:
-					await this.employeeHandlers.viewNotifications(4);
+					let notifications: any =
+						await this.employeeHandlers.viewNotifications(4);
+					console.log(notifications);
 					break;
 				case 3:
 					await this.employeeHandlers.provideFeedback();
 					break;
 				case 4:
-					await this.employeeHandlers.selectFoodItemForNextDay();
+					let rolledOutFoodItems: any =
+						await this.employeeHandlers.viewNotifications(4);
+					console.log(
+						"Rolled Out Food Item Ids : " +
+							rolledOutFoodItems.map((item: any) => item.Id).join(",")
+					);
+					const selectedFoodItemIds = await InputHandlerService.askQuestion(
+						"Enter item Id to select for next day seperated by comma : "
+					);
+					const rolledOutFoodItemIds = new Set(
+						rolledOutFoodItems.map((item: any) => item.Id)
+					);
+					const invalidFoodItemIds: string[] = [];
+
+					selectedFoodItemIds.split(",").forEach((id) => {
+						if (!rolledOutFoodItemIds.has(parseInt(id.trim()))) {
+							invalidFoodItemIds.push(id.trim());
+						}
+					});
+
+					if (invalidFoodItemIds.length > 0) {
+						console.log(
+							"Invalid Food Item Ids: " + invalidFoodItemIds.join(",")
+						);
+						console.log(
+							"Please enter valid Food Item Ids from the list: " +
+								rolledOutFoodItems.map((item: any) => item.Id).join(",")
+						);
+					} else {
+						await this.employeeHandlers.selectFoodItemForNextDay(
+							selectedFoodItemIds
+						);
+					}
 					break;
 				case 5:
 					await this.employeeHandlers.logout();

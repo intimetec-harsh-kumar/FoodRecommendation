@@ -35,16 +35,21 @@ class ChefConsole {
 					let recommendedFoodItems =
 						await this.chefHandlers.viewRecommendations();
 					console.log(
-						recommendedFoodItems.map((item: any) => item.foodItemId).join(",")
+						"Choose from recommeded food item IDs : " +
+							recommendedFoodItems.map((item: any) => item.foodItemId).join(",")
 					);
 					const foodItemIdsToRollOutForNextDay =
-						await InputHandlerService.askQuestion("Enter food item ids : ");
+						await InputHandlerService.askQuestion(
+							"Enter comma seperated food item id to roll out : "
+						);
 					await this.chefHandlers.sendFoodNotification(
 						foodItemIdsToRollOutForNextDay
 					);
 					break;
 				case 6:
-					await this.chefHandlers.viewRecommendations();
+					let recommendations: any =
+						await this.chefHandlers.viewRecommendations();
+					console.log(recommendations);
 					break;
 				case 7:
 					await this.chefHandlers.viewVotedItems();
