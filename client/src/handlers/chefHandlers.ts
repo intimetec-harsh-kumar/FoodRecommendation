@@ -61,11 +61,20 @@ class ChefHandlers {
 
 	async sendFoodNotification(
 		foodItemIdsToRollOutForNextDay: any
-	): Promise<void> {
-		this.socket.emit(
-			"sendFoodItemNotificationForNextDay",
-			foodItemIdsToRollOutForNextDay
-		);
+	): Promise<any> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit(
+				"sendFoodItemNotificationForNextDay",
+				foodItemIdsToRollOutForNextDay,
+				(response: any) => {
+					if (response) {
+						resolve(response.message);
+					} else {
+						reject("Error occurred while sending notification");
+					}
+				}
+			);
+		});
 	}
 
 	async viewRecommendations(): Promise<any[]> {

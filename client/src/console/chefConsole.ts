@@ -34,6 +34,10 @@ class ChefConsole {
 				case 5:
 					let recommendedFoodItems =
 						await this.chefHandlers.viewRecommendations();
+					const recommendedFoodItemIds = new Set(
+						recommendedFoodItems.map((item: any) => item.foodItemId)
+					);
+
 					console.log(
 						"Choose from recommeded food item IDs : " +
 							recommendedFoodItems.map((item: any) => item.foodItemId).join(",")
@@ -42,9 +46,26 @@ class ChefConsole {
 						await InputHandlerService.askQuestion(
 							"Enter comma seperated food item id to roll out : "
 						);
-					await this.chefHandlers.sendFoodNotification(
-						foodItemIdsToRollOutForNextDay
+					const selectedFoodItemIds = foodItemIdsToRollOutForNextDay
+						.split(",")
+						.map((id) => id.trim());
+					const invalidFoodItemIds = selectedFoodItemIds.filter(
+						(id) => !recommendedFoodItemIds.has(parseInt(id))
 					);
+					if (invalidFoodItemIds.length > 0) {
+						console.log(
+							"Invalid Food Item Ids: " + invalidFoodItemIds.join(",")
+						);
+						console.log(
+							"Please enter valid Food Item Ids from the list: " +
+								Array.from(recommendedFoodItemIds).join(",")
+						);
+					} else {
+						let message = await this.chefHandlers.sendFoodNotification(
+							foodItemIdsToRollOutForNextDay
+						);
+						console.log(message);
+					}
 					break;
 				case 6:
 					let recommendations: any =

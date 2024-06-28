@@ -156,7 +156,8 @@ class SocketService {
 				callback: (response: { message: string }) => void
 			) => {
 				NotificationHandler.handleSendNotifications(
-					foodItemIdsToRollOutForNextDay
+					foodItemIdsToRollOutForNextDay,
+					callback
 				);
 			}
 		);

@@ -18,17 +18,22 @@ class NotificationHandler {
 			);
 			callback({ notification: notification });
 		} catch (error) {
-			console.error("Error retrieving items:", error);
+			console.error("Error retrieving notification:", error);
 		}
 	}
 
-	public async handleSendNotifications(foodItemIdsToRollOutForNextDay: any) {
+	public async handleSendNotifications(
+		foodItemIdsToRollOutForNextDay: any,
+		callback: (response: { message: string }) => void
+	) {
 		try {
 			await NotificationService.sendFoodItemNotificationForNextDay(
 				foodItemIdsToRollOutForNextDay
 			);
+			callback({ message: `Notification sent successfully` });
 		} catch (error) {
-			console.error("Error retrieving items:", error);
+			console.error("Error occured while sending notification:", error);
+			callback({ message: `Error occured while sending notification` });
 		}
 	}
 }
