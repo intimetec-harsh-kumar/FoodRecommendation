@@ -35,14 +35,16 @@ class NotificationService {
 			throw error;
 		}
 	}
-	async sendFoodItemNotificationForNextDay() {
+	async sendFoodItemNotificationForNextDay(
+		foodItemIdsToRollOutForNextDay: string
+	) {
 		try {
-			const foodItemRecommendationsForNextDay =
-				await FoodRecommendationEngineService.getRecommendations(5);
-			foodItemRecommendationsForNextDay.forEach((recommendation: any) => {
+			let genericRepository = new GenericRepository(pool, "items");
+			foodItemIdsToRollOutForNextDay.split(",").forEach(async (itemId) => {
+				let item: any = await genericRepository.getById(itemId);
 				let notification = {
 					NotificationTypeId: 4,
-					Message: recommendation.itemName,
+					Message: item[0].item_name,
 					Date: dateService.getCurrentDate(),
 				};
 				this.pushNotification(notification);

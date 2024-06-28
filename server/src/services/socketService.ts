@@ -151,8 +151,13 @@ class SocketService {
 		);
 		socket.on(
 			"sendFoodItemNotificationForNextDay",
-			(callback: (response: { message: string }) => void) => {
-				NotificationHandler.handleSendNotifications();
+			(
+				foodItemIdsToRollOutForNextDay,
+				callback: (response: { message: string }) => void
+			) => {
+				NotificationHandler.handleSendNotifications(
+					foodItemIdsToRollOutForNextDay
+				);
 			}
 		);
 		socket.on(

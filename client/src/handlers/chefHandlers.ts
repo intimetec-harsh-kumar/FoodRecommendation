@@ -59,19 +59,25 @@ class ChefHandlers {
 		});
 	}
 
-	async sendFoodNotification(): Promise<void> {
-		this.socket.emit("sendFoodItemNotificationForNextDay");
+	async sendFoodNotification(
+		foodItemIdsToRollOutForNextDay: any
+	): Promise<void> {
+		this.socket.emit(
+			"sendFoodItemNotificationForNextDay",
+			foodItemIdsToRollOutForNextDay
+		);
 	}
 
-	async viewRecommendations(): Promise<void> {
+	async viewRecommendations(): Promise<any[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewRecommendations", (response: any) => {
 				if (response) {
-					console.log(response);
+					console.log(response.recommendations);
+					resolve(response.recommendations);
 				} else {
 					console.log("Error occured while logging out");
+					reject("Error occurred while fetching recommendations");
 				}
-				resolve(response);
 			});
 		});
 	}

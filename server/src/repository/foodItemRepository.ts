@@ -47,7 +47,7 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			const connection = await this.pool.getConnection();
 			const [rows]: any = await connection.query(
 				` SELECT 
-						f.id AS foodItemId,
+						f.foodItemId,
 						i.item_name as itemName,
 						f.rating,
 						f.vote,

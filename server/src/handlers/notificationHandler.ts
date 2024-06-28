@@ -22,9 +22,11 @@ class NotificationHandler {
 		}
 	}
 
-	public async handleSendNotifications() {
+	public async handleSendNotifications(foodItemIdsToRollOutForNextDay: any) {
 		try {
-			await NotificationService.sendFoodItemNotificationForNextDay();
+			await NotificationService.sendFoodItemNotificationForNextDay(
+				foodItemIdsToRollOutForNextDay
+			);
 		} catch (error) {
 			console.error("Error retrieving items:", error);
 		}

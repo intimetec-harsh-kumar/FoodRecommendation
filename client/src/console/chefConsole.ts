@@ -32,7 +32,16 @@ class ChefConsole {
 					await this.chefHandlers.viewAvailableFoodItems();
 					break;
 				case 5:
-					await this.chefHandlers.sendFoodNotification();
+					let recommendedFoodItems =
+						await this.chefHandlers.viewRecommendations();
+					console.log(
+						recommendedFoodItems.map((item: any) => item.foodItemId).join(",")
+					);
+					const foodItemIdsToRollOutForNextDay =
+						await InputHandlerService.askQuestion("Enter food item ids : ");
+					await this.chefHandlers.sendFoodNotification(
+						foodItemIdsToRollOutForNextDay
+					);
 					break;
 				case 6:
 					await this.chefHandlers.viewRecommendations();

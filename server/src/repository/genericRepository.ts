@@ -20,12 +20,10 @@ export class GenericRepository<T> implements IRepository<T> {
 		return rows.length > 0 ? rows : [];
 	}
 
-	async getById(Id: number): Promise<T> {
+	async getById(Id: string): Promise<T> {
 		const [rows]: any = await this.pool.query(
-			`SELECT r.role_name 
-        FROM users u 
-        JOIN roles r ON u.role_id = r.id 
-        WHERE u.id = ?`,
+			`SELECT * from ${this.tableName}
+        WHERE id = ?`,
 			[Id]
 		);
 		return rows.length > 0 ? rows : null;
