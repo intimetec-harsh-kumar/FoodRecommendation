@@ -6,14 +6,18 @@ import pool from "../config/dbConnection";
 class FoodRecommendationHandler {
 	public async handleViewRecommendation(
 		socket: Socket,
-		callback: (response: { recommendations: any }) => void
+		callback: (response: { recommendations: any; error?: string }) => void
 	): Promise<any> {
 		try {
 			let foodItemRecommendationForNextDay =
 				await FoodRecommendationEngineService.getRecommendations(5);
 			callback({ recommendations: foodItemRecommendationForNextDay });
-		} catch (error) {
-			console.error("Error fetching recommendations:", error);
+		} catch (error: any) {
+			console.error("Error fetching recommendations:", error.message);
+			callback({
+				recommendations: [],
+				error: `Error occured: ${error.message}`,
+			});
 		}
 	}
 }

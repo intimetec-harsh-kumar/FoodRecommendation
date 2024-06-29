@@ -17,26 +17,77 @@ class AdminConsole {
 			);
 			switch (action) {
 				case "1":
-					await this.adminHandlers.addItem();
+					var item_name = await InputHandlerService.askQuestion(
+						"Enter item name: "
+					);
+					var price = parseFloat(
+						await InputHandlerService.askQuestion("Enter item price: ")
+					);
+					var availability_status =
+						(await InputHandlerService.askQuestion(
+							"Is the item available? (yes/no): "
+						)) === "yes";
+					var meal_type_id = parseInt(
+						await InputHandlerService.askQuestion(
+							"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
+						)
+					);
+					let addedItemMessage = await this.adminHandlers.addItem(
+						item_name,
+						price,
+						availability_status,
+						meal_type_id
+					);
+					console.log(addedItemMessage);
 					break;
 				case "2":
-					await this.adminHandlers.updateItem();
+					var id = parseInt(
+						await InputHandlerService.askQuestion("Enter item ID to update: ")
+					);
+					var item_name = await InputHandlerService.askQuestion(
+						"Enter new item name: "
+					);
+					var price = parseFloat(
+						await InputHandlerService.askQuestion("Enter new item price: ")
+					);
+					var availability_status =
+						(await InputHandlerService.askQuestion(
+							"Is the item available? (yes/no): "
+						)) === "yes";
+					var meal_type_id = parseInt(
+						await InputHandlerService.askQuestion("Enter new meal type ID: ")
+					);
+					let updatedItemMessage = await this.adminHandlers.updateItem(
+						id,
+						item_name,
+						price,
+						availability_status,
+						meal_type_id
+					);
+					console.log(updatedItemMessage);
 					break;
 				case "3":
-					await this.adminHandlers.deleteItem();
+					var id = parseInt(
+						await InputHandlerService.askQuestion("Enter item ID to delete: ")
+					);
+					let deletedItemMessage = await this.adminHandlers.deleteItem(id);
+					console.log(deletedItemMessage);
 					break;
 				case "4":
-					await this.adminHandlers.viewItems();
+					let items = await this.adminHandlers.viewItems();
+					console.log(items);
 					break;
 				case "5":
-					await this.adminHandlers.viewMealTypes();
+					let mealTypes = await this.adminHandlers.viewMealTypes();
+					console.log(mealTypes);
 					break;
 				case "6":
 					await this.adminHandlers.logout();
 					isConsoleRunning = false;
 					return;
 				case "7":
-					await this.adminHandlers.viewLog();
+					let logs = await this.adminHandlers.viewLog();
+					console.log(logs);
 					break;
 				default:
 					console.log("Invalid action. Please try again.");

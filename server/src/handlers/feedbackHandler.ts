@@ -5,7 +5,7 @@ class FeedbackHandler {
 	public async handleProvideFeedback(
 		socket: Socket,
 		feedback: any,
-		callback: (response: { message: string }) => void
+		callback: (response: { message: string; error?: string }) => void
 	) {
 		try {
 			const addedFeedback = await FeedbackService.provideFeedback(feedback);
@@ -20,10 +20,11 @@ class FeedbackHandler {
 					message: `Failed to add a feedback`,
 				});
 			}
-		} catch (err) {
-			console.error("Error adding a feedback:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
 			callback({
 				message: "An error occurred while adding a feedback",
+				error: `Error occured: ${error.message}`,
 			});
 		}
 	}

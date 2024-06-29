@@ -1,93 +1,58 @@
 import { Socket } from "socket.io-client";
-import InputHandlerService from "../services/inputHandlerService";
-import ActionHandlers from "../handlers/actionHandlers";
 
-class AdminHandlers extends ActionHandlers {
-	constructor(socket: Socket) {
-		super(socket);
-	}
+class AdminHandlers {
+	constructor(private socket: Socket) {}
 
-	async addItem(): Promise<void> {
+	async addItem(
+		item_name: string,
+		price: number,
+		availability_status: boolean,
+		meal_type_id: number
+	): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			const item_name = await InputHandlerService.askQuestion(
-				"Enter item name: "
-			);
-			const price = parseFloat(
-				await InputHandlerService.askQuestion("Enter item price: ")
-			);
-			const availability_status =
-				(await InputHandlerService.askQuestion(
-					"Is the item available? (yes/no): "
-				)) === "yes";
-			const meal_type_id = parseInt(
-				await InputHandlerService.askQuestion(
-					"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
-				)
-			);
 			this.socket.emit(
 				"addItem",
 				{ item_name, price, availability_status, meal_type_id },
 				(response: any) => {
-					if (response.success) {
-						console.log(response.message);
-						resolve(response.message);
+					if (response.error) {
+						resolve(response.error);
 					} else {
-						console.log("Failed to add item:", response.message);
-						reject(new Error(response.message));
+						resolve(response.message);
 					}
 				}
 			);
 		});
 	}
 
-	async updateItem() {
+	async updateItem(
+		id: number,
+		item_name: string,
+		price: number,
+		availability_status: boolean,
+		meal_type_id: number
+	) {
 		return new Promise(async (resolve, reject) => {
-			const id = parseInt(
-				await InputHandlerService.askQuestion("Enter item ID to update: ")
-			);
-			const item_name = await InputHandlerService.askQuestion(
-				"Enter new item name: "
-			);
-			const price = parseFloat(
-				await InputHandlerService.askQuestion("Enter new item price: ")
-			);
-			const availability_status =
-				(await InputHandlerService.askQuestion(
-					"Is the item available? (yes/no): "
-				)) === "yes";
-			const meal_type_id = parseInt(
-				await InputHandlerService.askQuestion("Enter new meal type ID: ")
-			);
 			this.socket.emit(
 				"updateItem",
 				{ id, item_name, price, availability_status, meal_type_id },
 				(response: any) => {
-					if (response.success) {
-						console.log(response.message);
-						resolve(response.success);
+					if (response.error) {
+						resolve(response.error);
 					} else {
-						console.log(response.message);
-						reject(new Error(response.message));
+						resolve(response.message);
 					}
 				}
 			);
 		});
 	}
 
-	async deleteItem() {
+	async deleteItem(id: number) {
 		return new Promise(async (resolve, reject) => {
-			const id = parseInt(
-				await InputHandlerService.askQuestion("Enter item ID to delete: ")
-			);
-
 			this.socket.emit("deleteItem", id, (response: any) => {
-				console.log(response);
-				if (response.success) {
-					console.log(response.message);
-					resolve(response.message);
+				if (response.error) {
+					resolve(response.error);
 				} else {
-					console.error(response.message);
-					reject(new Error(response.message));
+					resolve(response.message);
 				}
 			});
 		});
@@ -96,12 +61,13 @@ class AdminHandlers extends ActionHandlers {
 	async viewItems() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewItems", (response: any) => {
-				if (response.items.length > 0) {
-					console.log(response.items);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.items.length === 0) {
+					resolve("No records found.");
 				} else {
-					console.log("no data found");
+					resolve(response.items);
 				}
-				resolve(response.items);
 			});
 		});
 	}
@@ -109,12 +75,13 @@ class AdminHandlers extends ActionHandlers {
 	async viewMealTypes() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewMealTypes", (response: any) => {
-				if (response.mealType.length > 0) {
-					console.log(response.mealType);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.mealType.length === 0) {
+					resolve("No records found.");
 				} else {
-					console.log("no data found");
+					resolve(response.mealType);
 				}
-				resolve(response.mealType);
 			});
 		});
 	}
@@ -122,12 +89,13 @@ class AdminHandlers extends ActionHandlers {
 	async viewLog() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewLog", (response: any) => {
-				if (response.log.length > 0) {
-					console.log(response.log);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.log.length === 0) {
+					resolve("No records found.");
 				} else {
-					console.log("no data found");
+					resolve(response.log);
 				}
-				resolve(response.log);
 			});
 		});
 	}

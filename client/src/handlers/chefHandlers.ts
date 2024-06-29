@@ -3,101 +3,108 @@ import { Socket } from "socket.io-client";
 class ChefHandlers {
 	constructor(private socket: Socket) {}
 
-	async viewMenuItems(): Promise<void> {
+	async viewMenuItems(): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewItems", (response: any) => {
-				if (response.items.length > 0) {
-					console.log(response.items);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.items.length === 0) {
+					resolve("No records found");
 				} else {
-					console.log("No records found.");
+					resolve(response.items);
 				}
-				resolve(response.items);
 			});
 		});
 	}
 
-	async viewMealTypes(): Promise<void> {
+	async viewMealTypes(): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewMealTypes", (response: any) => {
-				if (response.mealType.length > 0) {
-					console.log(response.mealType);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.mealType.length === 0) {
+					resolve("No records found.");
 				} else {
-					console.log("no data found");
+					resolve(response.mealType);
 				}
-				resolve(response.mealType);
 			});
 		});
 	}
 
-	async viewNotifications(notificationTypeId?: number): Promise<void> {
+	async viewNotifications(notificationTypeId?: number): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"viewNotifications",
 				notificationTypeId,
 				(response: any) => {
-					if (response.notification.length > 0) {
-						console.log(response.notification);
+					if (response.error) {
+						resolve(response.error);
+					} else if (response.notification.length === 0) {
+						resolve("There are no notifications yet");
 					} else {
-						console.log("No records found.");
+						resolve(response.notification);
 					}
-					resolve(response);
 				}
 			);
 		});
 	}
 
-	async viewAvailableFoodItems(): Promise<void> {
+	async viewAvailableFoodItems(): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewAvailableFoodItems", (response: any) => {
-				if (response.items.length > 0) {
-					console.log(response.items);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.items.length === 0) {
+					resolve("No records found");
 				} else {
-					console.log("No records found.");
+					resolve(response.items);
 				}
-				resolve(response);
 			});
 		});
 	}
 
 	async sendFoodNotification(
 		foodItemIdsToRollOutForNextDay: any
-	): Promise<any> {
+	): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"sendFoodItemNotificationForNextDay",
 				foodItemIdsToRollOutForNextDay,
 				(response: any) => {
-					if (response) {
-						resolve(response.message);
+					if (response.error) {
+						resolve(response.error);
 					} else {
-						reject("Error occurred while sending notification");
+						resolve(response.message);
 					}
 				}
 			);
 		});
 	}
 
-	async viewRecommendations(): Promise<any[]> {
+	async viewRecommendations(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewRecommendations", (response: any) => {
-				if (response) {
-					resolve(response.recommendations);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.recommendations.length === 0) {
+					resolve("No records found");
 				} else {
-					reject("Error occurred while fetching recommendations");
+					resolve(response.recommendations);
 				}
 			});
 		});
 	}
 
-	async viewVotedItems(): Promise<void> {
+	async viewVotedItems(): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewVotedItems", (response: any) => {
-				if (response) {
-					console.log(response.votedItems);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.votedItems.length === 0) {
+					resolve("No records found");
 				} else {
-					console.log("Error occured while fetching voted items data");
+					resolve(response.votedItems);
 				}
-				resolve(response);
 			});
 		});
 	}
@@ -105,11 +112,6 @@ class ChefHandlers {
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {
-				if (response) {
-					console.log(response);
-				} else {
-					console.log("Error occured while logging out");
-				}
 				resolve(response);
 			});
 		});

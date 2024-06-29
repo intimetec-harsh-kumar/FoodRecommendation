@@ -6,9 +6,13 @@ import { UserRepository } from "../repository/userRepository";
 
 class UserService {
 	async getUsers() {
-		const users = new UserRepository(pool, "User");
-		const rows = await users.getAll();
-		return rows;
+		try {
+			const users = new UserRepository(pool, "User");
+			const rows = await users.getAll();
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async getUserByEmail(email: string): Promise<any[]> {
@@ -18,15 +22,18 @@ class UserService {
 			const rows: any = await genericRepository.getByEmail(email);
 			connection.release();
 			return rows as any[];
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 
 	async getUserEmail(): Promise<string | null> {
-		let email: string | null = await UserDetail.getUserDetail();
-		return email;
+		try {
+			let email: string | null = await UserDetail.getUserDetail();
+			return email;
+		} catch (error) {
+			throw error;
+		}
 	}
 }
 export default new UserService();

@@ -10,7 +10,6 @@ class logService {
 			connection.release();
 			return rows;
 		} catch (error) {
-			console.error("Database error:", error);
 			throw error;
 		}
 	}
@@ -22,7 +21,6 @@ class logService {
 			connection.release();
 			return rows;
 		} catch (error) {
-			console.error("Database error:", error);
 			throw error;
 		}
 	}

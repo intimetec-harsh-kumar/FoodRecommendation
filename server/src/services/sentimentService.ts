@@ -8,8 +8,12 @@ class SentimentAnalysisService {
 	}
 
 	async analyzeFeedbackSentiments(feedbackComment: any): Promise<number> {
-		const result = this.sentiment.analyze(feedbackComment);
-		return result.score;
+		try {
+			const result = this.sentiment.analyze(feedbackComment);
+			return result.score;
+		} catch (error) {
+			throw error;
+		}
 	}
 }
 export default new SentimentAnalysisService();

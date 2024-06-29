@@ -8,9 +8,8 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			const [rows]: any = await connection.query("SELECT * FROM Meal_Type");
 			connection.release();
 			return rows;
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 
@@ -22,9 +21,8 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			);
 			connection.release();
 			return rows;
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 
@@ -36,9 +34,8 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			);
 			connection.release();
 			return rows;
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 
@@ -59,9 +56,8 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 			);
 			connection.release();
 			return rows;
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 }

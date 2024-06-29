@@ -5,9 +5,8 @@ class AuthenticationService {
 		try {
 			const user = await RoleService.getRoleUser(email);
 			return user;
-		} catch (err) {
-			console.error("Authentication error:", err);
-			return [];
+		} catch (error: any) {
+			throw error;
 		}
 	}
 }

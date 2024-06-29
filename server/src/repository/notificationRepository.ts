@@ -19,9 +19,8 @@ export class NotificationRepository extends GenericRepository<any> {
 
 			connection.release();
 			return rows as any[];
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 }

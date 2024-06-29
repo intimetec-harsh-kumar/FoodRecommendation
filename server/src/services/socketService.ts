@@ -50,6 +50,7 @@ class SocketService {
 						availability_status: number;
 						meal_type_id: number;
 					}[];
+					error?: string;
 				}) => void
 			) => {
 				FoodItemhandler.handleViewItems(socket, callback);

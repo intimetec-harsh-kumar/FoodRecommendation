@@ -1,11 +1,7 @@
 import { Socket } from "socket.io-client";
-import ActionHandlers from "../handlers/actionHandlers";
-import InputHandlerService from "../services/inputHandlerService";
 
-class EmployeeHandlers extends ActionHandlers {
-	constructor(socket: Socket) {
-		super(socket);
-	}
+class EmployeeHandlers {
+	constructor(private socket: Socket) {}
 
 	async viewNotifications(notificationTypeId?: number) {
 		return new Promise(async (resolve, reject) => {
@@ -13,10 +9,12 @@ class EmployeeHandlers extends ActionHandlers {
 				"viewNotifications",
 				notificationTypeId,
 				(response: any) => {
-					if (response.notification.length > 0) {
-						resolve(response.notification);
+					if (response.error) {
+						resolve(response.error);
+					} else if (response.notification.length === 0) {
+						resolve("No records found");
 					} else {
-						reject("error occured while fetching the records");
+						resolve(response.notification);
 					}
 				}
 			);
@@ -26,37 +24,31 @@ class EmployeeHandlers extends ActionHandlers {
 	async viewMenuItems() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewItems", (response: any) => {
-				if (response.items.length > 0) {
-					console.log(response.items);
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.items.length === 0) {
+					resolve("No records found");
 				} else {
-					console.log("no data found");
+					resolve(response.items);
 				}
-				resolve(response.items);
 			});
 		});
 	}
 
-	async provideFeedback(): Promise<void> {
+	async provideFeedback(
+		foodItemId: string,
+		rating: string,
+		comment: string
+	): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			const foodItemId = await InputHandlerService.askQuestion(
-				"Enter item Id: "
-			);
-			const rating = await InputHandlerService.askQuestion(
-				"Enter your rating (0-5): "
-			);
-			const comment = await InputHandlerService.askQuestion(
-				"Enter you feedback: "
-			);
 			this.socket.emit(
 				"provideFeedback",
 				{ foodItemId, rating, comment },
 				(response: any) => {
-					if (response) {
-						console.log(response.message);
-						resolve(response.message);
+					if (response.error) {
+						resolve(response.error);
 					} else {
-						console.log("Failed to provide feedback:", response.message);
-						reject(new Error(response.message));
+						resolve(response.message);
 					}
 				}
 			);
@@ -65,25 +57,14 @@ class EmployeeHandlers extends ActionHandlers {
 
 	async selectFoodItemForNextDay(foodItemId: any): Promise<void> {
 		return new Promise(async (resolve, reject) => {
-			// const foodItemId = await InputHandlerService.askQuestion(
-			// 	"Enter item Id: "
-			// );
-			// const rating = await InputHandlerService.askQuestion(
-			// 	"Enter your rating (0-5): "
-			// );
-			// const comment = await InputHandlerService.askQuestion(
-			// 	"Enter you feedback: "
-			// );
 			this.socket.emit(
 				"selectFoodItemForNextDay",
 				foodItemId,
 				(response: any) => {
-					if (response) {
-						console.log(response.message);
-						resolve(response.message);
+					if (response.error) {
+						resolve(response.error);
 					} else {
-						console.log("Failed to select food item:", response.message);
-						reject(new Error(response.message));
+						resolve(response.message);
 					}
 				}
 			);
@@ -93,14 +74,6 @@ class EmployeeHandlers extends ActionHandlers {
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout");
-			// , (response: any) => {
-			// 	if (response) {
-			// 		console.log("response", response);
-			// 	} else {
-			// 		console.log("Error occured while logging out");
-			// 	}
-			// 	resolve(response);
-			// });
 		});
 	}
 }

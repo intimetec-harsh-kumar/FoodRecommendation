@@ -9,6 +9,7 @@ class NotificationHandler {
 				message: string;
 				Date: any;
 			}[];
+			error?: string;
 		}) => void,
 		notificationTypeId?: number
 	): Promise<void> {
@@ -17,23 +18,27 @@ class NotificationHandler {
 				notificationTypeId
 			);
 			callback({ notification: notification });
-		} catch (error) {
-			console.error("Error retrieving notification:", error);
+		} catch (error: any) {
+			console.error("Error occured", error.message);
+			callback({ notification: [], error: `Error occured: ${error.message}` });
 		}
 	}
 
 	public async handleSendNotifications(
 		foodItemIdsToRollOutForNextDay: any,
-		callback: (response: { message: string }) => void
+		callback: (response: { message: string; error?: string }) => void
 	) {
 		try {
 			await NotificationService.sendFoodItemNotificationForNextDay(
 				foodItemIdsToRollOutForNextDay
 			);
 			callback({ message: `Notification sent successfully` });
-		} catch (error) {
-			console.error("Error occured while sending notification:", error);
-			callback({ message: `Error occured while sending notification` });
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
+			callback({
+				message: `Error occured while sending notification`,
+				error: `Error occured: ${error.message}`,
+			});
 		}
 	}
 }

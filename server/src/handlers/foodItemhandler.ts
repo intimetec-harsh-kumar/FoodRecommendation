@@ -5,6 +5,7 @@ import DateService from "../services/dateService";
 import UserDetail from "../User/userDetail";
 import LogService from "../services/logService";
 import foodItemService from "../services/foodItemService";
+import { log } from "console";
 
 class FoodItemHandler {
 	public async handleAddItem(
@@ -15,7 +16,11 @@ class FoodItemHandler {
 			availability_status: boolean;
 			meal_type_id: number;
 		},
-		callback: (response: { success: boolean; message: string }) => void
+		callback: (response: {
+			success: boolean;
+			message: string;
+			error?: string;
+		}) => void
 	): Promise<void> {
 		try {
 			const addedItem = await FoodItemService.addItem(item);
@@ -39,11 +44,12 @@ class FoodItemHandler {
 					message: `Failed to delete item with name ${item.item_name}`,
 				});
 			}
-		} catch (err) {
-			console.error("Error deleting item:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
 			callback({
 				success: false,
 				message: "An error occurred while adding the item",
+				error: `Error occured: ${error.message}`,
 			});
 		}
 	}
@@ -57,7 +63,11 @@ class FoodItemHandler {
 			availability_status: boolean;
 			meal_type_id: number;
 		},
-		callback: (response: { success: boolean; message: string }) => void
+		callback: (response: {
+			success: boolean;
+			message: string;
+			error?: string;
+		}) => void
 	): Promise<void> {
 		try {
 			const updatedItem = await FoodItemService.updateItem(item);
@@ -80,10 +90,13 @@ class FoodItemHandler {
 					message: `Failed to update item with id ${item.id}`,
 				});
 			}
-		} catch (err) {
+		} catch (error: any) {
+			console.log(`Error occured: ${error.message}`);
+
 			callback({
 				success: false,
 				message: `Failed to update item with id ${item.id}`,
+				error: `Error occured: ${error.message}`,
 			});
 		}
 	}
@@ -91,7 +104,11 @@ class FoodItemHandler {
 	public async handleDeleteItem(
 		socket: Socket,
 		itemId: number,
-		callback: (response: { success: boolean; message: string }) => void
+		callback: (response: {
+			success: boolean;
+			message: string;
+			error?: string;
+		}) => void
 	): Promise<void> {
 		try {
 			const deletedItem = await FoodItemService.deleteItem(itemId);
@@ -114,11 +131,12 @@ class FoodItemHandler {
 					message: `Failed to delete item with id ${itemId}`,
 				});
 			}
-		} catch (err) {
-			console.error("Error deleting item:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
 			callback({
 				success: false,
 				message: "An error occurred while deleting the item",
+				error: `Error occured: ${error.message}`,
 			});
 		}
 	}
@@ -133,6 +151,7 @@ class FoodItemHandler {
 				availability_status: number;
 				meal_type_id: number;
 			}[];
+			error?: string;
 		}) => void
 	): Promise<any> {
 		try {
@@ -140,8 +159,9 @@ class FoodItemHandler {
 			let userEmail = UserDetail.getUserDetail();
 			this.addLog(userEmail, "ViewItems");
 			callback({ items: items });
-		} catch (err) {
-			console.error("Error retrieving items:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
+			callback({ items: [], error: `Error occured: ${error.message}` });
 		}
 	}
 
@@ -152,13 +172,15 @@ class FoodItemHandler {
 				id: number;
 				type_name: string;
 			}[];
+			error?: string;
 		}) => void
 	): Promise<any> {
 		try {
 			const mealType = await FoodItemService.getMealTypes();
 			callback({ mealType: mealType });
-		} catch (err) {
-			console.error("Error retrieving meal types:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
+			callback({ mealType: [], error: `Error occured: ${error.message}` });
 		}
 	}
 
@@ -171,14 +193,16 @@ class FoodItemHandler {
 				user_email: string;
 				Date: Date;
 			}[];
+			error?: string;
 		}) => void
 	): Promise<any> {
 		try {
 			let currentDate = DateService.getCurrentDate();
 			const votedItem = await FoodItemService.getVotedItem(currentDate);
 			callback({ votedItems: votedItem });
-		} catch (err) {
-			console.error("Error retrieving voted items:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
+			callback({ votedItems: [], error: `Error occured: ${error.message}` });
 		}
 	}
 
@@ -192,19 +216,21 @@ class FoodItemHandler {
 				availability_status: number;
 				meal_type_id: number;
 			}[];
+			error?: string;
 		}) => void
 	): Promise<any> {
 		try {
 			const items = await FoodItemService.getAvailableItems();
 			callback({ items: items });
-		} catch (err) {
-			console.error("Error retrieving items:", err);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
+			callback({ items: [], error: `Error occured: ${error.message}` });
 		}
 	}
 
 	public async selectFoodItemForNextDay(
 		foodItemIds: string,
-		callback: (response: { message: string }) => void
+		callback: (response: { message: string; error?: string }) => void
 	): Promise<any> {
 		try {
 			const userEmail = UserDetail.getUserDetail();
@@ -217,8 +243,6 @@ class FoodItemHandler {
 					user_email: userEmail,
 					date: currentDate,
 				};
-				console.log("itemmm", foodItemId);
-
 				return await FoodItemService.addVotedItem(votedItem);
 			});
 			const results = await Promise.all(promises);
@@ -233,18 +257,23 @@ class FoodItemHandler {
 					message: `Failed to choose some items with ids ${foodItemIds}`,
 				});
 			}
-		} catch (error) {
-			console.error("Error retrieving items:", error);
+		} catch (error: any) {
+			console.error("Error occured:", error.message);
+			callback({ message: "", error: `Error occured: ${error.message}` });
 		}
 	}
 
 	addLog(email: string | null, action: string) {
-		let logObject = {
-			user_email: email,
-			action: action,
-			timestamp: DateService.getCurrentTimestamp(),
-		};
-		LogService.addLogs(logObject);
+		try {
+			let logObject = {
+				user_email: email,
+				action: action,
+				timestamp: DateService.getCurrentTimestamp(),
+			};
+			LogService.addLogs(logObject);
+		} catch (error: any) {
+			console.log(`Error occured: ${error.message}`);
+		}
 	}
 }
 export default new FoodItemHandler();

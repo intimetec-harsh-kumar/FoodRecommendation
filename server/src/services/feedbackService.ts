@@ -17,7 +17,6 @@ class FeedbackService {
 			connection.release();
 			return rows.affectedRows ? rows : [];
 		} catch (error) {
-			console.error("Database error:", error);
 			throw error;
 		}
 	}

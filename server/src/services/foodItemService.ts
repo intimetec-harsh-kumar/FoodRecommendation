@@ -8,15 +8,23 @@ class FoodItemService {
 		availability_status: boolean;
 		meal_type_id: number;
 	}): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Item");
-		const rows = await foodItemRepository.add(item);
-		return rows;
+		try {
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
+			const rows = await foodItemRepository.add(item);
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async addVotedItem(votedItem: any): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Voted_Item");
-		const rows = await foodItemRepository.add(votedItem);
-		return rows;
+		try {
+			const foodItemRepository = new FoodItemRepository(pool, "Voted_Item");
+			const rows = await foodItemRepository.add(votedItem);
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async updateItem(item: {
@@ -26,27 +34,43 @@ class FoodItemService {
 		availability_status: boolean;
 		meal_type_id: number;
 	}): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Item");
-		const rows = await foodItemRepository.update(item);
-		return rows;
+		try {
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
+			const rows = await foodItemRepository.update(item);
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async deleteItem(itemId: number): Promise<unknown> {
-		const foodItemRepository = new FoodItemRepository(pool, "Item");
-		const rows = await foodItemRepository.delete(itemId);
-		return rows;
+		try {
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
+			const rows = await foodItemRepository.delete(itemId);
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async getItems(): Promise<any[]> {
-		const foodItemRepository = new FoodItemRepository(pool, "Item");
-		const rows = await foodItemRepository.getAll();
-		return rows;
+		try {
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
+			const rows = await foodItemRepository.getAll();
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async getAvailableItems(): Promise<any[]> {
-		const foodItemRepository = new FoodItemRepository(pool, "Item");
-		const rows = await foodItemRepository.getAvailableItems();
-		return rows;
+		try {
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
+			const rows = await foodItemRepository.getAvailableItems();
+			return rows;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async getMealTypes(): Promise<any[]> {
@@ -56,9 +80,8 @@ class FoodItemService {
 			const rows = await foodItemRepository.getMealTypes();
 			connection.release();
 			return rows;
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 
@@ -69,9 +92,8 @@ class FoodItemService {
 			const rows = await foodItemRepository.getVotedItem(currentDate);
 			connection.release();
 			return rows;
-		} catch (err) {
-			console.error("Database error:", err);
-			throw err;
+		} catch (error) {
+			throw error;
 		}
 	}
 }

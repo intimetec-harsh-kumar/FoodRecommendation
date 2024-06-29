@@ -20,16 +20,21 @@ class ChefConsole {
 
 			switch (action) {
 				case 1:
-					await this.chefHandlers.viewMenuItems();
+					let menuItems = await this.chefHandlers.viewMenuItems();
+					console.log(menuItems);
 					break;
 				case 2:
-					await this.chefHandlers.viewMealTypes();
+					let mealTypes = await this.chefHandlers.viewMealTypes();
+					console.log(mealTypes);
 					break;
 				case 3:
-					await this.chefHandlers.viewNotifications();
+					let notifications = await this.chefHandlers.viewNotifications();
+					console.log(notifications);
 					break;
 				case 4:
-					await this.chefHandlers.viewAvailableFoodItems();
+					let availableFoodItems =
+						await this.chefHandlers.viewAvailableFoodItems();
+					console.log(availableFoodItems);
 					break;
 				case 5:
 					let recommendedFoodItems =
@@ -75,7 +80,8 @@ class ChefConsole {
 					console.log(recommendations);
 					break;
 				case 7:
-					await this.chefHandlers.viewVotedItems();
+					let votedItems = await this.chefHandlers.viewVotedItems();
+					console.log(votedItems);
 					break;
 				case 8:
 					await this.chefHandlers.logout();

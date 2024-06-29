@@ -2,16 +2,26 @@ export default class UserDetail {
 	static userDetail: string | null;
 
 	static setUserDetail(userDetail: string) {
-		console.log("userDetail", userDetail);
-
-		UserDetail.userDetail = userDetail;
+		try {
+			UserDetail.userDetail = userDetail;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	static getUserDetail(): string | null {
-		return UserDetail.userDetail;
+		try {
+			return UserDetail.userDetail;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	static clearUserDetail() {
-		UserDetail.userDetail = null;
+		try {
+			UserDetail.userDetail = null;
+		} catch (error) {
+			throw error;
+		}
 	}
 }

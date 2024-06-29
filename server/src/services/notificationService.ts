@@ -14,7 +14,6 @@ class NotificationService {
 			connection.release();
 			return rows;
 		} catch (error) {
-			console.error("Database error:", error);
 			throw error;
 		}
 	}
@@ -31,7 +30,6 @@ class NotificationService {
 			connection.release();
 			return rows;
 		} catch (error) {
-			console.error("Database error:", error);
 			throw error;
 		}
 	}
@@ -50,7 +48,6 @@ class NotificationService {
 				this.pushNotification(notification);
 			});
 		} catch (error) {
-			console.error("Database error:", error);
 			throw error;
 		}
 	}

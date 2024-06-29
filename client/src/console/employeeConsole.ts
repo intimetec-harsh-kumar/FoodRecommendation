@@ -22,7 +22,8 @@ class EmployeeConsole {
 
 			switch (action) {
 				case 1:
-					await this.employeeHandlers.viewMenuItems();
+					let menuItems = await this.employeeHandlers.viewMenuItems();
+					console.log(menuItems);
 					break;
 				case 2:
 					let notifications: any =
@@ -30,13 +31,26 @@ class EmployeeConsole {
 					console.log(notifications);
 					break;
 				case 3:
-					await this.employeeHandlers.provideFeedback();
+					const foodItemId = await InputHandlerService.askQuestion(
+						"Enter item Id: "
+					);
+					const rating = await InputHandlerService.askQuestion(
+						"Enter your rating (0-5): "
+					);
+					const comment = await InputHandlerService.askQuestion(
+						"Enter you feedback: "
+					);
+					let feedbackMessage = await this.employeeHandlers.provideFeedback(
+						foodItemId,
+						rating,
+						comment
+					);
+					console.log(feedbackMessage);
 					break;
 				case 4:
 					let rolledOutFoodItems: any =
 						await this.employeeHandlers.viewNotifications(4);
 					console.log(rolledOutFoodItems);
-
 					console.log(
 						"Rolled Out Food Item Ids : " +
 							rolledOutFoodItems.map((item: any) => item.id).join(",")
@@ -48,13 +62,11 @@ class EmployeeConsole {
 						rolledOutFoodItems.map((item: any) => item.id)
 					);
 					const invalidFoodItemIds: string[] = [];
-
 					selectedFoodItemIds.split(",").forEach((id) => {
 						if (!rolledOutFoodItemIds.has(parseInt(id.trim()))) {
 							invalidFoodItemIds.push(id.trim());
 						}
 					});
-
 					if (invalidFoodItemIds.length > 0) {
 						console.log(
 							"Invalid Food Item Ids: " + invalidFoodItemIds.join(",")
