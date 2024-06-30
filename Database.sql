@@ -89,6 +89,36 @@ CREATE TABLE Voted_Item (
     FOREIGN KEY (user_email) REFERENCES User(email)
 );
 
+---- Update_Food_Item_Audit_After_Insert_In_Feedback_Table Trigger
+DELIMITER //
+create TRIGGER Update_Food_Item_Audit_After_Insert_In_Feedback_Table
+AFTER INSERT ON Feedback
+FOR EACH ROW
+BEGIN
+    DECLARE new_vote INT DEFAULT 0;
+    DECLARE new_rating DECIMAL(2,1) DEFAULT 0.0;
+    DECLARE new_sentiment DECIMAL(2,1) DEFAULT 0.0;
+    IF EXISTS (SELECT 1 FROM Food_Item_Audit WHERE food_item_id = NEW.food_item_id) THEN
+
+        SELECT vote, rating, sentiment INTO new_vote, new_rating, new_sentiment
+        FROM Food_Item_Audit
+        WHERE food_item_id = NEW.food_item_id;
+
+        SET new_vote = new_vote + 1;
+        SET new_rating = ((new_rating * (new_vote - 1)) + NEW.rating) / new_vote;
+        SET new_sentiment = ((new_sentiment * (new_vote - 1)) + @Sentiment_Score) / new_vote;
+        
+        UPDATE Food_Item_Audit
+        SET rating = new_rating, vote = new_vote, sentiment = new_sentiment
+        WHERE food_item_id = NEW.food_item_id;
+    ELSE
+        INSERT INTO Food_Item_Audit (food_item_id, rating, vote, sentiment, no_of_times_prepared)
+        VALUES (NEW.food_item_id, NEW.rating, 1, @Sentiment_Score, 0);
+    END IF;
+END //
+DELIMITER ;
+
+
 select * from User;
 select * from Item;
 select * from Log;

@@ -41,7 +41,7 @@ export class GenericRepository<T> implements IRepository<T> {
 		}
 	}
 
-	async add(entity: T): Promise<void> {
+	async add(entity: T, sentimentScore?: any): Promise<void> {
 		try {
 			const row: any = await this.pool.query(
 				`INSERT INTO ${this.tableName} SET ?`,

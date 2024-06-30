@@ -2,7 +2,7 @@ import pool from "../config/dbConnection";
 import { FoodItemRepository } from "../repository/foodItemRepository";
 import { GenericRepository } from "../repository/genericRepository";
 import { NotificationRepository } from "../repository/notificationRepository";
-import dateService from "./dateService";
+import DateService from "./dateService";
 import FoodRecommendationEngineService from "./foodRecommendationService";
 
 class NotificationService {
@@ -43,10 +43,26 @@ class NotificationService {
 				let notification = {
 					notification_type_id: 4,
 					message: item[0].item_name,
-					Date: dateService.getCurrentDate(),
+					Date: DateService.getCurrentDate(),
 				};
 				this.pushNotification(notification);
 			});
+		} catch (error) {
+			throw error;
+		}
+	}
+	async sendNotificationForDetailedFeedback(
+		foodItemIdForDetailedFeedback: number,
+		questions: string
+	) {
+		try {
+			let notification = {
+				notification_type_id: 5,
+				message: `We are trying to improve your experience with food item having id ${foodItemIdForDetailedFeedback}. Please provide your feedback by 
+					answering following questions. ${questions}`,
+				Date: DateService.getCurrentDate(),
+			};
+			this.pushNotification(notification);
 		} catch (error) {
 			throw error;
 		}

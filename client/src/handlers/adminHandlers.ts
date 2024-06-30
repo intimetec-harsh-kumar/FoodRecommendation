@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 class AdminHandlers {
 	constructor(private socket: Socket) {}
 
-	async addItem(
+	async handleAddItem(
 		item_name: string,
 		price: number,
 		availability_status: boolean,
@@ -24,7 +24,7 @@ class AdminHandlers {
 		});
 	}
 
-	async updateItem(
+	async handleUpdateItem(
 		id: number,
 		item_name: string,
 		price: number,
@@ -46,7 +46,7 @@ class AdminHandlers {
 		});
 	}
 
-	async deleteItem(id: number) {
+	async handleDeleteItem(id: number) {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("deleteItem", id, (response: any) => {
 				if (response.error) {
@@ -97,6 +97,40 @@ class AdminHandlers {
 					resolve(response.log);
 				}
 			});
+		});
+	}
+
+	async viewDiscardMenuItemList(): Promise<unknown> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewDiscardMenuItemList", (response: any) => {
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.items.length === 0) {
+					resolve("No records found");
+				} else {
+					resolve(response.items);
+				}
+			});
+		});
+	}
+
+	async handleSendNotificationForDetailedFeedback(
+		foodItemIdForDetailedFeedback: number,
+		questions: string
+	): Promise<unknown> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit(
+				"sendNotificationForDetailedFeedback",
+				foodItemIdForDetailedFeedback,
+				questions,
+				(response: any) => {
+					if (response.error) {
+						resolve(response.error);
+					} else {
+						resolve(response.message);
+					}
+				}
+			);
 		});
 	}
 

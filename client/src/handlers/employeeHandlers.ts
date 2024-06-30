@@ -36,14 +36,14 @@ class EmployeeHandlers {
 	}
 
 	async provideFeedback(
-		foodItemId: string,
+		food_item_id: string,
 		rating: string,
 		comment: string
 	): Promise<void> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"provideFeedback",
-				{ foodItemId, rating, comment },
+				{ food_item_id, rating, comment },
 				(response: any) => {
 					if (response.error) {
 						resolve(response.error);

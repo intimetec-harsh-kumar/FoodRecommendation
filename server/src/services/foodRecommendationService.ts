@@ -40,5 +40,16 @@ class FoodRecommendationEngineService {
 			throw error;
 		}
 	}
+
+	public async getDiscardMenuItemList(): Promise<any> {
+		try {
+			const foodItemRepo = new FoodItemRepository(pool, "Item");
+			const foodItemsToBeDiscarded: any =
+				await foodItemRepo.getDiscardMenuItemList();
+			return foodItemsToBeDiscarded;
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 export default new FoodRecommendationEngineService();

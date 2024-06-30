@@ -50,9 +50,31 @@ export class FoodItemRepository extends GenericRepository<FoodItems> {
 						f.vote,
 						f.sentiment,
 						f.no_of_times_prepared,
-						(f.no_of_times_prepared / f.rating) AS preparationToRatingRatio
+						(f.no_of_times_prepared / NULLIF(f.rating, 0)) AS preparationToRatingRatio
 					FROM 
 						Food_Item_Audit f inner join Item i on i.id=f.food_item_id;`
+			);
+			connection.release();
+			return rows;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getDiscardMenuItemList(): Promise<any[]> {
+		try {
+			const connection = await this.pool.getConnection();
+			const [rows]: any = await connection.query(
+				` SELECT 
+						f.food_item_id,
+						i.item_name as itemName,
+						f.rating,
+						f.vote,
+						f.sentiment,
+						f.no_of_times_prepared,
+						(f.no_of_times_prepared / NULLIF(f.rating, 0)) AS preparationToRatingRatio
+					FROM 
+						Food_Item_Audit f inner join Item i on i.id=f.food_item_id where f.rating <= 2 order by f.rating desc;`
 			);
 			connection.release();
 			return rows;

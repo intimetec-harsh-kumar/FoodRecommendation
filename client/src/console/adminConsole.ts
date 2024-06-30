@@ -13,7 +13,7 @@ class AdminConsole {
 		let isConsoleRunning = true;
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
-				"Admin: Choose an action (\n 1: addItem\n 2: update \n 3: delete \n 4: view \n 5: meal types \n 6: Logout \n 7: viewLog \n): "
+				"Admin: Choose an action (\n 1: addItem\n 2: update \n 3: delete \n 4: view \n 5: meal types \n 6: View Discard MenuItem List \n 7: viewLog \n 8: Logout\n): "
 			);
 			switch (action) {
 				case "1":
@@ -32,7 +32,7 @@ class AdminConsole {
 							"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
 						)
 					);
-					let addedItemMessage = await this.adminHandlers.addItem(
+					let addedItemMessage = await this.adminHandlers.handleAddItem(
 						item_name,
 						price,
 						availability_status,
@@ -57,7 +57,7 @@ class AdminConsole {
 					var meal_type_id = parseInt(
 						await InputHandlerService.askQuestion("Enter new meal type ID: ")
 					);
-					let updatedItemMessage = await this.adminHandlers.updateItem(
+					let updatedItemMessage = await this.adminHandlers.handleUpdateItem(
 						id,
 						item_name,
 						price,
@@ -70,7 +70,9 @@ class AdminConsole {
 					var id = parseInt(
 						await InputHandlerService.askQuestion("Enter item ID to delete: ")
 					);
-					let deletedItemMessage = await this.adminHandlers.deleteItem(id);
+					let deletedItemMessage = await this.adminHandlers.handleDeleteItem(
+						id
+					);
 					console.table(deletedItemMessage);
 					break;
 				case "4":
@@ -82,13 +84,55 @@ class AdminConsole {
 					console.table(mealTypes);
 					break;
 				case "6":
-					await this.adminHandlers.logout();
-					isConsoleRunning = false;
-					return;
+					let discardMenuItemList =
+						await this.adminHandlers.viewDiscardMenuItemList();
+					if (typeof discardMenuItemList === "string") {
+						console.table(discardMenuItemList);
+					} else {
+						console.table(discardMenuItemList);
+						const discardMenuItemListAction =
+							await InputHandlerService.askQuestion(
+								"Choose an action:\n 1: Remove the Food Item from Menu List\n 2: Get Detailed Feedback\n"
+							);
+
+						switch (parseInt(discardMenuItemListAction)) {
+							case 1:
+								let itemIdToDiscard = await InputHandlerService.askQuestion(
+									"Enter Item Id to be discarded : "
+								);
+								let message = await this.adminHandlers.handleDeleteItem(
+									parseInt(itemIdToDiscard)
+								);
+								console.log(message);
+								break;
+							case 2:
+								const itemIdToGetFeedback =
+									await InputHandlerService.askQuestion(
+										"Enter the food item ID to get detailed feedback: "
+									);
+								let questions = await InputHandlerService.askQuestion(
+									"Enter questions about food item for feedback: "
+								);
+								let notificationMessage =
+									await this.adminHandlers.handleSendNotificationForDetailedFeedback(
+										parseInt(itemIdToGetFeedback),
+										questions
+									);
+								console.log(notificationMessage);
+								break;
+							default:
+								console.log("Invalid action. Please try again.");
+						}
+					}
+					break;
 				case "7":
 					let logs = await this.adminHandlers.viewLog();
 					console.table(logs);
 					break;
+				case "8":
+					await this.adminHandlers.logout();
+					isConsoleRunning = false;
+					return;
 				default:
 					console.log("Invalid action. Please try again.");
 			}

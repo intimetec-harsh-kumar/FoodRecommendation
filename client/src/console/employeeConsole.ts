@@ -16,7 +16,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Notification\n 3: Send Feedback \n 4: Choose Item for next day \n 5:Logout\n): "
+					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Notification\n 3: Send Feedback \n 4: Choose Item for next day \n 5: Logout\n): "
 				)
 			);
 
@@ -31,7 +31,7 @@ class EmployeeConsole {
 					console.table(notifications);
 					break;
 				case 3:
-					const foodItemId = await InputHandlerService.askQuestion(
+					const food_item_id = await InputHandlerService.askQuestion(
 						"Enter item Id: "
 					);
 					const rating = await InputHandlerService.askQuestion(
@@ -41,7 +41,7 @@ class EmployeeConsole {
 						"Enter you feedback: "
 					);
 					let feedbackMessage = await this.employeeHandlers.provideFeedback(
-						foodItemId,
+						food_item_id,
 						rating,
 						comment
 					);

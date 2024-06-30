@@ -156,7 +156,7 @@ class SocketService {
 				foodItemIdsToRollOutForNextDay,
 				callback: (response: { message: string }) => void
 			) => {
-				NotificationHandler.handleSendNotifications(
+				NotificationHandler.handleSendNotificationsForNextDay(
 					foodItemIdsToRollOutForNextDay,
 					callback
 				);
@@ -166,6 +166,40 @@ class SocketService {
 			"viewVotedItems",
 			(callback: (response: { votedItems: any[] }) => void) => {
 				foodItemhandler.handleViewVotedItems(socket, callback);
+			}
+		);
+		socket.on(
+			"viewDiscardMenuItemList",
+			(
+				callback: (response: {
+					items: {
+						id: number;
+						item_name: string;
+						price: number;
+						availability_status: number;
+						meal_type_id: number;
+					}[];
+					error?: string;
+				}) => void
+			) => {
+				FoodRecommendationHandler.handleViewDiscardMenuItemList(
+					socket,
+					callback
+				);
+			}
+		);
+		socket.on(
+			"sendNotificationForDetailedFeedback",
+			(
+				foodItemIdForDetailedFeedback,
+				questions,
+				callback: (response: { message: string; error?: string }) => void
+			) => {
+				NotificationHandler.handleSendNotificationForDetailedFeedback(
+					foodItemIdForDetailedFeedback,
+					questions,
+					callback
+				);
 			}
 		);
 	}

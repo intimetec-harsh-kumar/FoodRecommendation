@@ -14,7 +14,7 @@ class ChefConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Chef: Choose an action (\n 1: View Menu Items \n 2: View Meal Types \n 3: View Notifications \n 4: View Available Food Items \n 5: Send Notification \n 6: View Recommendations \n 7: View Voted Items \n 8: Logout \n): "
+					"Chef: Choose an action (\n 1: View Menu Items \n 2: View Meal Types \n 3: View Notifications \n 4: View Available Food Items \n 5: Send Notification for Next Day Meal \n 6: View Recommendations \n 7: View Voted Items \n 8: View Discard Menu List \n 9: Logout \n): "
 				)
 			);
 
@@ -68,9 +68,10 @@ class ChefConsole {
 								Array.from(recommendedFoodItemIds).join(",")
 						);
 					} else {
-						let message = await this.chefHandlers.sendFoodNotification(
-							foodItemIdsToRollOutForNextDay
-						);
+						let message =
+							await this.chefHandlers.sendFoodNotificationForNextDay(
+								foodItemIdsToRollOutForNextDay
+							);
 						console.log(message);
 					}
 					break;
@@ -84,6 +85,48 @@ class ChefConsole {
 					console.table(votedItems);
 					break;
 				case 8:
+					let discardMenuItemList =
+						await this.chefHandlers.viewDiscardMenuItemList();
+					if (typeof discardMenuItemList === "string") {
+						console.table(discardMenuItemList);
+					} else {
+						console.table(discardMenuItemList);
+						const discardMenuItemListAction =
+							await InputHandlerService.askQuestion(
+								"Choose an action:\n 1: Remove the Food Item from Menu List\n 2: Get Detailed Feedback\n"
+							);
+
+						switch (parseInt(discardMenuItemListAction)) {
+							case 1:
+								let itemIdToDiscard = await InputHandlerService.askQuestion(
+									"Enter Item Id to be discarded : "
+								);
+								let message = await this.chefHandlers.handleDeleteItem(
+									parseInt(itemIdToDiscard)
+								);
+								console.log(message);
+								break;
+							case 2:
+								const itemIdToGetFeedback =
+									await InputHandlerService.askQuestion(
+										"Enter the food item ID to get detailed feedback: "
+									);
+								let questions = await InputHandlerService.askQuestion(
+									"Enter questions about food item for feedback: "
+								);
+								let notificationMessage =
+									await this.chefHandlers.handleSendNotificationForDetailedFeedback(
+										parseInt(itemIdToGetFeedback),
+										questions
+									);
+								console.log(notificationMessage);
+								break;
+							default:
+								console.log("Invalid action. Please try again.");
+						}
+					}
+					break;
+				case 9:
 					await this.chefHandlers.logout();
 					isConsoleRunning = false;
 					return;

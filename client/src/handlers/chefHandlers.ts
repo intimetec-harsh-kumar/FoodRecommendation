@@ -63,7 +63,7 @@ class ChefHandlers {
 		});
 	}
 
-	async sendFoodNotification(
+	async sendFoodNotificationForNextDay(
 		foodItemIdsToRollOutForNextDay: any
 	): Promise<unknown> {
 		return new Promise(async (resolve, reject) => {
@@ -106,6 +106,52 @@ class ChefHandlers {
 					resolve(response.votedItems);
 				}
 			});
+		});
+	}
+
+	async viewDiscardMenuItemList(): Promise<unknown> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("viewDiscardMenuItemList", (response: any) => {
+				if (response.error) {
+					resolve(response.error);
+				} else if (response.items.length === 0) {
+					resolve("No records found");
+				} else {
+					resolve(response.items);
+				}
+			});
+		});
+	}
+
+	async handleDeleteItem(id: number) {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("deleteItem", id, (response: any) => {
+				if (response.error) {
+					resolve(response.error);
+				} else {
+					resolve(response.message);
+				}
+			});
+		});
+	}
+
+	async handleSendNotificationForDetailedFeedback(
+		foodItemIdForDetailedFeedback: number,
+		questions: string
+	): Promise<unknown> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit(
+				"sendNotificationForDetailedFeedback",
+				foodItemIdForDetailedFeedback,
+				questions,
+				(response: any) => {
+					if (response.error) {
+						resolve(response.error);
+					} else {
+						resolve(response.message);
+					}
+				}
+			);
 		});
 	}
 
