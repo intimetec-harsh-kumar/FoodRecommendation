@@ -38,7 +38,7 @@ class AdminConsole {
 						availability_status,
 						meal_type_id
 					);
-					console.log(addedItemMessage);
+					console.table(addedItemMessage);
 					break;
 				case "2":
 					var id = parseInt(
@@ -64,22 +64,22 @@ class AdminConsole {
 						availability_status,
 						meal_type_id
 					);
-					console.log(updatedItemMessage);
+					console.table(updatedItemMessage);
 					break;
 				case "3":
 					var id = parseInt(
 						await InputHandlerService.askQuestion("Enter item ID to delete: ")
 					);
 					let deletedItemMessage = await this.adminHandlers.deleteItem(id);
-					console.log(deletedItemMessage);
+					console.table(deletedItemMessage);
 					break;
 				case "4":
 					let items = await this.adminHandlers.viewItems();
-					console.log(items);
+					console.table(items);
 					break;
 				case "5":
 					let mealTypes = await this.adminHandlers.viewMealTypes();
-					console.log(mealTypes);
+					console.table(mealTypes);
 					break;
 				case "6":
 					await this.adminHandlers.logout();
@@ -87,7 +87,7 @@ class AdminConsole {
 					return;
 				case "7":
 					let logs = await this.adminHandlers.viewLog();
-					console.log(logs);
+					console.table(logs);
 					break;
 				default:
 					console.log("Invalid action. Please try again.");

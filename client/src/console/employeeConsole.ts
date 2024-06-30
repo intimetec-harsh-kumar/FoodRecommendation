@@ -23,12 +23,12 @@ class EmployeeConsole {
 			switch (action) {
 				case 1:
 					let menuItems = await this.employeeHandlers.viewMenuItems();
-					console.log(menuItems);
+					console.table(menuItems);
 					break;
 				case 2:
 					let notifications: any =
 						await this.employeeHandlers.viewNotifications(4);
-					console.log(notifications);
+					console.table(notifications);
 					break;
 				case 3:
 					const foodItemId = await InputHandlerService.askQuestion(
@@ -50,7 +50,7 @@ class EmployeeConsole {
 				case 4:
 					let rolledOutFoodItems: any =
 						await this.employeeHandlers.viewNotifications(4);
-					console.log(rolledOutFoodItems);
+					console.table(rolledOutFoodItems);
 					console.log(
 						"Rolled Out Food Item Ids : " +
 							rolledOutFoodItems.map((item: any) => item.id).join(",")
