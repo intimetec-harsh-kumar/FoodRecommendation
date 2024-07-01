@@ -19,7 +19,7 @@ class EmployeeHandlers {
 		});
 	}
 
-	async viewMenuItems() {
+	async viewMenuItems(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewItems", (response: any) => {
 				if (response.error) {

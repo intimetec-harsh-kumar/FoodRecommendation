@@ -36,12 +36,22 @@ class EmployeeConsole {
 					console.table(notifications);
 					break;
 				case 3:
+					let foodItems = await this.employeeHandlers.viewMenuItems();
+					const foodItemIds = new Set(foodItems.map((item: any) => item.id));
 					const food_item_id = await InputHandlerService.askQuestion(
 						"Enter item Id: "
 					);
+					if (!foodItemIds.has(parseInt(food_item_id))) {
+						console.log("Please enter a valid foodItem Id");
+						break;
+					}
 					const rating = await InputHandlerService.askQuestion(
 						"Enter your rating (0-5): "
 					);
+					if (0 > parseInt(rating) || parseInt(rating) > 5) {
+						console.log("Please enter the rating in the range 0-5 only.");
+						break;
+					}
 					const comment = await InputHandlerService.askQuestion(
 						"Enter you feedback: "
 					);

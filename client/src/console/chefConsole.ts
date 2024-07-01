@@ -52,6 +52,10 @@ class ChefConsole {
 							parseInt(mealTypeId),
 							parseInt(numberOfRecommendations)
 						);
+					if (recommendedFoodItems.length === 0) {
+						console.log("There is no food recommendation");
+						break;
+					}
 					const recommendedFoodItemIds = new Set(
 						recommendedFoodItems.map((item: any) => item.food_item_id)
 					);
@@ -66,6 +70,8 @@ class ChefConsole {
 						await InputHandlerService.askQuestion(
 							"Enter comma seperated food item id to roll out : "
 						);
+					console.log(recommendedFoodItemIds);
+
 					const selectedFoodItemIds = foodItemIdsToRollOutForNextDay
 						.split(",")
 						.map((id) => id.trim());
@@ -109,30 +115,39 @@ class ChefConsole {
 				case 8:
 					let discardMenuItemList =
 						await this.chefHandlers.viewDiscardMenuItemList();
-					if (typeof discardMenuItemList === "string") {
-						console.table(discardMenuItemList);
-					} else {
-						console.table(discardMenuItemList);
-						const discardMenuItemListAction =
-							await InputHandlerService.askQuestion(
-								"Choose an action:\n 1: Remove the Food Item from Menu List\n 2: Get Detailed Feedback\n"
+					if (discardMenuItemList.length === 0) {
+						console.log("Currently there are no food to discard");
+						break;
+					}
+					console.table(discardMenuItemList);
+					const discardMenuItemListAction =
+						await InputHandlerService.askQuestion(
+							"Choose an action:\n 1: Remove the Food Item from Menu List\n 2: Get Detailed Feedback\n"
+						);
+					const discardMenuItemListIds = new Set(
+						discardMenuItemList.map((item: any) => item.food_item_id)
+					);
+					switch (parseInt(discardMenuItemListAction)) {
+						case 1:
+							let itemIdToDiscard = await InputHandlerService.askQuestion(
+								"Enter Item Id to be discarded : "
 							);
-
-						switch (parseInt(discardMenuItemListAction)) {
-							case 1:
-								let itemIdToDiscard = await InputHandlerService.askQuestion(
-									"Enter Item Id to be discarded : "
-								);
+							if (discardMenuItemListIds.has(itemIdToDiscard)) {
 								let message = await this.chefHandlers.handleDeleteItem(
 									parseInt(itemIdToDiscard)
 								);
 								console.log(message);
-								break;
-							case 2:
-								const itemIdToGetFeedback =
-									await InputHandlerService.askQuestion(
-										"Enter the food item ID to get detailed feedback: "
-									);
+							} else {
+								console.log(
+									"Please choose from the discard menu item list only."
+								);
+							}
+							break;
+						case 2:
+							const itemIdToGetFeedback = await InputHandlerService.askQuestion(
+								"Enter the food item ID to get detailed feedback: "
+							);
+							if (discardMenuItemListIds.has(parseInt(itemIdToGetFeedback))) {
 								let questions = await InputHandlerService.askQuestion(
 									"Enter questions about food item for feedback: "
 								);
@@ -142,10 +157,14 @@ class ChefConsole {
 										questions
 									);
 								console.log(notificationMessage);
-								break;
-							default:
-								console.log("Invalid action. Please try again.");
-						}
+							} else {
+								console.log(
+									"Please choose from the discard menu item list only."
+								);
+							}
+							break;
+						default:
+							console.log("Invalid action. Please try again.");
 					}
 					break;
 				case 9:
