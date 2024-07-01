@@ -1,12 +1,17 @@
 import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import EmployeeHandlers from "../handlers/employeeHandlers";
+import AuthenticationService from "../services/authenticationService";
 
 class EmployeeConsole {
 	private employeeHandlers: EmployeeHandlers;
+	private authenticationService: AuthenticationService;
 
 	constructor(private socketService: SocketService) {
 		this.employeeHandlers = new EmployeeHandlers(
+			this.socketService.getSocket()
+		);
+		this.authenticationService = new AuthenticationService(
 			this.socketService.getSocket()
 		);
 	}
@@ -16,7 +21,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Notification\n 3: Send Feedback \n 4: Choose Item for next day \n 5: Logout\n): "
+					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Today's Menu\n 3: Send Feedback \n 4: Choose Item for next day \n 5: Logout\n): "
 				)
 			);
 
@@ -50,39 +55,45 @@ class EmployeeConsole {
 				case 4:
 					let rolledOutFoodItems: any =
 						await this.employeeHandlers.viewNotifications(4);
-					console.table(rolledOutFoodItems);
-					console.log(
-						"Rolled Out Food Item Ids : " +
-							rolledOutFoodItems.map((item: any) => item.id).join(",")
-					);
-					const selectedFoodItemIds = await InputHandlerService.askQuestion(
-						"Enter item Id to select for next day seperated by comma : "
-					);
-					const rolledOutFoodItemIds = new Set(
-						rolledOutFoodItems.map((item: any) => item.id)
-					);
-					const invalidFoodItemIds: string[] = [];
-					selectedFoodItemIds.split(",").forEach((id) => {
-						if (!rolledOutFoodItemIds.has(parseInt(id.trim()))) {
-							invalidFoodItemIds.push(id.trim());
-						}
-					});
-					if (invalidFoodItemIds.length > 0) {
-						console.log(
-							"Invalid Food Item Ids: " + invalidFoodItemIds.join(",")
-						);
-						console.log(
-							"Please enter valid Food Item Ids from the list: " +
-								rolledOutFoodItems.map((item: any) => item.Id).join(",")
-						);
+					if (rolledOutFoodItems.length == 0) {
+						console.log("No records found");
 					} else {
-						await this.employeeHandlers.selectFoodItemForNextDay(
-							selectedFoodItemIds
+						console.table(rolledOutFoodItems);
+						console.log(
+							"Rolled Out Food Item Ids : " +
+								rolledOutFoodItems.map((item: any) => item.id).join(",")
 						);
+						const selectedFoodItemIds = await InputHandlerService.askQuestion(
+							"Enter item Id to select for next day seperated by comma : "
+						);
+						const rolledOutFoodItemIds = new Set(
+							rolledOutFoodItems.map((item: any) => item.id)
+						);
+						const invalidFoodItemIds: string[] = [];
+						selectedFoodItemIds.split(",").forEach((id) => {
+							if (!rolledOutFoodItemIds.has(parseInt(id.trim()))) {
+								invalidFoodItemIds.push(id.trim());
+							}
+						});
+						if (invalidFoodItemIds.length > 0) {
+							console.log(
+								"Invalid Food Item Ids: " + invalidFoodItemIds.join(",")
+							);
+							console.log(
+								"Please enter valid Food Item Ids from the list: " +
+									rolledOutFoodItems.map((item: any) => item.Id).join(",")
+							);
+						} else {
+							await this.employeeHandlers.selectFoodItemForNextDay(
+								selectedFoodItemIds
+							);
+						}
 					}
 					break;
 				case 5:
-					await this.employeeHandlers.logout();
+					let logoutMessage = await this.employeeHandlers.logout();
+					console.log(logoutMessage);
+					await this.authenticationService.authenticate();
 					isConsoleRunning = false;
 					break;
 				default:

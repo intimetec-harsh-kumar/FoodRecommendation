@@ -137,7 +137,7 @@ class AdminHandlers {
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {
-				resolve(response);
+				resolve(response.message);
 			});
 		});
 	}

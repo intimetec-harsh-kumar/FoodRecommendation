@@ -1,12 +1,17 @@
 import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import AdminHandlers from "../handlers/adminHandlers";
+import AuthenticationService from "../services/authenticationService";
 
 class AdminConsole {
 	private adminHandlers: AdminHandlers;
+	private authenticationService: AuthenticationService;
 
 	constructor(private socketService: SocketService) {
 		this.adminHandlers = new AdminHandlers(this.socketService.getSocket());
+		this.authenticationService = new AuthenticationService(
+			this.socketService.getSocket()
+		);
 	}
 
 	async start() {
@@ -130,9 +135,11 @@ class AdminConsole {
 					console.table(logs);
 					break;
 				case "8":
-					await this.adminHandlers.logout();
+					let logoutMessage = await this.adminHandlers.logout();
+					console.log(logoutMessage);
+					await this.authenticationService.authenticate();
 					isConsoleRunning = false;
-					return;
+					break;
 				default:
 					console.log("Invalid action. Please try again.");
 			}

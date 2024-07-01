@@ -1,12 +1,16 @@
 import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import ChefHandlers from "../handlers/chefHandlers";
+import AuthenticationService from "../services/authenticationService";
 
 class ChefConsole {
 	private chefHandlers: ChefHandlers;
-
+	private authenticationService: AuthenticationService;
 	constructor(private socketService: SocketService) {
 		this.chefHandlers = new ChefHandlers(this.socketService.getSocket());
+		this.authenticationService = new AuthenticationService(
+			this.socketService.getSocket()
+		);
 	}
 
 	async start() {
@@ -145,9 +149,11 @@ class ChefConsole {
 					}
 					break;
 				case 9:
-					await this.chefHandlers.logout();
+					let logoutMessage = await this.chefHandlers.logout();
+					console.log(logoutMessage);
+					await this.authenticationService.authenticate();
 					isConsoleRunning = false;
-					return;
+					break;
 				default:
 					console.log("Invalid action. Please try again.");
 			}

@@ -130,10 +130,11 @@ class SocketService {
 			}
 		);
 
-		socket.on("logout", () => {
-			console.log(`User ${socket.id} logged out`);
+		socket.on("logout", (callback: (response: { message: string }) => void) => {
+			let userEmail = UserDetail.getUserDetail();
+			console.log(`User ${userEmail} logged out`);
 			UserDetail.clearUserDetail();
-			socket.disconnect(true);
+			callback({ message: `User ${userEmail} logged out` });
 		});
 
 		socket.on(
