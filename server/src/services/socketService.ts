@@ -138,8 +138,17 @@ class SocketService {
 
 		socket.on(
 			"viewRecommendations",
-			(callback: (response: { recommendations: any[] }) => void) => {
-				FoodRecommendationHandler.handleViewRecommendation(socket, callback);
+			(
+				mealType,
+				numberOfRecommendation,
+				callback: (response: { recommendations: any[] }) => void
+			) => {
+				FoodRecommendationHandler.handleViewRecommendation(
+					socket,
+					mealType,
+					numberOfRecommendation,
+					callback
+				);
 			}
 		);
 

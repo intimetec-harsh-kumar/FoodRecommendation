@@ -81,17 +81,25 @@ class ChefHandlers {
 		});
 	}
 
-	async viewRecommendations(): Promise<any> {
+	async viewRecommendations(
+		mealType: number,
+		numberOfRecommendation: number
+	): Promise<any> {
 		return new Promise(async (resolve, reject) => {
-			this.socket.emit("viewRecommendations", (response: any) => {
-				if (response.error) {
-					resolve(response.error);
-				} else if (response.recommendations.length === 0) {
-					resolve("No records found");
-				} else {
-					resolve(response.recommendations);
+			this.socket.emit(
+				"viewRecommendations",
+				mealType,
+				numberOfRecommendation,
+				(response: any) => {
+					if (response.error) {
+						resolve(response.error);
+					} else if (response.recommendations.length === 0) {
+						resolve("No records found");
+					} else {
+						resolve(response.recommendations);
+					}
 				}
-			});
+			);
 		});
 	}
 

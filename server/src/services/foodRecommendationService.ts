@@ -24,10 +24,15 @@ class FoodRecommendationEngineService {
 		}
 	}
 
-	public async getRecommendations(limit: number): Promise<any> {
+	public async getRecommendations(
+		mealType: number,
+		limit: number
+	): Promise<any> {
 		try {
 			const foodItemRepo = new FoodItemRepository(pool, "Item");
-			const foodItems: any = await foodItemRepo.getItemsForRecommendation();
+			const foodItems: any = await foodItemRepo.getItemsForRecommendation(
+				mealType
+			);
 			let foodItemsForRecommendation =
 				this.calculateRecommendationScores(foodItems);
 			let foodItemsSortedByRecommendation: any[] =

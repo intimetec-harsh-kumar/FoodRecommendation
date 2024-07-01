@@ -4,11 +4,16 @@ import FoodRecommendationEngineService from "../services/foodRecommendationServi
 class FoodRecommendationHandler {
 	public async handleViewRecommendation(
 		socket: Socket,
+		mealType: number,
+		numberOfRecommendation: number,
 		callback: (response: { recommendations: any; error?: string }) => void
 	): Promise<any> {
 		try {
 			let foodItemRecommendationForNextDay =
-				await FoodRecommendationEngineService.getRecommendations(5);
+				await FoodRecommendationEngineService.getRecommendations(
+					mealType,
+					numberOfRecommendation
+				);
 			callback({ recommendations: foodItemRecommendationForNextDay });
 		} catch (error: any) {
 			console.error("Error fetching recommendations:", error.message);

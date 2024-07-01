@@ -37,8 +37,17 @@ class ChefConsole {
 					console.table(availableFoodItems);
 					break;
 				case 5:
+					let mealTypeId = await InputHandlerService.askQuestion(
+						"Please select mealTypeId (1: breakfast,2: lunch, 3:dinner) : "
+					);
+					let numberOfRecommendations = await InputHandlerService.askQuestion(
+						"Please enter number of recommendation you want to get : "
+					);
 					let recommendedFoodItems =
-						await this.chefHandlers.viewRecommendations();
+						await this.chefHandlers.viewRecommendations(
+							parseInt(mealTypeId),
+							parseInt(numberOfRecommendations)
+						);
 					const recommendedFoodItemIds = new Set(
 						recommendedFoodItems.map((item: any) => item.food_item_id)
 					);
@@ -76,8 +85,17 @@ class ChefConsole {
 					}
 					break;
 				case 6:
+					let mealType = await InputHandlerService.askQuestion(
+						"Please select mealTypeId (1: breakfast,2: lunch, 3:dinner) : "
+					);
+					let numberOfRecommendation = await InputHandlerService.askQuestion(
+						"Please enter number of recommendation you want to get : "
+					);
 					let recommendations: any =
-						await this.chefHandlers.viewRecommendations();
+						await this.chefHandlers.viewRecommendations(
+							parseInt(mealType),
+							parseInt(numberOfRecommendation)
+						);
 					console.table(recommendations);
 					break;
 				case 7:

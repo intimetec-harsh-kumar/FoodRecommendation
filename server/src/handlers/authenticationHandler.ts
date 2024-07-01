@@ -11,7 +11,6 @@ class authenticationHandler {
 	): Promise<void> {
 		try {
 			const user = await AuthenticationService.authenticateUser(email);
-			console.log("in authhandler", user);
 			UserDetail.setUserDetail(email);
 			socket.emit("authenticated", user);
 			if (user.length > 0) {
