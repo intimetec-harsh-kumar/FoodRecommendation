@@ -16,9 +16,11 @@ class AdminConsole {
 
 	async start() {
 		let isConsoleRunning = true;
+		var existingItems = await this.adminHandlers.viewItems();
+		let existingItemsIds = new Set(existingItems.map((item: any) => item.id));
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
-				"Admin: Choose an action (\n 1: addItem\n 2: update \n 3: delete \n 4: view \n 5: meal types \n 6: View Discard MenuItem List \n 7: viewLog \n 8: Logout\n): "
+				"Admin: Choose an action (\n 1: Add an Item\n 2: Update an Item \n 3: Delete an Item \n 4: View Items \n 5: View Meal Types \n 6: View Discard MenuItem List \n 7: View Logs \n 8: Logout\n): "
 			);
 			switch (action) {
 				case "1":
@@ -49,19 +51,35 @@ class AdminConsole {
 					var id = parseInt(
 						await InputHandlerService.askQuestion("Enter item ID to update: ")
 					);
+					if (!existingItemsIds.has(id)) {
+						console.log("Please enter correct item Id");
+						break;
+					}
 					var item_name = await InputHandlerService.askQuestion(
 						"Enter new item name: "
 					);
 					var price = parseFloat(
 						await InputHandlerService.askQuestion("Enter new item price: ")
 					);
+					if (isNaN(price)) {
+						console.log("Price can not be other than number type");
+						break;
+					}
 					var availability_status =
 						(await InputHandlerService.askQuestion(
 							"Is the item available? (yes/no): "
 						)) === "yes";
+					var existingMealTypes = await this.adminHandlers.viewMealTypes();
+					let existingMealTypesIds = new Set(
+						existingMealTypes.map((mealType: any) => mealType.id)
+					);
 					var meal_type_id = parseInt(
 						await InputHandlerService.askQuestion("Enter new meal type ID: ")
 					);
+					if (existingMealTypesIds.has(meal_type_id)) {
+						console.log("Please enter correct mealType Id");
+						return;
+					}
 					let updatedItemMessage = await this.adminHandlers.handleUpdateItem(
 						id,
 						item_name,
@@ -75,6 +93,10 @@ class AdminConsole {
 					var id = parseInt(
 						await InputHandlerService.askQuestion("Enter item ID to delete: ")
 					);
+					if (!existingItemsIds.has(id)) {
+						console.log("Please enter correct item Id");
+						break;
+					}
 					let deletedItemMessage = await this.adminHandlers.handleDeleteItem(
 						id
 					);
@@ -91,8 +113,8 @@ class AdminConsole {
 				case "6":
 					let discardMenuItemList =
 						await this.adminHandlers.viewDiscardMenuItemList();
-					if (typeof discardMenuItemList === "string") {
-						console.table(discardMenuItemList);
+					if (discardMenuItemList.length === 0) {
+						console.log("No record found.");
 					} else {
 						console.table(discardMenuItemList);
 						const discardMenuItemListAction =
