@@ -123,10 +123,10 @@ class SocketService {
 		socket.on(
 			"selectFoodItemForNextDay",
 			(
-				foodItemId: string,
+				foodItemIds: string,
 				callback: (response: { message: string }) => void
 			) => {
-				FoodItemhandler.selectFoodItemForNextDay(foodItemId, callback);
+				FoodItemhandler.selectFoodItemForNextDay(foodItemIds, callback);
 			}
 		);
 

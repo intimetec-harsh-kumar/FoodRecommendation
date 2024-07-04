@@ -42,7 +42,10 @@ class NotificationService {
 				let item: any = await genericRepository.getById(itemId);
 				let notification = {
 					notification_type_id: 4,
-					message: item[0].item_name,
+					message: JSON.stringify({
+						itemId: item[0].id,
+						itemName: item[0].item_name,
+					}),
 					Date: DateService.getCurrentDate(),
 				};
 				this.pushNotification(notification);

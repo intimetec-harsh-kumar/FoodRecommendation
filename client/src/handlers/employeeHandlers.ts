@@ -53,11 +53,11 @@ class EmployeeHandlers {
 		});
 	}
 
-	async selectFoodItemForNextDay(foodItemId: any): Promise<void> {
+	async selectFoodItemForNextDay(foodItemIds: any): Promise<void> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"selectFoodItemForNextDay",
-				foodItemId,
+				foodItemIds,
 				(response: any) => {
 					if (response.error) {
 						resolve(response.error);

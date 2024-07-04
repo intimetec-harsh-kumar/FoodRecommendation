@@ -68,30 +68,35 @@ class EmployeeConsole {
 					if (rolledOutFoodItems.length == 0) {
 						console.log("No records found");
 					} else {
-						console.table(rolledOutFoodItems);
-						console.log(
-							"Rolled Out Food Item Ids : " +
-								rolledOutFoodItems.map((item: any) => item.id).join(",")
+						console.table(
+							rolledOutFoodItems.map((item: any) => {
+								const messageObj = JSON.parse(item.message);
+								return {
+									itemId: messageObj.itemId,
+									itemName: messageObj.itemName,
+								};
+							})
 						);
+						let rolledOutFoodItemsId = rolledOutFoodItems
+							.map((item: any) => JSON.parse(item.message).itemId)
+							.join(",");
+						console.log("Rolled Out Food Item Ids : " + rolledOutFoodItemsId);
 						const selectedFoodItemIds = await InputHandlerService.askQuestion(
 							"Enter item Id to select for next day seperated by comma : "
 						);
-						const rolledOutFoodItemIds = new Set(
-							rolledOutFoodItems.map((item: any) => item.id)
-						);
 						const invalidFoodItemIds: string[] = [];
 						selectedFoodItemIds.split(",").forEach((id) => {
-							if (!rolledOutFoodItemIds.has(parseInt(id.trim()))) {
-								invalidFoodItemIds.push(id.trim());
+							if (!rolledOutFoodItemsId.split(",").includes(id)) {
+								invalidFoodItemIds.push(id);
 							}
 						});
 						if (invalidFoodItemIds.length > 0) {
 							console.log(
-								"Invalid Food Item Ids: " + invalidFoodItemIds.join(",")
-							);
-							console.log(
-								"Please enter valid Food Item Ids from the list: " +
-									rolledOutFoodItems.map((item: any) => item.Id).join(",")
+								"Invalid Food Item Ids: " +
+									invalidFoodItemIds.join(",") +
+									"\n" +
+									"Please enter valid Food Item Ids from : " +
+									rolledOutFoodItemsId
 							);
 						} else {
 							await this.employeeHandlers.selectFoodItemForNextDay(
