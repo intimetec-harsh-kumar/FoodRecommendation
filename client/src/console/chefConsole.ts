@@ -33,7 +33,11 @@ class ChefConsole {
 					break;
 				case 3:
 					let notifications = await this.chefHandlers.viewNotifications();
-					console.table(notifications);
+					if (notifications.length === 0) {
+						console.log("There is no notification yet.");
+					} else {
+						console.table(notifications);
+					}
 					break;
 				case 4:
 					let availableFoodItems =
@@ -70,8 +74,6 @@ class ChefConsole {
 						await InputHandlerService.askQuestion(
 							"Enter comma seperated food item id to roll out : "
 						);
-					console.log(recommendedFoodItemIds);
-
 					const selectedFoodItemIds = foodItemIdsToRollOutForNextDay
 						.split(",")
 						.map((id) => id.trim());

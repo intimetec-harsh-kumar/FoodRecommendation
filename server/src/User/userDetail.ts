@@ -1,5 +1,5 @@
 export default class UserDetail {
-	static userDetail: string | null;
+	static userDetail: string | undefined;
 
 	static setUserDetail(userDetail: string) {
 		try {
@@ -9,7 +9,7 @@ export default class UserDetail {
 		}
 	}
 
-	static getUserDetail(): string | null {
+	static getUserDetail(): string | undefined {
 		try {
 			return UserDetail.userDetail;
 		} catch (error) {
@@ -19,7 +19,7 @@ export default class UserDetail {
 
 	static clearUserDetail() {
 		try {
-			UserDetail.userDetail = null;
+			UserDetail.userDetail = undefined;
 		} catch (error) {
 			throw error;
 		}

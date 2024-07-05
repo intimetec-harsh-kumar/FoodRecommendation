@@ -1,4 +1,5 @@
 import { Socket } from "socket.io-client";
+import { ILog } from "../models/ILog";
 
 class AdminHandlers {
 	constructor(private socket: Socket) {}
@@ -86,13 +87,11 @@ class AdminHandlers {
 		});
 	}
 
-	async viewLog() {
+	async viewLog(): Promise<ILog[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewLog", (response: any) => {
 				if (response.error) {
 					resolve(response.error);
-				} else if (response.log.length === 0) {
-					resolve("No records found.");
 				} else {
 					resolve(response.log);
 				}

@@ -4,8 +4,6 @@ import NotificationService from "../services/notificationService";
 import DateService from "../services/dateService";
 import UserDetail from "../User/userDetail";
 import LogService from "../services/logService";
-import foodItemService from "../services/foodItemService";
-import { log } from "console";
 
 class FoodItemHandler {
 	public async handleAddItem(
@@ -263,7 +261,7 @@ class FoodItemHandler {
 		}
 	}
 
-	addLog(email: string | null, action: string) {
+	addLog(email: string | undefined, action: string) {
 		try {
 			let logObject = {
 				user_email: email,

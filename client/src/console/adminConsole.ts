@@ -154,7 +154,11 @@ class AdminConsole {
 					break;
 				case "7":
 					let logs = await this.adminHandlers.viewLog();
-					console.table(logs);
+					if (logs.length === 0) {
+						console.log("No logs found.");
+					} else {
+						console.table(logs);
+					}
 					break;
 				case "8":
 					let logoutMessage = await this.adminHandlers.logout();

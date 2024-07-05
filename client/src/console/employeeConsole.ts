@@ -2,6 +2,7 @@ import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import EmployeeHandlers from "../handlers/employeeHandlers";
 import AuthenticationService from "../services/authenticationService";
+import { INotification } from "../models/INotification";
 
 class EmployeeConsole {
 	private employeeHandlers: EmployeeHandlers;
@@ -31,9 +32,12 @@ class EmployeeConsole {
 					console.table(menuItems);
 					break;
 				case 2:
-					let notifications: any =
-						await this.employeeHandlers.viewNotifications(4);
-					console.table(notifications);
+					let notifications = await this.employeeHandlers.viewNotifications(4);
+					if (notifications.length === 0) {
+						console.log("There is no notification yet.");
+					} else {
+						console.table(notifications);
+					}
 					break;
 				case 3:
 					let foodItems = await this.employeeHandlers.viewMenuItems();

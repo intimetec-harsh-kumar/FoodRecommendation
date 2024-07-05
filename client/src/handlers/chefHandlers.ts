@@ -1,4 +1,5 @@
 import { Socket } from "socket.io-client";
+import { INotification } from "../models/INotification";
 
 class ChefHandlers {
 	constructor(private socket: Socket) {}
@@ -31,7 +32,9 @@ class ChefHandlers {
 		});
 	}
 
-	async viewNotifications(notificationTypeId?: number): Promise<unknown> {
+	async viewNotifications(
+		notificationTypeId?: number
+	): Promise<INotification[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"viewNotifications",
@@ -39,8 +42,6 @@ class ChefHandlers {
 				(response: any) => {
 					if (response.error) {
 						resolve(response.error);
-					} else if (response.notification.length === 0) {
-						resolve("There are no notifications yet");
 					} else {
 						resolve(response.notification);
 					}

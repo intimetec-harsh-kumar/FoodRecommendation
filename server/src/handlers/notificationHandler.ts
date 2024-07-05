@@ -1,15 +1,11 @@
+import { INotification } from "../models/INotification";
 import DateService from "../services/dateService";
 import NotificationService from "../services/notificationService";
 
 class NotificationHandler {
 	public async handleViewNotifications(
 		callback: (response: {
-			notification: {
-				id: number;
-				notification_type_id: number;
-				message: string;
-				Date: any;
-			}[];
+			notification: INotification[];
 			error?: string;
 		}) => void,
 		notificationTypeId?: number

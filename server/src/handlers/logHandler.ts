@@ -1,13 +1,11 @@
 import { Socket } from "socket.io";
 import logService from "../services/logService";
+import { ILog } from "../models/ILog";
 
 class LogHandler {
 	public async handleViewLogs(
 		socket: Socket,
-		callback: (response: {
-			log: { id: number; user_email: string; action: string }[];
-			error?: string;
-		}) => void
+		callback: (response: { log: ILog[]; error?: string }) => void
 	): Promise<any> {
 		try {
 			const logs = await logService.getLogs();

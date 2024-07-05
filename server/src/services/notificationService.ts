@@ -1,4 +1,5 @@
 import pool from "../config/dbConnection";
+import { INotification } from "../models/INotification";
 import { FoodItemRepository } from "../repository/foodItemRepository";
 import { GenericRepository } from "../repository/genericRepository";
 import { NotificationRepository } from "../repository/notificationRepository";
@@ -6,7 +7,7 @@ import DateService from "./dateService";
 import FoodRecommendationEngineService from "./foodRecommendationService";
 
 class NotificationService {
-	async pushNotification(notification: any): Promise<void> {
+	async pushNotification(notification: Partial<INotification>): Promise<void> {
 		try {
 			const connection = await pool.getConnection();
 			const genericRepository = new GenericRepository(pool, "Notification");

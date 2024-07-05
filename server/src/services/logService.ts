@@ -1,8 +1,9 @@
 import pool from "../config/dbConnection";
+import { ILog } from "../models/ILog";
 import { GenericRepository } from "../repository/genericRepository";
 
 class logService {
-	async addLogs(log: any): Promise<void> {
+	async addLogs(log: Partial<ILog>): Promise<void> {
 		try {
 			const connection = await pool.getConnection();
 			const genericRepository = new GenericRepository(pool, "Log");
@@ -13,7 +14,7 @@ class logService {
 			throw error;
 		}
 	}
-	async getLogs(): Promise<any[]> {
+	async getLogs(): Promise<ILog[]> {
 		try {
 			const connection = await pool.getConnection();
 			const genericRepository = new GenericRepository(pool, "Log");

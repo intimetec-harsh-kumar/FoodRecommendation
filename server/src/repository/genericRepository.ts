@@ -41,7 +41,7 @@ export class GenericRepository<T> implements IRepository<T> {
 		}
 	}
 
-	async add(entity: T, sentimentScore?: any): Promise<void> {
+	async add(entity: T): Promise<any> {
 		try {
 			const row: any = await this.pool.query(
 				`INSERT INTO ${this.tableName} SET ?`,
@@ -53,7 +53,7 @@ export class GenericRepository<T> implements IRepository<T> {
 		}
 	}
 
-	async update(entity: T): Promise<void> {
+	async update(entity: T): Promise<any> {
 		try {
 			const row: any = await this.pool.query(
 				`UPDATE ${this.tableName} SET ? WHERE id = ?`,
@@ -65,7 +65,7 @@ export class GenericRepository<T> implements IRepository<T> {
 		}
 	}
 
-	async delete(id: number): Promise<void> {
+	async delete(id: number): Promise<any> {
 		try {
 			const row: any = await this.pool.query(
 				`DELETE FROM ${this.tableName} WHERE id = ?`,

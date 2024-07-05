@@ -8,6 +8,8 @@ import logHandler from "../handlers/logHandler";
 import FoodRecommendationHandler from "../handlers/foodRecommendationHandler";
 import FeedbackHandler from "../handlers/feedbackHandler";
 import foodItemhandler from "../handlers/foodItemhandler";
+import { ILog } from "../models/ILog";
+import { INotification } from "../models/INotification";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -72,14 +74,7 @@ class SocketService {
 			"viewNotifications",
 			(
 				notificationTypeId: number | undefined,
-				callback: (response: {
-					notification: {
-						id: number;
-						notification_type_id: number;
-						message: string;
-						Date: any;
-					}[];
-				}) => void
+				callback: (response: { notification: INotification[] }) => void
 			) => {
 				NotificationHandler.handleViewNotifications(
 					callback,
@@ -107,15 +102,7 @@ class SocketService {
 
 		socket.on(
 			"viewLog",
-			(
-				callback: (response: {
-					log: {
-						id: number;
-						user_email: string;
-						action: string;
-					}[];
-				}) => void
-			) => {
+			(callback: (response: { log: Partial<ILog>[] }) => void) => {
 				logHandler.handleViewLogs(socket, callback);
 			}
 		);

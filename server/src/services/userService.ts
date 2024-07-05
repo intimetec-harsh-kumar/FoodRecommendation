@@ -1,24 +1,13 @@
 import pool from "../config/dbConnection";
 import UserDetail from "../User/userDetail";
-import { Users } from "../models/Users";
+import { IUsers } from "../models/IUsers";
 import { GenericRepository } from "../repository/genericRepository";
-import { UserRepository } from "../repository/userRepository";
 
 class UserService {
-	async getUsers() {
-		try {
-			const users = new UserRepository(pool, "User");
-			const rows = await users.getAll();
-			return rows;
-		} catch (error) {
-			throw error;
-		}
-	}
-
-	async getUserByEmail(email: string): Promise<any[]> {
+	async getUserByEmail(email: string): Promise<IUsers[]> {
 		try {
 			const connection = await pool.getConnection();
-			const genericRepository = new GenericRepository<Users>(pool, "User");
+			const genericRepository = new GenericRepository<IUsers>(pool, "User");
 			const rows: any = await genericRepository.getByEmail(email);
 			connection.release();
 			return rows as any[];
@@ -27,9 +16,9 @@ class UserService {
 		}
 	}
 
-	async getUserEmail(): Promise<string | null> {
+	async getUserEmail(): Promise<string | undefined> {
 		try {
-			let email: string | null = await UserDetail.getUserDetail();
+			let email: string | undefined = UserDetail.getUserDetail();
 			return email;
 		} catch (error) {
 			throw error;

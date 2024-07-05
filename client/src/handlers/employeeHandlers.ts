@@ -1,9 +1,12 @@
 import { Socket } from "socket.io-client";
+import { INotification } from "../models/INotification";
 
 class EmployeeHandlers {
 	constructor(private socket: Socket) {}
 
-	async viewNotifications(notificationTypeId?: number) {
+	async viewNotifications(
+		notificationTypeId?: number
+	): Promise<INotification[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"viewNotifications",
