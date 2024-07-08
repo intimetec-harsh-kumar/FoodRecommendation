@@ -3,6 +3,7 @@ import SocketService from "../services/socketService";
 import EmployeeHandlers from "../handlers/employeeHandlers";
 import AuthenticationService from "../services/authenticationService";
 import { INotification } from "../models/INotification";
+import { Message } from "../constants/constant";
 
 class EmployeeConsole {
 	private employeeHandlers: EmployeeHandlers;
@@ -22,7 +23,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					"Employee: Choose an action (\n 1: View Menu Items \n 2: View Today's Menu\n 3: Send Feedback \n 4: Choose Item for next day \n 5: Logout\n): "
+					`Employee: Choose an action (\n 1: ${Message.ViewItem} \n 2: ${Message.ViewTodaysMenu}\n 3: ${Message.SendFeedback} \n 4: ${Message.ChooseNextDayFood} \n 5: ${Message.Logout}\n): `
 				)
 			);
 
@@ -30,7 +31,7 @@ class EmployeeConsole {
 				case 1:
 					let menuItems = await this.employeeHandlers.viewMenuItems();
 					if (menuItems.length === 0) {
-						console.log("No records found.");
+						console.log(Message.Logout);
 					} else {
 						console.table(menuItems);
 					}
@@ -38,7 +39,7 @@ class EmployeeConsole {
 				case 2:
 					let notifications = await this.employeeHandlers.viewNotifications(4);
 					if (notifications.length === 0) {
-						console.log("There is no notification yet.");
+						console.log(Message.NoRecordFound);
 					} else {
 						console.table(notifications);
 					}
@@ -74,7 +75,7 @@ class EmployeeConsole {
 					let rolledOutFoodItems: any =
 						await this.employeeHandlers.viewNotifications(4);
 					if (rolledOutFoodItems.length == 0) {
-						console.log("No records found");
+						console.log(Message.NoRecordFound);
 					} else {
 						console.table(
 							rolledOutFoodItems.map((item: any) => {
@@ -120,7 +121,7 @@ class EmployeeConsole {
 					isConsoleRunning = false;
 					break;
 				default:
-					console.log("Invalid action. Please try again.");
+					console.log(Message.InValidAction);
 			}
 		}
 	}

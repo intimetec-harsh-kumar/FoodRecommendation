@@ -17,9 +17,9 @@ export class GenericRepository<T> implements IRepository<T> {
 		try {
 			const [rows]: any = await this.pool.query(
 				`SELECT r.role_name 
-        FROM User u 
-        JOIN role r ON u.role_id = r.id 
-        WHERE u.email = ?`,
+        			FROM User u 
+        			JOIN role r ON u.role_id = r.id 
+        			WHERE u.email = ?`,
 				[email]
 			);
 			return rows.length > 0 ? rows : [];
@@ -32,7 +32,7 @@ export class GenericRepository<T> implements IRepository<T> {
 		try {
 			const [rows]: any = await this.pool.query(
 				`SELECT * from ${this.tableName}
-        WHERE id = ?`,
+        			WHERE id = ?`,
 				[Id]
 			);
 			return rows.length > 0 ? rows : null;

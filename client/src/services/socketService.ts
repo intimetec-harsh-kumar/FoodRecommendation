@@ -4,6 +4,7 @@ import AuthenticationService from "./authenticationService";
 import AdminConsole from "../console/adminConsole";
 import EmployeeConsole from "../console/employeeConsole";
 import ChefConsole from "../console/chefConsole";
+import { Message } from "../constants/constant";
 
 class SocketService {
 	private socket: Socket;
@@ -11,12 +12,9 @@ class SocketService {
 	private adminConsole?: AdminConsole;
 	private chefConsole?: ChefConsole;
 	private employeeConsole?: EmployeeConsole;
-	private messageCallback?: (msg: string) => void;
-	private viewItemsCallback?: (items: any[]) => void;
-	private viewMealTypesCallback?: (mealTypes: any[]) => void;
 
 	constructor() {
-		this.socket = io("http://localhost:3000");
+		this.socket = io(Message.SocketUrl);
 		this.authenticationService = new AuthenticationService(this.socket);
 		this.initializeSocket();
 	}

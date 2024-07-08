@@ -2,6 +2,7 @@ import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import AdminHandlers from "../handlers/adminHandlers";
 import AuthenticationService from "../services/authenticationService";
+import { Message } from "../constants/constant";
 
 class AdminConsole {
 	private adminHandlers: AdminHandlers;
@@ -20,7 +21,7 @@ class AdminConsole {
 		let existingItemsIds = new Set(existingItems.map((item: any) => item.id));
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
-				"Admin: Choose an action (\n 1: Add an Item\n 2: Update an Item \n 3: Delete an Item \n 4: View Items \n 5: View Meal Types \n 6: View Discard MenuItem List \n 7: View Logs \n 8: Logout\n): "
+				`Admin: Choose an action (\n 1: ${Message.AddItem}\n 2: ${Message.UpdateItem} \n 3: ${Message.DeleteItem} \n 4: ${Message.ViewItem} \n 5: ${Message.ViewMealType} \n 6: ${Message.ViewDiscardedItem} \n 7: ${Message.ViewLog} \n 8: ${Message.Logout}\n): `
 			);
 			switch (action) {
 				case "1":
@@ -105,7 +106,7 @@ class AdminConsole {
 				case "4":
 					let items = await this.adminHandlers.viewItems();
 					if (items.length === 0) {
-						console.log("No records found.");
+						console.log(Message.NoRecordFound);
 					} else {
 						console.table(items);
 					}
@@ -118,12 +119,12 @@ class AdminConsole {
 					let discardMenuItemList =
 						await this.adminHandlers.viewDiscardMenuItemList();
 					if (discardMenuItemList.length === 0) {
-						console.log("No record found.");
+						console.log(Message.NoRecordFound);
 					} else {
 						console.table(discardMenuItemList);
 						const discardMenuItemListAction =
 							await InputHandlerService.askQuestion(
-								"Choose an action:\n 1: Remove the Food Item from Menu List\n 2: Get Detailed Feedback\n"
+								`Choose an action:\n 1: ${Message.RemoveItem}\n 2: ${Message.DetailedFeedback}\n`
 							);
 
 						switch (parseInt(discardMenuItemListAction)) {
@@ -152,14 +153,14 @@ class AdminConsole {
 								console.log(notificationMessage);
 								break;
 							default:
-								console.log("Invalid action. Please try again.");
+								console.log(Message.InValidAction);
 						}
 					}
 					break;
 				case "7":
 					let logs = await this.adminHandlers.viewLog();
 					if (logs.length === 0) {
-						console.log("No logs found.");
+						console.log(Message.NoRecordFound);
 					} else {
 						console.table(logs);
 					}
@@ -171,7 +172,7 @@ class AdminConsole {
 					isConsoleRunning = false;
 					break;
 				default:
-					console.log("Invalid action. Please try again.");
+					console.log(Message.InValidAction);
 			}
 		}
 	}
