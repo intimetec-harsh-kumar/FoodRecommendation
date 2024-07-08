@@ -76,7 +76,7 @@ class AdminConsole {
 					var meal_type_id = parseInt(
 						await InputHandlerService.askQuestion("Enter new meal type ID: ")
 					);
-					if (existingMealTypesIds.has(meal_type_id)) {
+					if (!existingMealTypesIds.has(meal_type_id)) {
 						console.log("Please enter correct mealType Id");
 						return;
 					}
@@ -104,7 +104,11 @@ class AdminConsole {
 					break;
 				case "4":
 					let items = await this.adminHandlers.viewItems();
-					console.table(items);
+					if (items.length === 0) {
+						console.log("No records found.");
+					} else {
+						console.table(items);
+					}
 					break;
 				case "5":
 					let mealTypes = await this.adminHandlers.viewMealTypes();

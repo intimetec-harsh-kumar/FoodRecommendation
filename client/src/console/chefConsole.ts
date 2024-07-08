@@ -25,7 +25,11 @@ class ChefConsole {
 			switch (action) {
 				case 1:
 					let menuItems = await this.chefHandlers.viewMenuItems();
-					console.table(menuItems);
+					if (menuItems.length === 0) {
+						console.log("No records found.");
+					} else {
+						console.table(menuItems);
+					}
 					break;
 				case 2:
 					let mealTypes = await this.chefHandlers.viewMealTypes();
@@ -42,7 +46,11 @@ class ChefConsole {
 				case 4:
 					let availableFoodItems =
 						await this.chefHandlers.viewAvailableFoodItems();
-					console.table(availableFoodItems);
+					if (availableFoodItems.length === 0) {
+						console.log("No records found.");
+					} else {
+						console.table(availableFoodItems);
+					}
 					break;
 				case 5:
 					let mealTypeId = await InputHandlerService.askQuestion(

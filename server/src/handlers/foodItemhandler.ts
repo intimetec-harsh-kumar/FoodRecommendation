@@ -4,16 +4,13 @@ import NotificationService from "../services/notificationService";
 import DateService from "../services/dateService";
 import UserDetail from "../User/userDetail";
 import LogService from "../services/logService";
+import { IFoodItem } from "../models/IFoodItem";
+import { IMealType } from "../models/IMealType";
 
 class FoodItemHandler {
 	public async handleAddItem(
 		socket: Socket,
-		item: {
-			item_name: string;
-			price: number;
-			availability_status: boolean;
-			meal_type_id: number;
-		},
+		item: IFoodItem,
 		callback: (response: {
 			success: boolean;
 			message: string;
@@ -54,13 +51,7 @@ class FoodItemHandler {
 
 	public async handleUpdateItem(
 		socket: Socket,
-		item: {
-			id: number;
-			item_name: string;
-			price: number;
-			availability_status: boolean;
-			meal_type_id: number;
-		},
+		item: IFoodItem,
 		callback: (response: {
 			success: boolean;
 			message: string;
@@ -141,16 +132,7 @@ class FoodItemHandler {
 
 	public async handleViewItems(
 		socket: Socket,
-		callback: (response: {
-			items: {
-				id: number;
-				item_name: string;
-				price: number;
-				availability_status: number;
-				meal_type_id: number;
-			}[];
-			error?: string;
-		}) => void
+		callback: (response: { items: IFoodItem[]; error?: string }) => void
 	): Promise<any> {
 		try {
 			const items = await FoodItemService.getItems();
@@ -165,13 +147,7 @@ class FoodItemHandler {
 
 	public async handleViewMealTypes(
 		socket: Socket,
-		callback: (response: {
-			mealType: {
-				id: number;
-				type_name: string;
-			}[];
-			error?: string;
-		}) => void
+		callback: (response: { mealType: IMealType[]; error?: string }) => void
 	): Promise<any> {
 		try {
 			const mealType = await FoodItemService.getMealTypes();
@@ -206,16 +182,7 @@ class FoodItemHandler {
 
 	public async handleViewAvailableFoodItems(
 		socket: Socket,
-		callback: (response: {
-			items: {
-				id: number;
-				item_name: string;
-				price: number;
-				availability_status: number;
-				meal_type_id: number;
-			}[];
-			error?: string;
-		}) => void
+		callback: (response: { items: IFoodItem[]; error?: string }) => void
 	): Promise<any> {
 		try {
 			const items = await FoodItemService.getAvailableItems();

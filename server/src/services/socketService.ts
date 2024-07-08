@@ -10,6 +10,8 @@ import FeedbackHandler from "../handlers/feedbackHandler";
 import foodItemhandler from "../handlers/foodItemhandler";
 import { ILog } from "../models/ILog";
 import { INotification } from "../models/INotification";
+import { IFoodItem } from "../models/IFoodItem";
+import { IMealType } from "../models/IMealType";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -44,16 +46,7 @@ class SocketService {
 		socket.on(
 			"viewItems",
 			(
-				callback: (response: {
-					items: {
-						id: number;
-						item_name: string;
-						price: number;
-						availability_status: number;
-						meal_type_id: number;
-					}[];
-					error?: string;
-				}) => void
+				callback: (response: { items: IFoodItem[]; error?: string }) => void
 			) => {
 				FoodItemhandler.handleViewItems(socket, callback);
 			}
@@ -61,11 +54,7 @@ class SocketService {
 
 		socket.on(
 			"viewMealTypes",
-			(
-				callback: (response: {
-					mealType: { id: number; type_name: string }[];
-				}) => void
-			) => {
+			(callback: (response: { mealType: IMealType[] }) => void) => {
 				FoodItemhandler.handleViewMealTypes(socket, callback);
 			}
 		);
@@ -85,17 +74,7 @@ class SocketService {
 
 		socket.on(
 			"viewAvailableFoodItems",
-			(
-				callback: (response: {
-					items: {
-						id: number;
-						item_name: string;
-						price: number;
-						availability_status: number;
-						meal_type_id: number;
-					}[];
-				}) => void
-			) => {
+			(callback: (response: { items: IFoodItem[] }) => void) => {
 				FoodItemhandler.handleViewAvailableFoodItems(socket, callback);
 			}
 		);
@@ -168,16 +147,7 @@ class SocketService {
 		socket.on(
 			"viewDiscardMenuItemList",
 			(
-				callback: (response: {
-					items: {
-						id: number;
-						item_name: string;
-						price: number;
-						availability_status: number;
-						meal_type_id: number;
-					}[];
-					error?: string;
-				}) => void
+				callback: (response: { items: IFoodItem[]; error?: string }) => void
 			) => {
 				FoodRecommendationHandler.handleViewDiscardMenuItemList(
 					socket,

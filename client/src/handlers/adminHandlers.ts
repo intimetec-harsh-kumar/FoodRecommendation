@@ -1,5 +1,6 @@
 import { Socket } from "socket.io-client";
 import { ILog } from "../models/ILog";
+import { IFoodItem } from "../models/IFoodItem";
 
 class AdminHandlers {
 	constructor(private socket: Socket) {}
@@ -9,7 +10,7 @@ class AdminHandlers {
 		price: number,
 		availability_status: boolean,
 		meal_type_id: number
-	): Promise<void> {
+	): Promise<IFoodItem> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"addItem",
@@ -31,7 +32,7 @@ class AdminHandlers {
 		price: number,
 		availability_status: boolean,
 		meal_type_id: number
-	) {
+	): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"updateItem",
@@ -59,13 +60,11 @@ class AdminHandlers {
 		});
 	}
 
-	async viewItems(): Promise<any> {
+	async viewItems(): Promise<IFoodItem[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewItems", (response: any) => {
 				if (response.error) {
 					resolve(response.error);
-				} else if (response.items.length === 0) {
-					resolve("No records found.");
 				} else {
 					resolve(response.items);
 				}

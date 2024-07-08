@@ -29,7 +29,11 @@ class EmployeeConsole {
 			switch (action) {
 				case 1:
 					let menuItems = await this.employeeHandlers.viewMenuItems();
-					console.table(menuItems);
+					if (menuItems.length === 0) {
+						console.log("No records found.");
+					} else {
+						console.table(menuItems);
+					}
 					break;
 				case 2:
 					let notifications = await this.employeeHandlers.viewNotifications(4);

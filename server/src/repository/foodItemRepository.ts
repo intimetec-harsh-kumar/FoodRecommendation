@@ -1,7 +1,8 @@
 import { GenericRepository } from "./genericRepository";
-import { FoodItems } from "../models/FoodItems";
+import { IFoodItem } from "../models/IFoodItem";
+import { IMealType } from "../models/IMealType";
 
-export class FoodItemRepository extends GenericRepository<FoodItems> {
+export class FoodItemRepository extends GenericRepository<any> {
 	async getMealTypes(): Promise<any[]> {
 		try {
 			const connection = await this.pool.getConnection();

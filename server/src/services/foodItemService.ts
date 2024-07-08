@@ -1,13 +1,10 @@
 import pool from "../config/dbConnection";
+import { IFoodItem } from "../models/IFoodItem";
+import { IMealType } from "../models/IMealType";
 import { FoodItemRepository } from "../repository/foodItemRepository";
 
 class FoodItemService {
-	async addItem(item: {
-		item_name: string;
-		price: number;
-		availability_status: boolean;
-		meal_type_id: number;
-	}): Promise<unknown> {
+	async addItem(item: IFoodItem): Promise<unknown> {
 		try {
 			const foodItemRepository = new FoodItemRepository(pool, "Item");
 			const rows = await foodItemRepository.add(item);
@@ -27,13 +24,7 @@ class FoodItemService {
 		}
 	}
 
-	async updateItem(item: {
-		id: number;
-		item_name: string;
-		price: number;
-		availability_status: boolean;
-		meal_type_id: number;
-	}): Promise<unknown> {
+	async updateItem(item: IFoodItem): Promise<unknown> {
 		try {
 			const foodItemRepository = new FoodItemRepository(pool, "Item");
 			const rows = await foodItemRepository.update(item);
@@ -53,7 +44,7 @@ class FoodItemService {
 		}
 	}
 
-	async getItems(): Promise<any[]> {
+	async getItems(): Promise<IFoodItem[]> {
 		try {
 			const foodItemRepository = new FoodItemRepository(pool, "Item");
 			const rows = await foodItemRepository.getAll();
@@ -63,7 +54,7 @@ class FoodItemService {
 		}
 	}
 
-	async getAvailableItems(): Promise<any[]> {
+	async getAvailableItems(): Promise<IFoodItem[]> {
 		try {
 			const foodItemRepository = new FoodItemRepository(pool, "Item");
 			const rows = await foodItemRepository.getAvailableItems();
@@ -73,7 +64,7 @@ class FoodItemService {
 		}
 	}
 
-	async getMealTypes(): Promise<any[]> {
+	async getMealTypes(): Promise<IMealType[]> {
 		try {
 			const connection = await pool.getConnection();
 			const foodItemRepository = new FoodItemRepository(pool, "Item");

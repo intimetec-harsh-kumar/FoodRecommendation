@@ -3,7 +3,7 @@ import { ILog } from "../models/ILog";
 import { GenericRepository } from "../repository/genericRepository";
 
 class logService {
-	async addLogs(log: Partial<ILog>): Promise<void> {
+	async addLogs(log: Partial<ILog>): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
 			const genericRepository = new GenericRepository(pool, "Log");

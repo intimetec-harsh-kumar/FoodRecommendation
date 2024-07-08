@@ -6,7 +6,7 @@ class LogHandler {
 	public async handleViewLogs(
 		socket: Socket,
 		callback: (response: { log: ILog[]; error?: string }) => void
-	): Promise<any> {
+	): Promise<void> {
 		try {
 			const logs = await logService.getLogs();
 			callback({ log: logs });

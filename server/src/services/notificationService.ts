@@ -7,7 +7,7 @@ import DateService from "./dateService";
 import FoodRecommendationEngineService from "./foodRecommendationService";
 
 class NotificationService {
-	async pushNotification(notification: Partial<INotification>): Promise<void> {
+	async pushNotification(notification: Partial<INotification>): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
 			const genericRepository = new GenericRepository(pool, "Notification");
@@ -18,7 +18,7 @@ class NotificationService {
 			throw error;
 		}
 	}
-	async getNotification(notificationTypeId?: number): Promise<void> {
+	async getNotification(notificationTypeId?: number): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
 			const notificationRepository = new NotificationRepository(

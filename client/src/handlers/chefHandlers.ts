@@ -1,16 +1,15 @@
 import { Socket } from "socket.io-client";
 import { INotification } from "../models/INotification";
+import { IFoodItem } from "../models/IFoodItem";
 
 class ChefHandlers {
 	constructor(private socket: Socket) {}
 
-	async viewMenuItems(): Promise<unknown> {
+	async viewMenuItems(): Promise<IFoodItem[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewItems", (response: any) => {
 				if (response.error) {
 					resolve(response.error);
-				} else if (response.items.length === 0) {
-					resolve("No records found");
 				} else {
 					resolve(response.items);
 				}
@@ -50,13 +49,11 @@ class ChefHandlers {
 		});
 	}
 
-	async viewAvailableFoodItems(): Promise<unknown> {
+	async viewAvailableFoodItems(): Promise<IFoodItem[]> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewAvailableFoodItems", (response: any) => {
 				if (response.error) {
 					resolve(response.error);
-				} else if (response.items.length === 0) {
-					resolve("No records found");
 				} else {
 					resolve(response.items);
 				}
