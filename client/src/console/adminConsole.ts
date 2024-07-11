@@ -2,7 +2,7 @@ import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import AdminHandlers from "../handlers/adminHandlers";
 import AuthenticationService from "../services/authenticationService";
-import { Message } from "../constants/constant";
+import { Constants } from "../constants/constant";
 
 class AdminConsole {
 	private adminHandlers: AdminHandlers;
@@ -21,7 +21,7 @@ class AdminConsole {
 		let existingItemsIds = new Set(existingItems.map((item: any) => item.id));
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
-				`Admin: Choose an action (\n 1: ${Message.AddItem}\n 2: ${Message.UpdateItem} \n 3: ${Message.DeleteItem} \n 4: ${Message.ViewItem} \n 5: ${Message.ViewMealType} \n 6: ${Message.ViewDiscardedItem} \n 7: ${Message.ViewLog} \n 8: ${Message.Logout}\n): `
+				`Admin: Choose an action (\n 1: ${Constants.AddItem}\n 2: ${Constants.UpdateItem} \n 3: ${Constants.DeleteItem} \n 4: ${Constants.ViewItem} \n 5: ${Constants.ViewMealType} \n 6: ${Constants.ViewDiscardedItem} \n 7: ${Constants.ViewLog} \n 8: ${Constants.Logout}\n): `
 			);
 			switch (action) {
 				case "1":
@@ -106,7 +106,7 @@ class AdminConsole {
 				case "4":
 					let items = await this.adminHandlers.viewItems();
 					if (items.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(items);
 					}
@@ -119,12 +119,12 @@ class AdminConsole {
 					let discardMenuItemList =
 						await this.adminHandlers.viewDiscardMenuItemList();
 					if (discardMenuItemList.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(discardMenuItemList);
 						const discardMenuItemListAction =
 							await InputHandlerService.askQuestion(
-								`Choose an action:\n 1: ${Message.RemoveItem}\n 2: ${Message.DetailedFeedback}\n`
+								`Choose an action:\n 1: ${Constants.RemoveItem}\n 2: ${Constants.DetailedFeedback}\n`
 							);
 
 						switch (parseInt(discardMenuItemListAction)) {
@@ -153,14 +153,14 @@ class AdminConsole {
 								console.log(notificationMessage);
 								break;
 							default:
-								console.log(Message.InValidAction);
+								console.log(Constants.InValidAction);
 						}
 					}
 					break;
 				case "7":
 					let logs = await this.adminHandlers.viewLog();
 					if (logs.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(logs);
 					}
@@ -172,7 +172,7 @@ class AdminConsole {
 					isConsoleRunning = false;
 					break;
 				default:
-					console.log(Message.InValidAction);
+					console.log(Constants.InValidAction);
 			}
 		}
 	}

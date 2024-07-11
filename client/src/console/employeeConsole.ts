@@ -2,8 +2,7 @@ import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import EmployeeHandlers from "../handlers/employeeHandlers";
 import AuthenticationService from "../services/authenticationService";
-import { INotification } from "../models/INotification";
-import { Message } from "../constants/constant";
+import { Constants } from "../constants/constant";
 
 class EmployeeConsole {
 	private employeeHandlers: EmployeeHandlers;
@@ -23,7 +22,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					`Employee: Choose an action (\n 1: ${Message.ViewItem} \n 2: ${Message.ViewTodaysMenu}\n 3: ${Message.SendFeedback} \n 4: ${Message.ChooseNextDayFood} \n 5: ${Message.Logout}\n): `
+					`Employee: Choose an action (\n 1: ${Constants.ViewItem} \n 2: ${Constants.ViewTodaysMenu}\n 3: ${Constants.SendFeedback} \n 4: ${Constants.ChooseNextDayFood} \n 5: ${Constants.Logout}\n): `
 				)
 			);
 
@@ -31,15 +30,17 @@ class EmployeeConsole {
 				case 1:
 					let menuItems = await this.employeeHandlers.viewMenuItems();
 					if (menuItems.length === 0) {
-						console.log(Message.Logout);
+						console.log(Constants.Logout);
 					} else {
 						console.table(menuItems);
 					}
 					break;
 				case 2:
-					let notifications = await this.employeeHandlers.viewNotifications(6);
+					let notifications = await this.employeeHandlers.viewNotifications(
+						Constants.NotificationIdForTodaysPreparedFood
+					);
 					if (notifications.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(notifications);
 					}
@@ -73,9 +74,11 @@ class EmployeeConsole {
 					break;
 				case 4:
 					let rolledOutFoodItems: any =
-						await this.employeeHandlers.viewNotifications(4);
+						await this.employeeHandlers.viewNotifications(
+							Constants.NotificationIdForFoodRecommendation
+						);
 					if (rolledOutFoodItems.length == 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(
 							rolledOutFoodItems.map((item: any) => {
@@ -121,7 +124,7 @@ class EmployeeConsole {
 					isConsoleRunning = false;
 					break;
 				default:
-					console.log(Message.InValidAction);
+					console.log(Constants.InValidAction);
 			}
 		}
 	}

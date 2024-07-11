@@ -2,7 +2,7 @@ import InputHandlerService from "../services/inputHandlerService";
 import SocketService from "../services/socketService";
 import ChefHandlers from "../handlers/chefHandlers";
 import AuthenticationService from "../services/authenticationService";
-import { Message } from "../constants/constant";
+import { Constants } from "../constants/constant";
 
 class ChefConsole {
 	private chefHandlers: ChefHandlers;
@@ -19,7 +19,7 @@ class ChefConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					`Chef: Choose an action (\n 1: ${Message.ViewItem} \n 2: ${Message.ViewMealType} \n 3: ${Message.ViewNotification} \n 4: ${Message.ViewAvailableItems} \n 5: ${Message.SendNotification} \n 6: ${Message.ViewRecommendation} \n 7: ${Message.ViewVotedItems} \n 8: ${Message.ViewDiscardedItem} \n 9: ${Message.PrepareFood} \n 10: ${Message.Logout} \n): `
+					`Chef: Choose an action (\n 1: ${Constants.ViewItem} \n 2: ${Constants.ViewMealType} \n 3: ${Constants.ViewNotification} \n 4: ${Constants.ViewAvailableItems} \n 5: ${Constants.SendNotification} \n 6: ${Constants.ViewRecommendation} \n 7: ${Constants.ViewVotedItems} \n 8: ${Constants.ViewDiscardedItem} \n 9: ${Constants.PrepareFood} \n 10: ${Constants.Logout} \n): `
 				)
 			);
 
@@ -27,7 +27,7 @@ class ChefConsole {
 				case 1:
 					let menuItems = await this.chefHandlers.viewMenuItems();
 					if (menuItems.length === 0) {
-						console.log(Message.Logout);
+						console.log(Constants.Logout);
 					} else {
 						console.table(menuItems);
 					}
@@ -39,7 +39,7 @@ class ChefConsole {
 				case 3:
 					let notifications = await this.chefHandlers.viewNotifications();
 					if (notifications.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(notifications);
 					}
@@ -48,7 +48,7 @@ class ChefConsole {
 					let availableFoodItems =
 						await this.chefHandlers.viewAvailableFoodItems();
 					if (availableFoodItems.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(availableFoodItems);
 					}
@@ -122,7 +122,7 @@ class ChefConsole {
 				case 7:
 					let votedItems = await this.chefHandlers.viewVotedItems();
 					if (votedItems.length === 0) {
-						console.log(Message.NoRecordFound);
+						console.log(Constants.NoRecordFound);
 					} else {
 						console.table(votedItems);
 					}
@@ -137,7 +137,7 @@ class ChefConsole {
 					console.table(discardMenuItemList);
 					const discardMenuItemListAction =
 						await InputHandlerService.askQuestion(
-							`Choose an action:\n 1: ${Message.RemoveItem}\n 2: ${Message.DetailedFeedback}\n`
+							`Choose an action:\n 1: ${Constants.RemoveItem}\n 2: ${Constants.DetailedFeedback}\n`
 						);
 					const discardMenuItemListIds = new Set(
 						discardMenuItemList.map((item: any) => item.food_item_id)
@@ -179,7 +179,7 @@ class ChefConsole {
 							}
 							break;
 						default:
-							console.log(Message.InValidAction);
+							console.log(Constants.InValidAction);
 					}
 					break;
 				case 9:
@@ -208,7 +208,7 @@ class ChefConsole {
 					isConsoleRunning = false;
 					break;
 				default:
-					console.log(Message.InValidAction);
+					console.log(Constants.InValidAction);
 			}
 		}
 	}

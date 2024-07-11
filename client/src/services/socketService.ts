@@ -4,7 +4,7 @@ import AuthenticationService from "./authenticationService";
 import AdminConsole from "../console/adminConsole";
 import EmployeeConsole from "../console/employeeConsole";
 import ChefConsole from "../console/chefConsole";
-import { Message } from "../constants/constant";
+import { Constants } from "../constants/constant";
 
 class SocketService {
 	private socket: Socket;
@@ -14,7 +14,7 @@ class SocketService {
 	private employeeConsole?: EmployeeConsole;
 
 	constructor() {
-		this.socket = io(Message.SocketUrl);
+		this.socket = io(Constants.SocketUrl);
 		this.authenticationService = new AuthenticationService(this.socket);
 		this.initializeSocket();
 	}

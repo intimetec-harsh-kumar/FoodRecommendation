@@ -1,4 +1,4 @@
-export const Message = {
+export const Constants = {
 	SocketUrl: "http://localhost:3000",
 	NoRecordFound: "No Records Found",
 	AddItem: "Add a food Item",
@@ -21,4 +21,6 @@ export const Message = {
 	ViewLog: "View Logs",
 	Logout: "LogOut",
 	InValidAction: "Invalid action. Please try again",
+	NotificationIdForFoodRecommendation: 4,
+	NotificationIdForTodaysPreparedFood: 6,
 };
