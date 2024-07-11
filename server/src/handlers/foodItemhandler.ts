@@ -228,7 +228,7 @@ class FoodItemHandler {
 		}
 	}
 
-	addLog(email: string | undefined, action: string) {
+	public addLog(email: string | undefined, action: string) {
 		try {
 			let logObject = {
 				user_email: email,
@@ -238,6 +238,20 @@ class FoodItemHandler {
 			LogService.addLogs(logObject);
 		} catch (error: any) {
 			console.log(`Error occured: ${error.message}`);
+		}
+	}
+	public async handlePrepareFood(
+		foodItemId: number,
+		callback: (response: { message: string; error?: string }) => void
+	) {
+		try {
+			await FoodItemService.prepareFood(foodItemId);
+			callback({
+				message: `Items with id ${foodItemId} is choosen for preparation`,
+			});
+		} catch (error: any) {
+			console.log(`Error occured: ${error.message}`);
+			callback({ message: "", error: `Error occured: ${error.message}` });
 		}
 	}
 }

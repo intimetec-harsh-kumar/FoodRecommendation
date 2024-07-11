@@ -17,6 +17,7 @@ export const Message = {
 	ChooseNextDayFood: "Choose Item for next day",
 	SendFeedback: "Send Feedback",
 	DetailedFeedback: "Get Detailed Feedback",
+	PrepareFood: "Prepare Food",
 	ViewLog: "View Logs",
 	Logout: "LogOut",
 	InValidAction: "Invalid action. Please try again",

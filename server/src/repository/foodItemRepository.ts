@@ -85,4 +85,16 @@ export class FoodItemRepository extends GenericRepository<any> {
 			throw error;
 		}
 	}
+	async prepareFood(foodItemId: number): Promise<any[]> {
+		try {
+			const connection = await this.pool.getConnection();
+			const [rows]: any = await connection.query(
+				`Update Food_Item_Audit Set no_of_times_prepared = no_of_times_prepared + 1 Where food_item_id = ${foodItemId}`
+			);
+			connection.release();
+			return rows;
+		} catch (error) {
+			throw error;
+		}
+	}
 }

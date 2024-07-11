@@ -1,5 +1,4 @@
 import { INotification } from "../models/INotification";
-import DateService from "../services/dateService";
 import NotificationService from "../services/notificationService";
 
 class NotificationHandler {

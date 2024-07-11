@@ -99,13 +99,11 @@ class ChefHandlers {
 		});
 	}
 
-	async viewVotedItems(): Promise<unknown> {
+	async viewVotedItems(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("viewVotedItems", (response: any) => {
 				if (response.error) {
 					resolve(response.error);
-				} else if (response.votedItems.length === 0) {
-					resolve("No records found");
 				} else {
 					resolve(response.votedItems);
 				}
@@ -154,6 +152,14 @@ class ChefHandlers {
 					}
 				}
 			);
+		});
+	}
+
+	async prepareFood(foodItemId: number): Promise<any> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("prepareFood", foodItemId, (response: any) => {
+				resolve(response.message);
+			});
 		});
 	}
 

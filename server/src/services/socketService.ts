@@ -169,6 +169,15 @@ class SocketService {
 				);
 			}
 		);
+		socket.on(
+			"prepareFood",
+			(
+				foodItemId: number,
+				callback: (response: { message: string; error?: string }) => void
+			) => {
+				FoodItemhandler.handlePrepareFood(foodItemId, callback);
+			}
+		);
 	}
 }
 

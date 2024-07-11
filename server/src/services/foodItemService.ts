@@ -2,6 +2,9 @@ import pool from "../config/dbConnection";
 import { IFoodItem } from "../models/IFoodItem";
 import { IMealType } from "../models/IMealType";
 import { FoodItemRepository } from "../repository/foodItemRepository";
+import { GenericRepository } from "../repository/genericRepository";
+import DateService from "./dateService";
+import notificationService from "./notificationService";
 
 class FoodItemService {
 	async addItem(item: IFoodItem): Promise<unknown> {
@@ -82,6 +85,29 @@ class FoodItemService {
 			const foodItemRepository = new FoodItemRepository(pool, "Voted_Item");
 			const rows = await foodItemRepository.getVotedItem(currentDate);
 			connection.release();
+			return rows;
+		} catch (error) {
+			throw error;
+		}
+	}
+	async prepareFood(foodItemId: number): Promise<any> {
+		try {
+			const foodItemRepository = new FoodItemRepository(
+				pool,
+				"Food_Item_Audit"
+			);
+			const rows = await foodItemRepository.prepareFood(foodItemId);
+			const genericRepository = new GenericRepository(pool, "Item");
+			let item: any = await genericRepository.getById(foodItemId.toString());
+			let notification = {
+				notification_type_id: 6,
+				message: JSON.stringify({
+					itemId: item[0].id,
+					itemName: item[0].item_name,
+				}),
+				Date: DateService.getCurrentDate(),
+			};
+			await notificationService.pushNotification(notification);
 			return rows;
 		} catch (error) {
 			throw error;

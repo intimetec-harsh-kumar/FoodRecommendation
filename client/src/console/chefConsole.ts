@@ -19,7 +19,7 @@ class ChefConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					`Chef: Choose an action (\n 1: ${Message.ViewItem} \n 2: ${Message.ViewMealType} \n 3: ${Message.ViewNotification} \n 4: ${Message.ViewAvailableItems} \n 5: ${Message.SendNotification} \n 6: ${Message.ViewRecommendation} \n 7: ${Message.ViewVotedItems} \n 8: ${Message.ViewDiscardedItem} \n 9: ${Message.Logout} \n): `
+					`Chef: Choose an action (\n 1: ${Message.ViewItem} \n 2: ${Message.ViewMealType} \n 3: ${Message.ViewNotification} \n 4: ${Message.ViewAvailableItems} \n 5: ${Message.SendNotification} \n 6: ${Message.ViewRecommendation} \n 7: ${Message.ViewVotedItems} \n 8: ${Message.ViewDiscardedItem} \n 9: ${Message.PrepareFood} \n 10: ${Message.Logout} \n): `
 				)
 			);
 
@@ -121,7 +121,11 @@ class ChefConsole {
 					break;
 				case 7:
 					let votedItems = await this.chefHandlers.viewVotedItems();
-					console.table(votedItems);
+					if (votedItems.length === 0) {
+						console.log(Message.NoRecordFound);
+					} else {
+						console.table(votedItems);
+					}
 					break;
 				case 8:
 					let discardMenuItemList =
@@ -179,6 +183,25 @@ class ChefConsole {
 					}
 					break;
 				case 9:
+					let votedItem = await this.chefHandlers.viewVotedItems();
+					let votedItemIds = new Set(
+						votedItem.map((item: any) => item.food_item_id)
+					);
+					console.log(votedItemIds);
+
+					let foodItemId = await InputHandlerService.askQuestion(
+						"Enter fooditem id you want to prepare today : "
+					);
+					if (!votedItemIds.has(parseInt(foodItemId))) {
+						console.log("Invalid foodiItemId choosen");
+						break;
+					}
+					let message = await this.chefHandlers.prepareFood(
+						parseInt(foodItemId)
+					);
+					console.log(message);
+					break;
+				case 10:
 					let logoutMessage = await this.chefHandlers.logout();
 					console.log(logoutMessage);
 					await this.authenticationService.authenticate();

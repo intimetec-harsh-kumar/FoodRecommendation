@@ -37,7 +37,7 @@ class EmployeeConsole {
 					}
 					break;
 				case 2:
-					let notifications = await this.employeeHandlers.viewNotifications(4);
+					let notifications = await this.employeeHandlers.viewNotifications(6);
 					if (notifications.length === 0) {
 						console.log(Message.NoRecordFound);
 					} else {
