@@ -19,6 +19,7 @@ export const Constants = {
 	DetailedFeedback: "Get Detailed Feedback",
 	PrepareFood: "Prepare Food",
 	ViewLog: "View Logs",
+	UpdateProfile: "Update Profile",
 	Logout: "LogOut",
 	InValidAction: "Invalid action. Please try again",
 	NotificationIdForFoodRecommendation: 4,

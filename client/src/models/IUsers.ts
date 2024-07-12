@@ -3,4 +3,5 @@ export interface IUsers {
 	name: string;
 	email: string;
 	role_id: number;
+	preference_id: number;
 }

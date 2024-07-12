@@ -71,6 +71,18 @@ class EmployeeHandlers {
 		});
 	}
 
+	async updateProfile(profileData: any): Promise<void> {
+		return new Promise(async (resolve, reject) => {
+			this.socket.emit("updateProfile", profileData, (response: any) => {
+				if (response.error) {
+					resolve(response.error);
+				} else {
+					resolve(response.message);
+				}
+			});
+		});
+	}
+
 	async logout() {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {

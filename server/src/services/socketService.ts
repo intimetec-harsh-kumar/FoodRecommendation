@@ -12,6 +12,7 @@ import { ILog } from "../models/ILog";
 import { INotification } from "../models/INotification";
 import { IFoodItem } from "../models/IFoodItem";
 import { IMealType } from "../models/IMealType";
+import userHandler from "../handlers/userHandler";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
@@ -176,6 +177,16 @@ class SocketService {
 				callback: (response: { message: string; error?: string }) => void
 			) => {
 				FoodItemhandler.handlePrepareFood(foodItemId, callback);
+			}
+		);
+
+		socket.on(
+			"updateProfile",
+			(
+				profileData: any,
+				callback: (response: { message: string; error?: string }) => void
+			) => {
+				userHandler.handleUpdateProfile(profileData, callback);
 			}
 		);
 	}

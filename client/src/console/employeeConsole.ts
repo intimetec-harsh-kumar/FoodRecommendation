@@ -22,7 +22,7 @@ class EmployeeConsole {
 		while (isConsoleRunning) {
 			const action = parseInt(
 				await InputHandlerService.askQuestion(
-					`Employee: Choose an action (\n 1: ${Constants.ViewItem} \n 2: ${Constants.ViewTodaysMenu}\n 3: ${Constants.SendFeedback} \n 4: ${Constants.ChooseNextDayFood} \n 5: ${Constants.Logout}\n): `
+					`Employee: Choose an action (\n 1: ${Constants.ViewItem} \n 2: ${Constants.ViewTodaysMenu}\n 3: ${Constants.SendFeedback} \n 4: ${Constants.ChooseNextDayFood} \n 5: ${Constants.UpdateProfile} \n 6: ${Constants.Logout}\n): `
 				)
 			);
 
@@ -118,6 +118,43 @@ class EmployeeConsole {
 					}
 					break;
 				case 5:
+					const validSpiceLevels = ["low", "medium", "high"];
+					const validFoodTypes = ["vegeterian", "non vegeterian"];
+					const validOriginality = ["north indian", "south indian", "others"];
+					const food_type = await InputHandlerService.askQuestion(
+						"Enter food type (vegeterian,non vegeterian): "
+					);
+					if (!validFoodTypes.includes(food_type)) {
+						console.log("Invalid selection");
+						break;
+					}
+					const spice_level = await InputHandlerService.askQuestion(
+						"Enter spice level (low,medium,high): "
+					);
+					if (!validSpiceLevels.includes(spice_level)) {
+						console.log("Invalid selection");
+						break;
+					}
+					const originality = await InputHandlerService.askQuestion(
+						"Enter from where the food belongs (north indian,south indian,others): "
+					);
+					if (!validOriginality.includes(originality)) {
+						console.log("Invalid selection");
+						break;
+					}
+					const sweet_tooth =
+						(await InputHandlerService.askQuestion(
+							"Enter if you have sweet tooth (yes/no): "
+						)) === "yes";
+					let message = await this.employeeHandlers.updateProfile({
+						food_type,
+						spice_level,
+						originality,
+						sweet_tooth,
+					});
+					console.log(message);
+					break;
+				case 6:
 					let logoutMessage = await this.employeeHandlers.logout();
 					console.log(logoutMessage);
 					await this.authenticationService.authenticate();

@@ -3,8 +3,11 @@ import { INotification } from "../models/INotification";
 import { FoodItemRepository } from "../repository/foodItemRepository";
 import { GenericRepository } from "../repository/genericRepository";
 import { NotificationRepository } from "../repository/notificationRepository";
+import { UserRepository } from "../repository/userRepository";
+import UserDetail from "../User/userDetail";
 import DateService from "./dateService";
 import FoodRecommendationEngineService from "./foodRecommendationService";
+import userService from "./userService";
 
 class NotificationService {
 	async pushNotification(notification: Partial<INotification>): Promise<any> {
@@ -25,6 +28,35 @@ class NotificationService {
 				pool,
 				"Notification"
 			);
+			if (notificationTypeId == 6) {
+				const rows: any =
+					await notificationRepository.getTodaysMenuOnTheBasisOfPreference(
+						notificationTypeId
+					);
+				let email: any = UserDetail.getUserDetail();
+				let preferenceData = await userService.getUserPreference(email);
+				const compareFunction = (a: any, b: any) => {
+					if (a.message.food_type !== b.message.food_type) {
+						if (a.message.food_type === preferenceData.food_type) return -1;
+						if (b.message.food_type === preferenceData.food_type) return 1;
+					}
+					if (a.message.originality !== b.message.originality) {
+						if (a.message.originality === preferenceData.originality) return -1;
+						if (b.message.originality === preferenceData.originality) return 1;
+					}
+					if (a.message.spice_level !== b.message.spice_level) {
+						if (a.message.spice_level === preferenceData.spice_level) return -1;
+						if (b.message.spice_level === preferenceData.spice_level) return 1;
+					}
+					if (a.message.is_sweet !== b.message.is_sweet) {
+						if (a.message.is_sweet === preferenceData.sweet_tooth) return -1;
+						if (b.message.is_sweet === preferenceData.sweet_tooth) return 1;
+					}
+					return 0;
+				};
+				rows.sort(compareFunction);
+				return rows;
+			}
 			const rows: any = await notificationRepository.getCurrentNotification(
 				notificationTypeId
 			);
