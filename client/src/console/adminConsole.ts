@@ -113,7 +113,11 @@ class AdminConsole {
 					break;
 				case "5":
 					let mealTypes = await this.adminHandlers.viewMealTypes();
-					console.table(mealTypes);
+					if (mealTypes.length === 0) {
+						console.log(Constants.NoRecordFound);
+					} else {
+						console.table(mealTypes);
+					}
 					break;
 				case "6":
 					let discardMenuItemList =

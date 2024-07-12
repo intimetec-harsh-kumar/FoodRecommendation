@@ -77,8 +77,6 @@ class AdminHandlers {
 			this.socket.emit("viewMealTypes", (response: any) => {
 				if (response.error) {
 					resolve(response.error);
-				} else if (response.mealType.length === 0) {
-					resolve("No records found.");
 				} else {
 					resolve(response.mealType);
 				}

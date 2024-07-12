@@ -34,7 +34,11 @@ class ChefConsole {
 					break;
 				case 2:
 					let mealTypes = await this.chefHandlers.viewMealTypes();
-					console.table(mealTypes);
+					if (mealTypes.length === 0) {
+						console.log(Constants.NoRecordFound);
+					} else {
+						console.table(mealTypes);
+					}
 					break;
 				case 3:
 					let notifications = await this.chefHandlers.viewNotifications();
