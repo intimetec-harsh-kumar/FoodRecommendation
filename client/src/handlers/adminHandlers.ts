@@ -5,46 +5,27 @@ import { IFoodItem } from "../models/IFoodItem";
 class AdminHandlers {
 	constructor(private socket: Socket) {}
 
-	async handleAddItem(
-		item_name: string,
-		price: number,
-		availability_status: boolean,
-		meal_type_id: number
-	): Promise<IFoodItem> {
+	async handleAddItem(item: IFoodItem): Promise<IFoodItem> {
 		return new Promise(async (resolve, reject) => {
-			this.socket.emit(
-				"addItem",
-				{ item_name, price, availability_status, meal_type_id },
-				(response: any) => {
-					if (response.error) {
-						resolve(response.error);
-					} else {
-						resolve(response.message);
-					}
+			this.socket.emit("addItem", item, (response: any) => {
+				if (response.error) {
+					resolve(response.error);
+				} else {
+					resolve(response.message);
 				}
-			);
+			});
 		});
 	}
 
-	async handleUpdateItem(
-		id: number,
-		item_name: string,
-		price: number,
-		availability_status: boolean,
-		meal_type_id: number
-	): Promise<any> {
+	async handleUpdateItem(item: IFoodItem): Promise<any> {
 		return new Promise(async (resolve, reject) => {
-			this.socket.emit(
-				"updateItem",
-				{ id, item_name, price, availability_status, meal_type_id },
-				(response: any) => {
-					if (response.error) {
-						resolve(response.error);
-					} else {
-						resolve(response.message);
-					}
+			this.socket.emit("updateItem", item, (response: any) => {
+				if (response.error) {
+					resolve(response.error);
+				} else {
+					resolve(response.message);
 				}
-			);
+			});
 		});
 	}
 

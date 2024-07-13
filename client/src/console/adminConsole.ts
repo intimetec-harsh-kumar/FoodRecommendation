@@ -23,6 +23,9 @@ class AdminConsole {
 			const action = await InputHandlerService.askQuestion(
 				`Admin: Choose an action (\n 1: ${Constants.AddItem}\n 2: ${Constants.UpdateItem} \n 3: ${Constants.DeleteItem} \n 4: ${Constants.ViewItem} \n 5: ${Constants.ViewMealType} \n 6: ${Constants.ViewDiscardedItem} \n 7: ${Constants.ViewLog} \n 8: ${Constants.Logout}\n): `
 			);
+			const validSpiceLevels = ["low", "medium", "high"];
+			const validFoodTypes = ["vegeterian", "non vegeterian"];
+			const validOriginality = ["north indian", "south indian", "others"];
 			switch (action) {
 				case "1":
 					var item_name = await InputHandlerService.askQuestion(
@@ -40,12 +43,41 @@ class AdminConsole {
 							"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
 						)
 					);
-					let addedItemMessage = await this.adminHandlers.handleAddItem(
+					var food_type = await InputHandlerService.askQuestion(
+						"Enter food type (vegeterian,non vegeterian): "
+					);
+					if (!validFoodTypes.includes(food_type)) {
+						console.log("Invalid selection");
+						break;
+					}
+					var spice_level = await InputHandlerService.askQuestion(
+						"Enter spice level (low,medium,high): "
+					);
+					if (!validSpiceLevels.includes(spice_level)) {
+						console.log("Invalid selection");
+						break;
+					}
+					var originality = await InputHandlerService.askQuestion(
+						"Enter from where the food belongs (north indian,south indian,others): "
+					);
+					if (!validOriginality.includes(originality)) {
+						console.log("Invalid selection");
+						break;
+					}
+					var is_sweet =
+						(await InputHandlerService.askQuestion(
+							"Is this item in sweet category (yes/no): "
+						)) === "yes";
+					let addedItemMessage = await this.adminHandlers.handleAddItem({
 						item_name,
 						price,
 						availability_status,
-						meal_type_id
-					);
+						meal_type_id,
+						food_type,
+						spice_level,
+						originality,
+						is_sweet,
+					});
 					console.table(addedItemMessage);
 					break;
 				case "2":
@@ -81,13 +113,42 @@ class AdminConsole {
 						console.log("Please enter correct mealType Id");
 						return;
 					}
-					let updatedItemMessage = await this.adminHandlers.handleUpdateItem(
+					var food_type = await InputHandlerService.askQuestion(
+						"Enter food type (vegeterian,non vegeterian): "
+					);
+					if (!validFoodTypes.includes(food_type)) {
+						console.log("Invalid selection");
+						break;
+					}
+					var spice_level = await InputHandlerService.askQuestion(
+						"Enter spice level (low,medium,high): "
+					);
+					if (!validSpiceLevels.includes(spice_level)) {
+						console.log("Invalid selection");
+						break;
+					}
+					var originality = await InputHandlerService.askQuestion(
+						"Enter from where the food belongs (north indian,south indian,others): "
+					);
+					if (!validOriginality.includes(originality)) {
+						console.log("Invalid selection");
+						break;
+					}
+					var is_sweet =
+						(await InputHandlerService.askQuestion(
+							"Is this item in sweet category (yes/no): "
+						)) === "yes";
+					let updatedItemMessage = await this.adminHandlers.handleUpdateItem({
 						id,
 						item_name,
 						price,
 						availability_status,
-						meal_type_id
-					);
+						meal_type_id,
+						food_type,
+						spice_level,
+						originality,
+						is_sweet,
+					});
 					console.table(updatedItemMessage);
 					break;
 				case "3":
