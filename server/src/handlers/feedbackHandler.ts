@@ -8,7 +8,10 @@ class FeedbackHandler {
 		callback: (response: { message: string; error?: string }) => void
 	) {
 		try {
-			const addedFeedback = await FeedbackService.provideFeedback(feedback);
+			const addedFeedback = await FeedbackService.provideFeedback(
+				socket,
+				feedback
+			);
 			if (addedFeedback) {
 				console.log(`feedback added successfullys`);
 				callback({

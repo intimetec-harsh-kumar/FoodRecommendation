@@ -3,11 +3,15 @@ import UserService from "../services/userService";
 
 class UserHandler {
 	public async handleUpdateProfile(
+		socket: Socket,
 		profileData: any,
 		callback: (response: { message: string; error?: string }) => void
 	) {
 		try {
-			const isProfileUpdated = await UserService.updateProfile(profileData);
+			const isProfileUpdated = await UserService.updateProfile(
+				socket,
+				profileData
+			);
 			if (isProfileUpdated) {
 				console.log(`profile updated successfully`);
 				callback({

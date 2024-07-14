@@ -61,7 +61,7 @@ class ChefHandlers {
 
 	async sendFoodNotificationForNextDay(
 		foodItemIdsToRollOutForNextDay: any
-	): Promise<unknown> {
+	): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"sendFoodItemNotificationForNextDay",
@@ -121,7 +121,7 @@ class ChefHandlers {
 		});
 	}
 
-	async handleDeleteItem(id: number) {
+	async handleDeleteItem(id: number): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("deleteItem", id, (response: any) => {
 				if (response.error) {
@@ -136,7 +136,7 @@ class ChefHandlers {
 	async handleSendNotificationForDetailedFeedback(
 		foodItemIdForDetailedFeedback: number,
 		questions: string
-	): Promise<unknown> {
+	): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"sendNotificationForDetailedFeedback",
@@ -161,7 +161,7 @@ class ChefHandlers {
 		});
 	}
 
-	async logout() {
+	async logout(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {
 				resolve(response.message);

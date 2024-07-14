@@ -4,7 +4,6 @@ class SocketHandler {
 	public handleRegister(socket: Socket, clientId: string): void {
 		try {
 			console.log(`Registering client with ID: ${clientId}`);
-			console.log(`Client ID received: ${clientId}`);
 		} catch (error: any) {
 			console.log("Error occured:", error.message);
 		}

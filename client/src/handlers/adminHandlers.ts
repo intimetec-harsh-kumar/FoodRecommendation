@@ -29,7 +29,7 @@ class AdminHandlers {
 		});
 	}
 
-	async handleDeleteItem(id: number) {
+	async handleDeleteItem(id: number): Promise<string> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("deleteItem", id, (response: any) => {
 				if (response.error) {
@@ -92,7 +92,7 @@ class AdminHandlers {
 	async handleSendNotificationForDetailedFeedback(
 		foodItemIdForDetailedFeedback: number,
 		questions: string
-	): Promise<unknown> {
+	): Promise<string> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"sendNotificationForDetailedFeedback",
@@ -109,7 +109,7 @@ class AdminHandlers {
 		});
 	}
 
-	async logout() {
+	async logout(): Promise<string> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {
 				resolve(response.message);

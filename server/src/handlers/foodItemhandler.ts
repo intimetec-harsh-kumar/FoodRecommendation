@@ -21,7 +21,7 @@ class FoodItemHandler {
 			const addedItem = await FoodItemService.addItem(item);
 			if (addedItem) {
 				console.log(`Item ${item.item_name} added successfully`);
-				let userEmail = UserDetail.getUserDetail();
+				let userEmail = UserDetail.getUserDetail(socket.id);
 				this.addLog(userEmail, "AddItems");
 				NotificationService.pushNotification({
 					notification_type_id: 1,
@@ -62,7 +62,7 @@ class FoodItemHandler {
 			const updatedItem = await FoodItemService.updateItem(item);
 			if (updatedItem) {
 				console.log(`Item with id ${item.id} updated successfully`);
-				let userEmail = UserDetail.getUserDetail();
+				let userEmail = UserDetail.getUserDetail(socket.id);
 				this.addLog(userEmail, "UpdateItem");
 				NotificationService.pushNotification({
 					notification_type_id: 2,
@@ -103,7 +103,7 @@ class FoodItemHandler {
 			const deletedItem = await FoodItemService.deleteItem(itemId);
 			if (deletedItem) {
 				console.log(`Item with ID ${itemId} deleted successfully`);
-				let userEmail = UserDetail.getUserDetail();
+				let userEmail = UserDetail.getUserDetail(socket.id);
 				this.addLog(userEmail, "DeleteItem");
 				NotificationService.pushNotification({
 					notification_type_id: 3,
@@ -136,7 +136,7 @@ class FoodItemHandler {
 	): Promise<any> {
 		try {
 			const items = await FoodItemService.getItems();
-			let userEmail = UserDetail.getUserDetail();
+			let userEmail = UserDetail.getUserDetail(socket.id);
 			this.addLog(userEmail, "ViewItems");
 			callback({ items: items });
 		} catch (error: any) {
@@ -194,11 +194,12 @@ class FoodItemHandler {
 	}
 
 	public async selectFoodItemForNextDay(
+		socket: Socket,
 		foodItemIds: string,
 		callback: (response: { message: string; error?: string }) => void
 	): Promise<any> {
 		try {
-			const userEmail = UserDetail.getUserDetail();
+			const userEmail = UserDetail.getUserDetail(socket.id);
 			const currentDate = DateService.getCurrentDate();
 			const foodItemIdArray = foodItemIds.split(",").map((id) => id.trim());
 

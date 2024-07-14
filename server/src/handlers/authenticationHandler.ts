@@ -11,13 +11,12 @@ class authenticationHandler {
 	): Promise<void> {
 		try {
 			const user = await AuthenticationService.authenticateUser(email);
-			UserDetail.setUserDetail(email);
+			UserDetail.setUserDetail(socket.id, email);
 			socket.emit("authenticated", user);
 			if (user.length > 0) {
 				console.log(`Email ${email} authenticated successfully.`);
-				let userEmail = UserDetail.getUserDetail();
 				let logObject = {
-					user_email: userEmail,
+					user_email: email,
 					action: "authentication",
 					timestamp: DateService.getCurrentTimestamp(),
 				};

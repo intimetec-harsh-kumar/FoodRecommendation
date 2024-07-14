@@ -67,6 +67,7 @@ class SocketService {
 				callback: (response: { notification: INotification[] }) => void
 			) => {
 				NotificationHandler.handleViewNotifications(
+					socket,
 					callback,
 					notificationTypeId
 				);
@@ -93,14 +94,14 @@ class SocketService {
 				foodItemIds: string,
 				callback: (response: { message: string }) => void
 			) => {
-				FoodItemhandler.selectFoodItemForNextDay(foodItemIds, callback);
+				FoodItemhandler.selectFoodItemForNextDay(socket, foodItemIds, callback);
 			}
 		);
 
 		socket.on("logout", (callback: (response: { message: string }) => void) => {
-			let userEmail = UserDetail.getUserDetail();
+			let userEmail = UserDetail.getUserDetail(socket.id);
 			console.log(`User ${userEmail} logged out`);
-			UserDetail.clearUserDetail();
+			UserDetail.clearUserDetail(socket.id);
 			callback({ message: `User ${userEmail} logged out` });
 		});
 
@@ -186,7 +187,7 @@ class SocketService {
 				profileData: any,
 				callback: (response: { message: string; error?: string }) => void
 			) => {
-				userHandler.handleUpdateProfile(profileData, callback);
+				userHandler.handleUpdateProfile(socket, profileData, callback);
 			}
 		);
 	}

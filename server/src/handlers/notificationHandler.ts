@@ -1,8 +1,10 @@
+import { Socket } from "socket.io";
 import { INotification } from "../models/INotification";
 import NotificationService from "../services/notificationService";
 
 class NotificationHandler {
 	public async handleViewNotifications(
+		socket: Socket,
 		callback: (response: {
 			notification: INotification[];
 			error?: string;
@@ -11,6 +13,7 @@ class NotificationHandler {
 	): Promise<void> {
 		try {
 			const notification: any = await NotificationService.getNotification(
+				socket,
 				notificationTypeId
 			);
 			callback({ notification: notification });

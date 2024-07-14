@@ -11,7 +11,7 @@ export const Constants = {
 	ViewMealType: "View Meal Types",
 	ViewNotification: "View Notification",
 	ViewRecommendation: "View Recommendations",
-	ViewVotedItems: "View Voted Item",
+	ViewVotedItems: "View votes on the item rolled out yesterday",
 	ViewTodaysMenu: "View Today's Menu",
 	SendNotification: "Send Notification for Next Day Meal",
 	ChooseNextDayFood: "Choose Item for next day",
@@ -24,4 +24,7 @@ export const Constants = {
 	InValidAction: "Invalid action. Please try again",
 	NotificationIdForFoodRecommendation: 4,
 	NotificationIdForTodaysPreparedFood: 6,
+	validFoodTypes: new Array("vegetarian", "non vegetarian"),
+	validSpiceLevels: new Array("low", "medium", "high"),
+	validOriginality: new Array("north indian", "south indian", "others"),
 };

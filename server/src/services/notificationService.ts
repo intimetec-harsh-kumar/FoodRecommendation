@@ -1,3 +1,4 @@
+import { Socket } from "socket.io";
 import pool from "../config/dbConnection";
 import { INotification } from "../models/INotification";
 import { FoodItemRepository } from "../repository/foodItemRepository";
@@ -21,7 +22,10 @@ class NotificationService {
 			throw error;
 		}
 	}
-	async getNotification(notificationTypeId?: number): Promise<any> {
+	async getNotification(
+		socket: Socket,
+		notificationTypeId?: number
+	): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
 			const notificationRepository = new NotificationRepository(
@@ -33,7 +37,7 @@ class NotificationService {
 					await notificationRepository.getTodaysMenuOnTheBasisOfPreference(
 						notificationTypeId
 					);
-				let email: any = UserDetail.getUserDetail();
+				let email: any = UserDetail.getUserDetail(socket.id);
 				let preferenceData = await userService.getUserPreference(email);
 				const compareFunction = (a: any, b: any) => {
 					if (a.message.food_type !== b.message.food_type) {

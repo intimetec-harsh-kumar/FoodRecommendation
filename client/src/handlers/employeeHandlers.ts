@@ -39,7 +39,7 @@ class EmployeeHandlers {
 		food_item_id: string,
 		rating: string,
 		comment: string
-	): Promise<void> {
+	): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"provideFeedback",
@@ -55,7 +55,7 @@ class EmployeeHandlers {
 		});
 	}
 
-	async selectFoodItemForNextDay(foodItemIds: any): Promise<void> {
+	async selectFoodItemForNextDay(foodItemIds: any): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit(
 				"selectFoodItemForNextDay",
@@ -71,7 +71,7 @@ class EmployeeHandlers {
 		});
 	}
 
-	async updateProfile(profileData: any): Promise<void> {
+	async updateProfile(profileData: any): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("updateProfile", profileData, (response: any) => {
 				if (response.error) {
@@ -83,7 +83,7 @@ class EmployeeHandlers {
 		});
 	}
 
-	async logout() {
+	async logout(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			this.socket.emit("logout", (response: any) => {
 				resolve(response.message);

@@ -1,243 +1,62 @@
 import InputHandlerService from "../services/inputHandlerService";
-import SocketService from "../services/socketService";
+import AdminService from "../services/adminService";
 import AdminHandlers from "../handlers/adminHandlers";
 import AuthenticationService from "../services/authenticationService";
 import { Constants } from "../constants/constant";
+import SocketService from "../services/socketService";
+import ConsoleService from "../services/consoleService";
+import { IFoodItem } from "../models/IFoodItem";
 
 class AdminConsole {
 	private adminHandlers: AdminHandlers;
 	private authenticationService: AuthenticationService;
+	private adminActionService: AdminService;
 
 	constructor(private socketService: SocketService) {
 		this.adminHandlers = new AdminHandlers(this.socketService.getSocket());
 		this.authenticationService = new AuthenticationService(
 			this.socketService.getSocket()
 		);
+		this.adminActionService = new AdminService(this.adminHandlers);
 	}
 
 	async start() {
 		let isConsoleRunning = true;
-		var existingItems = await this.adminHandlers.viewItems();
-		let existingItemsIds = new Set(existingItems.map((item: any) => item.id));
+
 		while (isConsoleRunning) {
 			const action = await InputHandlerService.askQuestion(
 				`Admin: Choose an action (\n 1: ${Constants.AddItem}\n 2: ${Constants.UpdateItem} \n 3: ${Constants.DeleteItem} \n 4: ${Constants.ViewItem} \n 5: ${Constants.ViewMealType} \n 6: ${Constants.ViewDiscardedItem} \n 7: ${Constants.ViewLog} \n 8: ${Constants.Logout}\n): `
 			);
-			const validSpiceLevels = ["low", "medium", "high"];
-			const validFoodTypes = ["vegeterian", "non vegeterian"];
-			const validOriginality = ["north indian", "south indian", "others"];
+
 			switch (action) {
 				case "1":
-					var item_name = await InputHandlerService.askQuestion(
-						"Enter item name: "
-					);
-					var price = parseFloat(
-						await InputHandlerService.askQuestion("Enter item price: ")
-					);
-					var availability_status =
-						(await InputHandlerService.askQuestion(
-							"Is the item available? (yes/no): "
-						)) === "yes";
-					var meal_type_id = parseInt(
-						await InputHandlerService.askQuestion(
-							"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
-						)
-					);
-					var food_type = await InputHandlerService.askQuestion(
-						"Enter food type (vegeterian,non vegeterian): "
-					);
-					if (!validFoodTypes.includes(food_type)) {
-						console.log("Invalid selection");
-						break;
-					}
-					var spice_level = await InputHandlerService.askQuestion(
-						"Enter spice level (low,medium,high): "
-					);
-					if (!validSpiceLevels.includes(spice_level)) {
-						console.log("Invalid selection");
-						break;
-					}
-					var originality = await InputHandlerService.askQuestion(
-						"Enter from where the food belongs (north indian,south indian,others): "
-					);
-					if (!validOriginality.includes(originality)) {
-						console.log("Invalid selection");
-						break;
-					}
-					var is_sweet =
-						(await InputHandlerService.askQuestion(
-							"Is this item in sweet category (yes/no): "
-						)) === "yes";
-					let addedItemMessage = await this.adminHandlers.handleAddItem({
-						item_name,
-						price,
-						availability_status,
-						meal_type_id,
-						food_type,
-						spice_level,
-						originality,
-						is_sweet,
-					});
-					console.table(addedItemMessage);
+					await this.adminActionService.addItem();
 					break;
 				case "2":
-					var id = parseInt(
-						await InputHandlerService.askQuestion("Enter item ID to update: ")
-					);
-					if (!existingItemsIds.has(id)) {
-						console.log("Please enter correct item Id");
-						break;
-					}
-					var item_name = await InputHandlerService.askQuestion(
-						"Enter new item name: "
-					);
-					var price = parseFloat(
-						await InputHandlerService.askQuestion("Enter new item price: ")
-					);
-					if (isNaN(price)) {
-						console.log("Price can not be other than number type");
-						break;
-					}
-					var availability_status =
-						(await InputHandlerService.askQuestion(
-							"Is the item available? (yes/no): "
-						)) === "yes";
-					var existingMealTypes = await this.adminHandlers.viewMealTypes();
-					let existingMealTypesIds = new Set(
-						existingMealTypes.map((mealType: any) => mealType.id)
-					);
-					var meal_type_id = parseInt(
-						await InputHandlerService.askQuestion("Enter new meal type ID: ")
-					);
-					if (!existingMealTypesIds.has(meal_type_id)) {
-						console.log("Please enter correct mealType Id");
-						return;
-					}
-					var food_type = await InputHandlerService.askQuestion(
-						"Enter food type (vegeterian,non vegeterian): "
-					);
-					if (!validFoodTypes.includes(food_type)) {
-						console.log("Invalid selection");
-						break;
-					}
-					var spice_level = await InputHandlerService.askQuestion(
-						"Enter spice level (low,medium,high): "
-					);
-					if (!validSpiceLevels.includes(spice_level)) {
-						console.log("Invalid selection");
-						break;
-					}
-					var originality = await InputHandlerService.askQuestion(
-						"Enter from where the food belongs (north indian,south indian,others): "
-					);
-					if (!validOriginality.includes(originality)) {
-						console.log("Invalid selection");
-						break;
-					}
-					var is_sweet =
-						(await InputHandlerService.askQuestion(
-							"Is this item in sweet category (yes/no): "
-						)) === "yes";
-					let updatedItemMessage = await this.adminHandlers.handleUpdateItem({
-						id,
-						item_name,
-						price,
-						availability_status,
-						meal_type_id,
-						food_type,
-						spice_level,
-						originality,
-						is_sweet,
-					});
-					console.table(updatedItemMessage);
+					await this.adminActionService.updateItem();
 					break;
 				case "3":
-					var id = parseInt(
-						await InputHandlerService.askQuestion("Enter item ID to delete: ")
-					);
-					if (!existingItemsIds.has(id)) {
-						console.log("Please enter correct item Id");
-						break;
-					}
-					let deletedItemMessage = await this.adminHandlers.handleDeleteItem(
-						id
-					);
-					console.table(deletedItemMessage);
+					await this.adminActionService.deleteItem();
 					break;
 				case "4":
-					let items = await this.adminHandlers.viewItems();
-					if (items.length === 0) {
-						console.log(Constants.NoRecordFound);
-					} else {
-						console.table(items);
-					}
+					await this.adminActionService.viewItems();
 					break;
 				case "5":
-					let mealTypes = await this.adminHandlers.viewMealTypes();
-					if (mealTypes.length === 0) {
-						console.log(Constants.NoRecordFound);
-					} else {
-						console.table(mealTypes);
-					}
+					await this.adminActionService.viewMealTypes();
 					break;
 				case "6":
-					let discardMenuItemList =
-						await this.adminHandlers.viewDiscardMenuItemList();
-					if (discardMenuItemList.length === 0) {
-						console.log(Constants.NoRecordFound);
-					} else {
-						console.table(discardMenuItemList);
-						const discardMenuItemListAction =
-							await InputHandlerService.askQuestion(
-								`Choose an action:\n 1: ${Constants.RemoveItem}\n 2: ${Constants.DetailedFeedback}\n`
-							);
-
-						switch (parseInt(discardMenuItemListAction)) {
-							case 1:
-								let itemIdToDiscard = await InputHandlerService.askQuestion(
-									"Enter Item Id to be discarded : "
-								);
-								let message = await this.adminHandlers.handleDeleteItem(
-									parseInt(itemIdToDiscard)
-								);
-								console.log(message);
-								break;
-							case 2:
-								const itemIdToGetFeedback =
-									await InputHandlerService.askQuestion(
-										"Enter the food item ID to get detailed feedback: "
-									);
-								let questions = await InputHandlerService.askQuestion(
-									"Enter questions about food item for feedback: "
-								);
-								let notificationMessage =
-									await this.adminHandlers.handleSendNotificationForDetailedFeedback(
-										parseInt(itemIdToGetFeedback),
-										questions
-									);
-								console.log(notificationMessage);
-								break;
-							default:
-								console.log(Constants.InValidAction);
-						}
-					}
+					await this.adminActionService.viewDiscardedItems();
 					break;
 				case "7":
-					let logs = await this.adminHandlers.viewLog();
-					if (logs.length === 0) {
-						console.log(Constants.NoRecordFound);
-					} else {
-						console.table(logs);
-					}
+					await this.adminActionService.viewLogs();
 					break;
 				case "8":
-					let logoutMessage = await this.adminHandlers.logout();
-					console.log(logoutMessage);
+					await this.adminActionService.logout();
 					await this.authenticationService.authenticate();
 					isConsoleRunning = false;
 					break;
 				default:
-					console.log(Constants.InValidAction);
+					ConsoleService.displayMessage(Constants.InValidAction);
 			}
 		}
 	}

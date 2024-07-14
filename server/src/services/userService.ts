@@ -3,6 +3,7 @@ import UserDetail from "../User/userDetail";
 import { IUsers } from "../models/IUsers";
 import { GenericRepository } from "../repository/genericRepository";
 import { UserRepository } from "../repository/userRepository";
+import { Socket } from "socket.io";
 
 class UserService {
 	async getUserByEmail(email: string): Promise<IUsers[]> {
@@ -17,9 +18,9 @@ class UserService {
 		}
 	}
 
-	async getUserEmail(): Promise<string | undefined> {
+	async getUserEmail(socket: Socket): Promise<string | undefined> {
 		try {
-			let email: string | undefined = UserDetail.getUserDetail();
+			let email: string | undefined = UserDetail.getUserDetail(socket.id);
 			return email;
 		} catch (error) {
 			throw error;
@@ -34,10 +35,10 @@ class UserService {
 			throw error;
 		}
 	}
-	async updateProfile(profileData: any): Promise<boolean> {
+	async updateProfile(socket: Socket, profileData: any): Promise<boolean> {
 		try {
 			let userRepository = new UserRepository(pool, "User");
-			profileData.user_email = UserDetail.getUserDetail();
+			profileData.user_email = UserDetail.getUserDetail(socket.id);
 			const isProfileUpdated = await userRepository.updateProfile(profileData);
 			return isProfileUpdated;
 		} catch (error) {
