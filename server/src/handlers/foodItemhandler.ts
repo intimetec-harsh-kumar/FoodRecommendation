@@ -2,7 +2,7 @@ import { Socket } from "socket.io";
 import FoodItemService from "../services/foodItemService";
 import NotificationService from "../services/notificationService";
 import DateService from "../services/dateService";
-import UserDetail from "../User/userDetail";
+import User from "../shared/user";
 import LogService from "../services/logService";
 import { IFoodItem } from "../models/IFoodItem";
 import { IMealType } from "../models/IMealType";
@@ -24,7 +24,7 @@ class FoodItemHandler {
 				ConsoleService.displayMessage(
 					`Item ${item.item_name} added successfully`
 				);
-				let userEmail = UserDetail.getUserDetail(socket.id);
+				let userEmail = User.getLoggedInUserEmail(socket.id);
 				this.addLog(userEmail, "AddItems");
 				NotificationService.pushNotification({
 					notification_type_id: 1,
@@ -69,7 +69,7 @@ class FoodItemHandler {
 				ConsoleService.displayMessage(
 					`Item with id ${item.id} updated successfully`
 				);
-				let userEmail = UserDetail.getUserDetail(socket.id);
+				let userEmail = User.getLoggedInUserEmail(socket.id);
 				this.addLog(userEmail, "UpdateItem");
 				NotificationService.pushNotification({
 					notification_type_id: 2,
@@ -112,7 +112,7 @@ class FoodItemHandler {
 				ConsoleService.displayMessage(
 					`Item with ID ${itemId} deleted successfully`
 				);
-				let userEmail = UserDetail.getUserDetail(socket.id);
+				let userEmail = User.getLoggedInUserEmail(socket.id);
 				this.addLog(userEmail, "DeleteItem");
 				NotificationService.pushNotification({
 					notification_type_id: 3,
@@ -145,7 +145,7 @@ class FoodItemHandler {
 	): Promise<any> {
 		try {
 			const items = await FoodItemService.getItems();
-			let userEmail = UserDetail.getUserDetail(socket.id);
+			let userEmail = User.getLoggedInUserEmail(socket.id);
 			this.addLog(userEmail, "ViewItems");
 			callback({ items: items });
 		} catch (error: any) {
@@ -208,7 +208,7 @@ class FoodItemHandler {
 		callback: (response: { message: string; error?: string }) => void
 	): Promise<any> {
 		try {
-			const userEmail = UserDetail.getUserDetail(socket.id);
+			const userEmail = User.getLoggedInUserEmail(socket.id);
 			const currentDate = DateService.getCurrentDate();
 			const foodItemIdArray = foodItemIds.split(",").map((id) => id.trim());
 

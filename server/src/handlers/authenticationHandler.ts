@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import AuthenticationService from "../services/authenticationService";
-import UserDetail from "../User/userDetail";
+import User from "../shared/user";
 import DateService from "../services/dateService";
 import LogService from "../services/logService";
 import ConsoleService from "../services/consoleService";
@@ -12,7 +12,7 @@ class authenticationHandler {
 	): Promise<void> {
 		try {
 			const user = await AuthenticationService.authenticateUser(email);
-			UserDetail.setUserDetail(socket.id, email);
+			User.setLoggedInUserEmail(socket.id, email);
 			socket.emit("authenticated", user);
 			if (user.length > 0) {
 				ConsoleService.displayMessage(

@@ -3,9 +3,10 @@ import pool from "../config/dbConnection";
 import { INotification } from "../models/INotification";
 import { GenericRepository } from "../repository/genericRepository";
 import { NotificationRepository } from "../repository/notificationRepository";
-import UserDetail from "../User/userDetail";
+import User from "../shared/user";
 import DateService from "./dateService";
 import userService from "./userService";
+import { Constants } from "../constants/constant";
 
 class NotificationService {
 	async pushNotification(notification: Partial<INotification>): Promise<any> {
@@ -29,12 +30,12 @@ class NotificationService {
 				pool,
 				"Notification"
 			);
-			if (notificationTypeId == 6) {
+			if (notificationTypeId == Constants.NotificationIdForPreparedFood) {
 				const rows: any =
 					await notificationRepository.getTodaysMenuOnTheBasisOfPreference(
 						notificationTypeId
 					);
-				let email: any = UserDetail.getUserDetail(socket.id);
+				let email: any = User.getLoggedInUserEmail(socket.id);
 				let preferenceData = await userService.getUserPreference(email);
 				const compareFunction = (a: any, b: any) => {
 					if (a.message.food_type !== b.message.food_type) {
@@ -75,7 +76,7 @@ class NotificationService {
 			foodItemIdsToRollOutForNextDay.split(",").forEach(async (itemId) => {
 				let item: any = await genericRepository.getById(itemId);
 				let notification = {
-					notification_type_id: 4,
+					notification_type_id: Constants.NotificationIdForRecommedation,
 					message: JSON.stringify({
 						itemId: item[0].id,
 						itemName: item[0].item_name,
@@ -94,9 +95,8 @@ class NotificationService {
 	) {
 		try {
 			let notification = {
-				notification_type_id: 5,
-				message: `We are trying to improve your experience with food item having id ${foodItemIdForDetailedFeedback}. Please provide your feedback by 
-					answering following questions. ${questions}`,
+				notification_type_id: Constants.NotificationIdForDetailedFeedback,
+				message: `${Constants.FeedbackMessageForImprovement} ${questions}`,
 				Date: DateService.getCurrentDate(),
 			};
 			this.pushNotification(notification);

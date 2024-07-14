@@ -1,7 +1,7 @@
 import { GenericRepository } from "./genericRepository";
 
 export class FeedbackRepository extends GenericRepository<any> {
-	async provideFeedback(entity: any, sentimentScore: number): Promise<void> {
+	async provideFeedback(entity: any, sentimentScore: number): Promise<any> {
 		try {
 			await this.pool.query(`SET @Sentiment_Score = ?`, [sentimentScore]);
 			const row: any = await this.pool.query(

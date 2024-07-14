@@ -1,5 +1,5 @@
 class DateService {
-	getCurrentDate() {
+	public getCurrentDate(): string {
 		try {
 			const date = new Date();
 			const year = date.getFullYear();
@@ -11,7 +11,7 @@ class DateService {
 		}
 	}
 
-	getCurrentTimestamp() {
+	public getCurrentTimestamp(): string {
 		try {
 			const date = new Date();
 			const year = date.getFullYear();

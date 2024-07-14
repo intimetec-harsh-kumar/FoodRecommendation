@@ -5,7 +5,6 @@ import AuthenticationService from "../services/authenticationService";
 import { Constants } from "../constants/constant";
 import SocketService from "../services/socketService";
 import ConsoleService from "../services/consoleService";
-import { IFoodItem } from "../models/IFoodItem";
 
 class AdminConsole {
 	private adminHandlers: AdminHandlers;

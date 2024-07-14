@@ -29,8 +29,8 @@ class FoodRecommendationEngineService {
 		limit: number
 	): Promise<any> {
 		try {
-			const foodItemRepo = new FoodItemRepository(pool, "Item");
-			const foodItems: any = await foodItemRepo.getItemsForRecommendation(
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
+			const foodItems: any = await foodItemRepository.getItemsForRecommendation(
 				mealType
 			);
 			let foodItemsForRecommendation =
@@ -48,9 +48,9 @@ class FoodRecommendationEngineService {
 
 	public async getDiscardMenuItemList(): Promise<any> {
 		try {
-			const foodItemRepo = new FoodItemRepository(pool, "Item");
+			const foodItemRepository = new FoodItemRepository(pool, "Item");
 			const foodItemsToBeDiscarded: any =
-				await foodItemRepo.getDiscardMenuItemList();
+				await foodItemRepository.getDiscardMenuItemList();
 			return foodItemsToBeDiscarded;
 		} catch (error) {
 			throw error;

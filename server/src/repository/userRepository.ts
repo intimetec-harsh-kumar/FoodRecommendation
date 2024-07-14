@@ -1,7 +1,7 @@
 import { GenericRepository } from "./genericRepository";
 
 export class UserRepository extends GenericRepository<any> {
-	async getUserPreference(email: string): Promise<void> {
+	async getUserPreference(email: string): Promise<any> {
 		try {
 			const [row]: any = await this.pool.query(
 				`select * from User U inner join Preference P on U.preference_id=P.id and U.email = ?`,

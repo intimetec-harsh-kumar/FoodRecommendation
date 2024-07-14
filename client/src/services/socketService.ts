@@ -65,10 +65,6 @@ class SocketService {
 		InputHandlerService.close();
 	}
 
-	public emit(event: string, data?: any): void {
-		this.socket.emit(event, data);
-	}
-
 	public getSocket(): Socket {
 		return this.socket;
 	}

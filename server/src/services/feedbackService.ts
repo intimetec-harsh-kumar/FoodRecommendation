@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import UserDetail from "../User/userDetail";
+import User from "../shared/user";
 import pool from "../config/dbConnection";
 import { FeedbackRepository } from "../repository/feedbackRepository";
 import SentimentService from "./sentimentService";
@@ -8,7 +8,7 @@ class FeedbackService {
 	async provideFeedback(socket: Socket, feedback: any): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
-			feedback.user_email = UserDetail.getUserDetail(socket.id);
+			feedback.user_email = User.getLoggedInUserEmail(socket.id);
 			const sentimentScore = await SentimentService.analyzeFeedbackSentiments(
 				feedback.comment
 			);

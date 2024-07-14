@@ -1,9 +1,9 @@
 class ConsoleService {
-	static displayMessage(message: string) {
+	static displayMessage(message: string): void {
 		console.log(message);
 	}
 
-	static displayTable(data: any) {
+	static displayTable(data: any): void {
 		console.table(data);
 	}
 }

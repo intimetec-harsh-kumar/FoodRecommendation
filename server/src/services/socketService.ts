@@ -3,7 +3,7 @@ import FoodItemhandler from "../handlers/foodItemhandler";
 import NotificationHandler from "../handlers/notificationHandler";
 import AuthenticationHandler from "../handlers/authenticationHandler";
 import SocketHandler from "../handlers/socketHandler";
-import UserDetail from "../User/userDetail";
+import User from "../shared/user";
 import logHandler from "../handlers/logHandler";
 import FoodRecommendationHandler from "../handlers/foodRecommendationHandler";
 import FeedbackHandler from "../handlers/feedbackHandler";
@@ -18,10 +18,6 @@ import ConsoleService from "./consoleService";
 class SocketService {
 	handleConnection(socket: Socket): void {
 		ConsoleService.displayMessage(`Client connected with ${socket.id}`);
-
-		socket.on("register", (clientId) => {
-			SocketHandler.handleRegister(socket, clientId);
-		});
 
 		socket.on("authenticate", async (email) => {
 			await AuthenticationHandler.handleAuthenticate(socket, email);
@@ -100,9 +96,9 @@ class SocketService {
 		);
 
 		socket.on("logout", (callback: (response: { message: string }) => void) => {
-			let userEmail = UserDetail.getUserDetail(socket.id);
+			let userEmail = User.getLoggedInUserEmail(socket.id);
 			ConsoleService.displayMessage(`User with email ${userEmail} logged out`);
-			UserDetail.clearUserDetail(socket.id);
+			User.clearLoggedInUserEmail(socket.id);
 			callback({ message: `User ${userEmail} logged out` });
 		});
 
