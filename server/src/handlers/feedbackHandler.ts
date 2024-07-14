@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import FeedbackService from "../services/feedbackService";
+import ConsoleService from "../services/consoleService";
 
 class FeedbackHandler {
 	public async handleProvideFeedback(
@@ -13,12 +14,12 @@ class FeedbackHandler {
 				feedback
 			);
 			if (addedFeedback) {
-				console.log(`feedback added successfullys`);
+				ConsoleService.displayMessage(`feedback added successfullys`);
 				callback({
 					message: `feedback added successfully`,
 				});
 			} else {
-				console.log(`Failed to add a feedback`);
+				ConsoleService.displayMessage(`Failed to add a feedback`);
 				callback({
 					message: `Failed to add a feedback`,
 				});

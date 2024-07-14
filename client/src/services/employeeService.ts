@@ -136,10 +136,9 @@ class EmployeeService {
 			ConsoleService.displayMessage("Invalid selection");
 			return;
 		}
-		const sweet_tooth =
-			(await InputHandlerService.askQuestion(
-				"Enter if you have sweet tooth (yes/no): "
-			)) === "yes";
+		const sweet_tooth = await InputHandlerService.askYesNoQuestion(
+			"Do you have a sweet tooth (yes/no): "
+		);
 		let message = await this.employeeHandlers.updateProfile({
 			food_type,
 			spice_level,

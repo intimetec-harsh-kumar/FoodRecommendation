@@ -13,10 +13,11 @@ import { INotification } from "../models/INotification";
 import { IFoodItem } from "../models/IFoodItem";
 import { IMealType } from "../models/IMealType";
 import userHandler from "../handlers/userHandler";
+import ConsoleService from "./consoleService";
 
 class SocketService {
 	handleConnection(socket: Socket): void {
-		console.log("Client connected with", socket.id);
+		ConsoleService.displayMessage(`Client connected with ${socket.id}`);
 
 		socket.on("register", (clientId) => {
 			SocketHandler.handleRegister(socket, clientId);
@@ -100,7 +101,7 @@ class SocketService {
 
 		socket.on("logout", (callback: (response: { message: string }) => void) => {
 			let userEmail = UserDetail.getUserDetail(socket.id);
-			console.log(`User ${userEmail} logged out`);
+			ConsoleService.displayMessage(`User with email ${userEmail} logged out`);
 			UserDetail.clearUserDetail(socket.id);
 			callback({ message: `User ${userEmail} logged out` });
 		});

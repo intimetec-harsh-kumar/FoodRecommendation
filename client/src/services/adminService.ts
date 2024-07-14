@@ -87,10 +87,9 @@ class AdminService {
 			ConsoleService.displayMessage("Price can not be other than number type");
 			return;
 		}
-		const availability_status =
-			(await InputHandlerService.askQuestion(
-				"Is the item available? (yes/no): "
-			)) === "yes";
+		const availability_status = await InputHandlerService.askYesNoQuestion(
+			"Is the item available? (yes/no): "
+		);
 		const existingMealTypes = await this.adminHandlers.viewMealTypes();
 		const existingMealTypesIds = new Set(
 			existingMealTypes.map((mealType: any) => mealType.id)
@@ -189,8 +188,6 @@ class AdminService {
 			const discardMenuItemListIds = new Set(
 				discardMenuItemList.map((item: any) => item.food_item_id)
 			);
-			console.log(discardMenuItemListIds);
-
 			switch (parseInt(discardMenuItemListAction)) {
 				case 1:
 					const itemIdToDiscard = parseInt(

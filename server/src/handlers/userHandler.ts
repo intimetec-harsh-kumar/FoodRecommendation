@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import UserService from "../services/userService";
+import ConsoleService from "../services/consoleService";
 
 class UserHandler {
 	public async handleUpdateProfile(
@@ -13,12 +14,12 @@ class UserHandler {
 				profileData
 			);
 			if (isProfileUpdated) {
-				console.log(`profile updated successfully`);
+				ConsoleService.displayMessage(`profile updated successfully`);
 				callback({
 					message: `profile updated  successfully`,
 				});
 			} else {
-				console.log(`Failed to update profile`);
+				ConsoleService.displayMessage(`Failed to update profile`);
 				callback({
 					message: `Failed to update profile`,
 				});

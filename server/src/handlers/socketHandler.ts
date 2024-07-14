@@ -1,19 +1,20 @@
 import { Socket } from "socket.io";
+import ConsoleService from "../services/consoleService";
 
 class SocketHandler {
 	public handleRegister(socket: Socket, clientId: string): void {
 		try {
-			console.log(`Registering client with ID: ${clientId}`);
+			ConsoleService.displayMessage(`Registering client with ID: ${clientId}`);
 		} catch (error: any) {
-			console.log("Error occured:", error.message);
+			ConsoleService.displayMessage(`Error occured: ${error.message}`);
 		}
 	}
 
 	public handleDisconnect(socket: Socket): void {
 		try {
-			console.log(`Client with ID ${socket.id} disconnected`);
+			ConsoleService.displayMessage(`Client with ID ${socket.id} disconnected`);
 		} catch (error: any) {
-			console.log("Error occured:", error.message);
+			ConsoleService.displayMessage(`Error occured: ${error.message}`);
 		}
 	}
 }

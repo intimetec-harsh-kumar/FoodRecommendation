@@ -5,6 +5,7 @@ import AdminConsole from "../console/adminConsole";
 import EmployeeConsole from "../console/employeeConsole";
 import ChefConsole from "../console/chefConsole";
 import { Constants } from "../constants/constant";
+import ConsoleService from "./consoleService";
 
 class SocketService {
 	private socket: Socket;
@@ -26,13 +27,13 @@ class SocketService {
 	}
 
 	private async handleConnect(): Promise<void> {
-		console.log("Connected to server");
+		ConsoleService.displayMessage("Connected to server");
 		await this.authenticationService.authenticate();
 	}
 
 	private async handleAuthenticated(user: any[]): Promise<void> {
 		if (user.length > 0) {
-			console.log(
+			ConsoleService.displayMessage(
 				`Email authenticated successfully. Role: ${user[0].role_name}`
 			);
 			switch (user[0].role_name) {
@@ -52,13 +53,15 @@ class SocketService {
 					console.error("Unknown role");
 			}
 		} else {
-			console.log("Email authentication failed. Please try again.");
+			ConsoleService.displayMessage(
+				"Email authentication failed. Please try again."
+			);
 			await this.authenticationService.authenticate();
 		}
 	}
 
 	private handleDisconnect(): void {
-		console.log("Disconnected from server");
+		ConsoleService.displayMessage("Disconnected from server");
 		InputHandlerService.close();
 	}
 

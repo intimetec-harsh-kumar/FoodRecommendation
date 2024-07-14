@@ -1,13 +1,10 @@
 import { Socket } from "socket.io";
 import pool from "../config/dbConnection";
 import { INotification } from "../models/INotification";
-import { FoodItemRepository } from "../repository/foodItemRepository";
 import { GenericRepository } from "../repository/genericRepository";
 import { NotificationRepository } from "../repository/notificationRepository";
-import { UserRepository } from "../repository/userRepository";
 import UserDetail from "../User/userDetail";
 import DateService from "./dateService";
-import FoodRecommendationEngineService from "./foodRecommendationService";
 import userService from "./userService";
 
 class NotificationService {

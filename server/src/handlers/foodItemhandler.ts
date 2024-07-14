@@ -6,6 +6,7 @@ import UserDetail from "../User/userDetail";
 import LogService from "../services/logService";
 import { IFoodItem } from "../models/IFoodItem";
 import { IMealType } from "../models/IMealType";
+import ConsoleService from "../services/consoleService";
 
 class FoodItemHandler {
 	public async handleAddItem(
@@ -20,7 +21,9 @@ class FoodItemHandler {
 		try {
 			const addedItem = await FoodItemService.addItem(item);
 			if (addedItem) {
-				console.log(`Item ${item.item_name} added successfully`);
+				ConsoleService.displayMessage(
+					`Item ${item.item_name} added successfully`
+				);
 				let userEmail = UserDetail.getUserDetail(socket.id);
 				this.addLog(userEmail, "AddItems");
 				NotificationService.pushNotification({
@@ -33,7 +36,9 @@ class FoodItemHandler {
 					message: `Item ${item.item_name} added successfully`,
 				});
 			} else {
-				console.log(`Failed to delete item with name ${item.item_name}`);
+				ConsoleService.displayMessage(
+					`Failed to delete item with name ${item.item_name}`
+				);
 				callback({
 					success: false,
 					message: `Failed to delete item with name ${item.item_name}`,
@@ -61,7 +66,9 @@ class FoodItemHandler {
 		try {
 			const updatedItem = await FoodItemService.updateItem(item);
 			if (updatedItem) {
-				console.log(`Item with id ${item.id} updated successfully`);
+				ConsoleService.displayMessage(
+					`Item with id ${item.id} updated successfully`
+				);
 				let userEmail = UserDetail.getUserDetail(socket.id);
 				this.addLog(userEmail, "UpdateItem");
 				NotificationService.pushNotification({
@@ -80,7 +87,7 @@ class FoodItemHandler {
 				});
 			}
 		} catch (error: any) {
-			console.log(`Error occured: ${error.message}`);
+			ConsoleService.displayMessage(`Error occured: ${error.message}`);
 
 			callback({
 				success: false,
@@ -102,7 +109,9 @@ class FoodItemHandler {
 		try {
 			const deletedItem = await FoodItemService.deleteItem(itemId);
 			if (deletedItem) {
-				console.log(`Item with ID ${itemId} deleted successfully`);
+				ConsoleService.displayMessage(
+					`Item with ID ${itemId} deleted successfully`
+				);
 				let userEmail = UserDetail.getUserDetail(socket.id);
 				this.addLog(userEmail, "DeleteItem");
 				NotificationService.pushNotification({
@@ -238,7 +247,7 @@ class FoodItemHandler {
 			};
 			LogService.addLogs(logObject);
 		} catch (error: any) {
-			console.log(`Error occured: ${error.message}`);
+			ConsoleService.displayMessage(`Error occured: ${error.message}`);
 		}
 	}
 	public async handlePrepareFood(
@@ -251,7 +260,7 @@ class FoodItemHandler {
 				message: `Items with id ${foodItemId} is choosen for preparation`,
 			});
 		} catch (error: any) {
-			console.log(`Error occured: ${error.message}`);
+			ConsoleService.displayMessage(`Error occured: ${error.message}`);
 			callback({ message: "", error: `Error occured: ${error.message}` });
 		}
 	}

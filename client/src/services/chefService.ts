@@ -52,15 +52,23 @@ class ChefService {
 	}
 
 	async handleSendNotification() {
-		let mealTypeId = await InputHandlerService.askQuestion(
-			"Please select mealTypeId (1: breakfast,2: lunch, 3:dinner) : "
+		let mealTypeId = parseInt(
+			await InputHandlerService.askQuestion(
+				"Please select mealTypeId (1: breakfast,2: lunch, 3:dinner) : "
+			)
 		);
-		let numberOfRecommendations = await InputHandlerService.askQuestion(
-			"Please enter number of recommendations you want to get : "
+		if (!Constants.validMealTypeIds.has(mealTypeId)) {
+			ConsoleService.displayMessage("Please enter valid meal type id");
+			return;
+		}
+		let numberOfRecommendations = parseInt(
+			await InputHandlerService.askQuestion(
+				"Please enter number of recommendations you want to get : "
+			)
 		);
 		let recommendedFoodItems = await this.chefHandlers.viewRecommendations(
-			parseInt(mealTypeId),
-			parseInt(numberOfRecommendations)
+			mealTypeId,
+			numberOfRecommendations
 		);
 		if (recommendedFoodItems.length === 0) {
 			ConsoleService.displayMessage("There is no food recommendation");
@@ -189,14 +197,16 @@ class ChefService {
 		let votedItem = await this.chefHandlers.viewVotedItems();
 		let votedItemIds = new Set(votedItem.map((item: any) => item.food_item_id));
 
-		let foodItemId = await InputHandlerService.askQuestion(
-			"Enter food item id you want to prepare today : "
+		let foodItemId = parseInt(
+			await InputHandlerService.askQuestion(
+				"Enter food item id you want to prepare today : "
+			)
 		);
-		if (!votedItemIds.has(parseInt(foodItemId))) {
+		if (!votedItemIds.has(foodItemId)) {
 			ConsoleService.displayMessage("Invalid food item ID chosen");
 			return;
 		}
-		let message = await this.chefHandlers.prepareFood(parseInt(foodItemId));
+		let message = await this.chefHandlers.prepareFood(foodItemId);
 		ConsoleService.displayMessage(message);
 	}
 

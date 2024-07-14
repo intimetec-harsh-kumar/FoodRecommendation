@@ -3,6 +3,7 @@ import AuthenticationService from "../services/authenticationService";
 import UserDetail from "../User/userDetail";
 import DateService from "../services/dateService";
 import LogService from "../services/logService";
+import ConsoleService from "../services/consoleService";
 
 class authenticationHandler {
 	public async handleAuthenticate(
@@ -14,7 +15,9 @@ class authenticationHandler {
 			UserDetail.setUserDetail(socket.id, email);
 			socket.emit("authenticated", user);
 			if (user.length > 0) {
-				console.log(`Email ${email} authenticated successfully.`);
+				ConsoleService.displayMessage(
+					`Email ${email} authenticated successfully.`
+				);
 				let logObject = {
 					user_email: email,
 					action: "authentication",
@@ -22,10 +25,10 @@ class authenticationHandler {
 				};
 				LogService.addLogs(logObject);
 			} else {
-				console.log(`Email ${email} authentication failed.`);
+				ConsoleService.displayMessage(`Email ${email} authentication failed.`);
 			}
 		} catch (error: any) {
-			console.log(`Error occured: ${error.message}`);
+			ConsoleService.displayMessage(`Error occured: ${error.message}`);
 		}
 	}
 }

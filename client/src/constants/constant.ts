@@ -27,4 +27,5 @@ export const Constants = {
 	validFoodTypes: new Array("vegetarian", "non vegetarian"),
 	validSpiceLevels: new Array("low", "medium", "high"),
 	validOriginality: new Array("north indian", "south indian", "others"),
+	validMealTypeIds: new Set([1, 2, 3]),
 };

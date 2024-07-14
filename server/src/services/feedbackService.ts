@@ -2,7 +2,6 @@ import { Socket } from "socket.io";
 import UserDetail from "../User/userDetail";
 import pool from "../config/dbConnection";
 import { FeedbackRepository } from "../repository/feedbackRepository";
-import { GenericRepository } from "../repository/genericRepository";
 import SentimentService from "./sentimentService";
 
 class FeedbackService {
