@@ -1,10 +1,11 @@
 import pool from "../config/dbConnection";
+import { Constants } from "../constants/constant";
 import { IFoodItem } from "../models/IFoodItem";
 import { IMealType } from "../models/IMealType";
 import { FoodItemRepository } from "../repository/foodItemRepository";
 import { GenericRepository } from "../repository/genericRepository";
 import DateService from "./dateService";
-import notificationService from "./notificationService";
+import NotificationService from "./notificationService";
 
 class FoodItemService {
 	async addItem(item: IFoodItem): Promise<unknown> {
@@ -99,19 +100,22 @@ class FoodItemService {
 			const rows = await foodItemRepository.prepareFood(foodItemId);
 			const genericRepository = new GenericRepository(pool, "Item");
 			let item: any = await genericRepository.getById(foodItemId.toString());
-			let notification = {
-				notification_type_id: 6,
-				message: JSON.stringify({
-					itemId: item[0].id,
-					itemName: item[0].item_name,
-				}),
-				Date: DateService.getCurrentDate(),
-			};
-			await notificationService.pushNotification(notification);
+			await this.sendPreparationNotification(item);
 			return rows;
 		} catch (error) {
 			throw error;
 		}
+	}
+	private async sendPreparationNotification(item: any): Promise<void> {
+		const notification = {
+			notification_type_id: Constants.NotificationIdForPreparedFood,
+			message: JSON.stringify({
+				itemId: item[0].id,
+				itemName: item[0].item_name,
+			}),
+			Date: DateService.getCurrentDate(),
+		};
+		await NotificationService.pushNotification(notification);
 	}
 }
 export default new FoodItemService();

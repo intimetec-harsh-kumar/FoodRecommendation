@@ -20,54 +20,88 @@ class NotificationService {
 			throw error;
 		}
 	}
-	async getNotification(
+
+	private async getUserPreference(socket: Socket): Promise<any> {
+		const email: any = User.getLoggedInUserEmail(socket.id);
+		const preferenceData = await userService.getUserPreference(email);
+		return preferenceData;
+	}
+
+	private compareFunction(preferenceData: any) {
+		return (a: any, b: any) => {
+			if (a.message.food_type !== b.message.food_type) {
+				if (a.message.food_type === preferenceData.food_type) return -1;
+				if (b.message.food_type === preferenceData.food_type) return 1;
+			}
+			if (a.message.originality !== b.message.originality) {
+				if (a.message.originality === preferenceData.originality) return -1;
+				if (b.message.originality === preferenceData.originality) return 1;
+			}
+			if (a.message.spice_level !== b.message.spice_level) {
+				if (a.message.spice_level === preferenceData.spice_level) return -1;
+				if (b.message.spice_level === preferenceData.spice_level) return 1;
+			}
+			if (a.message.is_sweet !== b.message.is_sweet) {
+				if (a.message.is_sweet === preferenceData.sweet_tooth) return -1;
+				if (b.message.is_sweet === preferenceData.sweet_tooth) return 1;
+			}
+			return 0;
+		};
+	}
+
+	private async getTodaysMenuOnTheBasisOfPreference(
+		notificationTypeId: number,
+		preferenceData: any
+	): Promise<any> {
+		const notificationRepository = new NotificationRepository(
+			pool,
+			"Notification"
+		);
+		const rows: any =
+			await notificationRepository.getTodaysMenuOnTheBasisOfPreference(
+				notificationTypeId
+			);
+		rows.sort(this.compareFunction(preferenceData));
+		return rows;
+	}
+
+	private async getCurrentNotification(
+		notificationTypeId?: number
+	): Promise<any> {
+		const notificationRepository = new NotificationRepository(
+			pool,
+			"Notification"
+		);
+		const rows: any = await notificationRepository.getCurrentNotification(
+			notificationTypeId
+		);
+		return rows;
+	}
+
+	public async getNotification(
 		socket: Socket,
 		notificationTypeId?: number
 	): Promise<any> {
 		try {
 			const connection = await pool.getConnection();
-			const notificationRepository = new NotificationRepository(
-				pool,
-				"Notification"
-			);
 			if (notificationTypeId == Constants.NotificationIdForPreparedFood) {
-				const rows: any =
-					await notificationRepository.getTodaysMenuOnTheBasisOfPreference(
-						notificationTypeId
-					);
-				let email: any = User.getLoggedInUserEmail(socket.id);
-				let preferenceData = await userService.getUserPreference(email);
-				const compareFunction = (a: any, b: any) => {
-					if (a.message.food_type !== b.message.food_type) {
-						if (a.message.food_type === preferenceData.food_type) return -1;
-						if (b.message.food_type === preferenceData.food_type) return 1;
-					}
-					if (a.message.originality !== b.message.originality) {
-						if (a.message.originality === preferenceData.originality) return -1;
-						if (b.message.originality === preferenceData.originality) return 1;
-					}
-					if (a.message.spice_level !== b.message.spice_level) {
-						if (a.message.spice_level === preferenceData.spice_level) return -1;
-						if (b.message.spice_level === preferenceData.spice_level) return 1;
-					}
-					if (a.message.is_sweet !== b.message.is_sweet) {
-						if (a.message.is_sweet === preferenceData.sweet_tooth) return -1;
-						if (b.message.is_sweet === preferenceData.sweet_tooth) return 1;
-					}
-					return 0;
-				};
-				rows.sort(compareFunction);
+				const preferenceData = await this.getUserPreference(socket);
+				const rows = await this.getTodaysMenuOnTheBasisOfPreference(
+					notificationTypeId,
+					preferenceData
+				);
+				connection.release();
+				return rows;
+			} else {
+				const rows = await this.getCurrentNotification(notificationTypeId);
+				connection.release();
 				return rows;
 			}
-			const rows: any = await notificationRepository.getCurrentNotification(
-				notificationTypeId
-			);
-			connection.release();
-			return rows;
 		} catch (error) {
 			throw error;
 		}
 	}
+
 	async sendFoodItemNotificationForNextDay(
 		foodItemIdsToRollOutForNextDay: string
 	) {

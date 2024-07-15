@@ -12,6 +12,7 @@ export class UserRepository extends GenericRepository<any> {
 			throw error;
 		}
 	}
+
 	async updateProfile(profileData: any): Promise<boolean> {
 		try {
 			const [isUserAlreadyInPreference]: any = await this.pool.query(

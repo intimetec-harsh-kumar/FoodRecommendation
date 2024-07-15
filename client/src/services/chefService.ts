@@ -114,6 +114,10 @@ class ChefService {
 				"Please select mealTypeId (1: breakfast,2: lunch, 3:dinner) : "
 			)
 		);
+		if (!Constants.validMealTypeIds.has(mealType)) {
+			ConsoleService.displayMessage("Invalid meal type id");
+			return;
+		}
 		let numberOfRecommendation = parseInt(
 			await InputHandlerService.askQuestion(
 				"Please enter number of recommendation you want to get : "

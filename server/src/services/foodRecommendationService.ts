@@ -5,42 +5,48 @@ class FoodRecommendationEngineService {
 	public calculateRecommendationScores(foodItems: any[]): any {
 		try {
 			for (const item of foodItems) {
-				const sentimentScore = item.sentiment;
-				const ratingScore = item.rating;
-				const voteScore = item.vote;
-				const preparationScore = item.no_of_times_prepared;
-				const preparationToRatingRatioScore = item.preparationToRatingRatio;
+				const sentimentScore = parseInt(item.sentiment);
+				const ratingScore = parseInt(item.rating);
+				const voteScore = parseInt(item.vote);
+				const preparationScore = parseInt(item.no_of_times_prepared);
+				const preparationToRatingRatioScore = parseInt(
+					item.preparationToRatingRatio
+				);
 
 				item.recommendationScore =
-					parseInt(sentimentScore) +
-					parseInt(ratingScore) +
-					parseInt(voteScore) +
-					parseInt(preparationScore) +
-					parseInt(preparationToRatingRatioScore) / 5;
+					sentimentScore +
+					ratingScore +
+					voteScore +
+					preparationScore +
+					preparationToRatingRatioScore / 5;
 			}
 			return foodItems;
 		} catch (error) {
 			throw error;
 		}
 	}
-
+	private async fetchFoodItemsForRecommendation(
+		mealType: number
+	): Promise<any> {
+		const foodItemRepository = new FoodItemRepository(pool, "Item");
+		return await foodItemRepository.getItemsForRecommendation(mealType);
+	}
+	private sortFoodItemsByRecommendation(foodItems: any[]): any[] {
+		return foodItems.sort(
+			(a: any, b: any) => b.recommendationScore - a.recommendationScore
+		);
+	}
 	public async getRecommendations(
 		mealType: number,
 		limit: number
 	): Promise<any> {
 		try {
-			const foodItemRepository = new FoodItemRepository(pool, "Item");
-			const foodItems: any = await foodItemRepository.getItemsForRecommendation(
-				mealType
-			);
+			const foodItems = await this.fetchFoodItemsForRecommendation(mealType);
 			let foodItemsForRecommendation =
 				this.calculateRecommendationScores(foodItems);
-			let foodItemsSortedByRecommendation: any[] =
-				foodItemsForRecommendation.sort(
-					(a: any, b: any) => b.recommendationScore - a.recommendationScore
-				);
-			let topRecommendations = foodItemsSortedByRecommendation.slice(0, limit);
-			return topRecommendations;
+			const foodItemsSortedByRecommendation =
+				this.sortFoodItemsByRecommendation(foodItemsForRecommendation);
+			return foodItemsSortedByRecommendation.slice(0, limit);
 		} catch (error) {
 			throw error;
 		}

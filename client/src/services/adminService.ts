@@ -18,15 +18,18 @@ class AdminService {
 		const price = parseFloat(
 			await InputHandlerService.askQuestion("Enter item price: ")
 		);
-		const availability_status =
-			(await InputHandlerService.askQuestion(
-				"Is the item available? (yes/no): "
-			)) === "yes";
+		const availability_status = await InputHandlerService.askYesNoQuestion(
+			"Is the item available? (yes/no): "
+		);
 		const meal_type_id = parseInt(
 			await InputHandlerService.askQuestion(
 				"Enter meal type ID (1: breakfast, 2: lunch, 3: dinner): "
 			)
 		);
+		if (!Constants.validMealTypeIds.has(meal_type_id)) {
+			ConsoleService.displayMessage("Invalid selection");
+			return;
+		}
 		const food_type = await InputHandlerService.askQuestion(
 			"Enter food type (vegetarian, non vegetarian): "
 		);
