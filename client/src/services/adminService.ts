@@ -18,6 +18,10 @@ class AdminService {
 		const price = parseFloat(
 			await InputHandlerService.askQuestion("Enter item price: ")
 		);
+		if (isNaN(price)) {
+			ConsoleService.displayMessage("Price should be a number");
+			return;
+		}
 		const availability_status = await InputHandlerService.askYesNoQuestion(
 			"Is the item available? (yes/no): "
 		);
