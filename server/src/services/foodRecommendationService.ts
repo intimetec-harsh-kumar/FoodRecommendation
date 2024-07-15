@@ -10,7 +10,7 @@ class FoodRecommendationEngineService {
 				const voteScore = parseInt(item.vote);
 				const preparationScore = parseInt(item.no_of_times_prepared);
 				const preparationToRatingRatioScore = parseInt(
-					item.preparationToRatingRatio
+					item.preparation_to_rating_ratio
 				);
 
 				item.recommendationScore =
